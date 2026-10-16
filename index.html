@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Récords Club Náutico</title>
+<meta name="description" content="Récords históricos y Top 10 del Club Náutico de natación: piscina de 50 m, piscina de 25 m y aguas abiertas.">
+<meta name="theme-color" content="#0b3a5b">
+<!-- La página incluye menores de edad: se comparte por enlace, no se indexa en buscadores. -->
+<meta name="robots" content="noindex, nofollow">
+<!-- Vista previa en WhatsApp: og:image y og:url deben ser URLs completas. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clubnautico.github.io/records-club-nautico/">
+<meta property="og:locale" content="es_EC">
+<meta property="og:title" content="Récords Club Náutico">
+<meta property="og:description" content="Récords del club y Top 10 histórico por prueba: piscina 50 m, 25 m y aguas abiertas.">
+<meta property="og:image" content="https://clubnautico.github.io/records-club-nautico/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b3a5b'/%3E%3Cpath d='M8 38c6 0 6-5 12-5s6 5 12 5 6-5 12-5 6 5 12 5M8 48c6 0 6-5 12-5s6 5 12 5 6-5 12-5 6 5 12 5' stroke='%2363d2e8' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='18' r='6' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f3f6f9; --panel:#ffffff; --fg:#0f2233; --muted:#526274; --line:#dbe3ea;
+  --brand:#0b3a5b; --brand-fg:#ffffff; --accent:#075f7e; --accent-soft:#e3f2f8;
+  --gold:#8a5600; --warn-bg:#fff4dc; --warn-fg:#6b4500;
+  --on:#0b3a5b; --on-fg:#ffffff;
+  --radius:12px;
+  color-scheme:light dark;
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1620; --panel:#13212e; --fg:#e6edf3; --muted:#9db0c2; --line:#24384a;
+    --brand:#0b3a5b; --brand-fg:#ffffff; --accent:#5cc8e6; --accent-soft:#163445;
+    --gold:#f0b54a; --warn-bg:#3a2c10; --warn-fg:#f3d79c;
+    --on:#5cc8e6; --on-fg:#06141d;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-size:16px;line-height:1.45}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header.top{background:var(--brand);color:var(--brand-fg);padding:20px 0 18px;position:relative;overflow:hidden}
+header.top svg.waves{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:28px;opacity:.35}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin:0}
+h1{font-size:26px;line-height:1.15;margin:4px 0 6px;font-weight:700}
+.lede{margin:0;font-size:15px;opacity:.9;max-width:60ch}
+
+.controls{background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line)}
+@media (min-width:760px) and (min-height:600px){.controls{position:sticky;top:0;z-index:5}}
+.seg{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:4px;margin-bottom:8px}
+.seg[hidden]{display:none}
+.item.top .ev{white-space:nowrap}
+.seg button{flex:1 1 0;min-height:44px;border:0;border-radius:9px;background:transparent;color:var(--fg);font:inherit;font-size:15px;font-weight:600;cursor:pointer;padding:6px 8px}
+.seg button[aria-pressed="true"]{background:var(--on);color:var(--on-fg)}
+.seg button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.rowlink:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.row2{display:flex;gap:8px}
+.row2 .seg{flex:1 1 0}
+@media (max-width:520px){.seg button{font-size:14px;padding:6px 4px}.row2{gap:6px}}
+.search{position:relative}
+.search input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--fg);font:inherit;padding:8px 12px 8px 38px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+
+main{padding:16px 0 8px}
+h2{font-size:20px;margin:6px 0 2px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.group{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:22px 0 6px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.item{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 14px;border-top:1px solid var(--line);color:inherit;text-decoration:none}
+.item:first-child{border-top:0}
+.rowlink{cursor:pointer}
+.rowlink:hover{background:var(--accent-soft)}
+.ev{font-weight:700;font-size:16px}
+.time{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.who{grid-column:1/-1;font-size:15px}
+.meta{grid-column:1/-1;color:var(--muted);font-size:13.5px}
+.meta .dot{padding:0 4px}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent);vertical-align:2px;margin-left:6px}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.go{color:var(--accent);font-size:13px;font-weight:600}
+.age{color:var(--muted);font-size:13.5px;white-space:nowrap}
+.age::before{content:"· "}
+ol.team{margin:2px 0 0;padding-left:1.4em}
+ol.team li{margin:1px 0}
+.pos{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted);min-width:1.8em;display:inline-block}
+.pos.p1{color:var(--gold)}
+.note{background:var(--warn-bg);color:var(--warn-fg);border-radius:10px;padding:10px 12px;font-size:14px;margin:12px 0}
+.empty{color:var(--muted);padding:16px 14px}
+
+.pick{display:block;margin:0 0 12px}
+.pick label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.pick select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--fg);font:inherit;font-size:16px;font-weight:600;padding:8px 12px}
+
+@media (min-width:760px){
+  h1{font-size:34px}
+  .item{grid-template-columns:minmax(150px,1.1fr) 90px minmax(160px,1.6fr) minmax(220px,2fr);align-items:baseline}
+  .item .who{grid-column:auto}
+  .item .meta{grid-column:auto}
+  .item .time{order:0}
+  .item.relay .who{grid-column:3/-1}
+  .item.relay .meta{grid-column:2/-1}
+  .item.top{grid-template-columns:140px minmax(180px,1.4fr) minmax(240px,2fr)}
+  .item.top .ev{grid-column:auto}
+}
+
+footer{color:var(--muted);font-size:13.5px;padding:22px 0 36px;border-top:1px solid var(--line);margin-top:24px}
+footer p{margin:0 0 6px}
+.err{background:var(--warn-bg);color:var(--warn-fg);padding:14px;border-radius:var(--radius)}
+
+@media print{
+  :root{--fg:#000;--muted:#333;--accent:#000;--panel:#fff;--line:#999;--accent-soft:#eee;--gold:#000;--warn-bg:#eee;--warn-fg:#000}
+  .controls,header.top svg.waves,.go{display:none}
+  header.top{background:none;color:#000;padding:0}
+  body{background:#fff;color:#000;font-size:11pt}
+  .card{border-color:#999}
+  .item{break-inside:avoid;padding:5px 8px}
+  .rowlink:hover{background:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Club Náutico · Natación</p>
+    <h1>Récords del club</h1>
+    <p class="lede">Las mejores marcas de la historia del club, todas las categorías y máster juntas.</p>
+  </div>
+  <svg class="waves" viewBox="0 0 1200 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10V28H0z" fill="#63d2e8"/></svg>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Piscina" data-key="curso">
+      <button type="button" data-v="LC">Piscina 50 m</button>
+      <button type="button" data-v="SC">Piscina 25 m</button>
+      <button type="button" data-v="OW">Aguas abiertas</button>
+    </div>
+    <div class="row2">
+      <div class="seg" role="group" aria-label="Rama" data-key="genero">
+        <button type="button" data-v="M">Varones</button>
+        <button type="button" data-v="F">Damas</button>
+      </div>
+      <div class="seg" role="group" aria-label="Vista" data-key="vista" id="seg-vista">
+        <button type="button" data-v="rec">Récords</button>
+        <button type="button" data-v="top">Top 10</button>
+      </div>
+    </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Buscar nadador/a…" aria-label="Buscar nadador o nadadora por nombre" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<p id="status" class="sr-only" role="status"></p>
+<main class="wrap" id="main" tabindex="-1">
+  <p class="sub">Cargando…</p>
+  <noscript><p class="err">Esta página necesita JavaScript. Actívalo o ábrela en otro navegador.</p></noscript>
+</main>
+
+<footer class="wrap">
+  <p>Fuente: resultados oficiales FENA 2017–2026 y torneos internacionales verificados. Actualizado al 14/10/2026.</p>
+  <p>Página del Club Náutico. No es una página oficial de la FENA.</p>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+  const FILES = {
+    rec: 'data/records_piscina.json',
+    top: 'data/top10_piscina.json',
+    rel: 'data/relevos_records.json',
+    owRec: 'data/records_aguas_abiertas.json',
+    owTop: 'data/top_aguas_abiertas.json'
+  };
+  const D = {}, ERR = {};
+  const st = { curso: 'LC', genero: 'M', vista: 'rec', prueba: null, q: '' };
+  const main = document.getElementById('main');
+  const qInput = document.getElementById('q');
+
+  // ---------- formato ----------
+  const nombre = (s) => {
+    if (!s) return '';
+    const i = s.indexOf(',');
+    return i < 0 ? s.trim() : (s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim());
+  };
+  const titulo = (s) => (s || '').toLowerCase().replace(/(^|[\s,(\-\/])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  const lugar = (s) => {
+    const t = (s || '').trim();
+    return t ? titulo(t) : 'Ecuador'; // el PDF no imprime la ciudad (IV Abel Gilbert 2019)
+  };
+  const ymd = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((s || '').trim()); return m ? { y: m[1], m: m[2], d: m[3] } : null; };
+  const fecha = (ini, fin) => {
+    if (fin === undefined && /\sa\s/.test(ini || '')) [ini, fin] = ini.split(/\s+a\s+/);
+    const a = ymd(ini), b = ymd(fin);
+    if (!a) return ini || '';
+    if (!b || (a.y === b.y && a.m === b.m && a.d === b.d)) return `${a.d}/${a.m}/${a.y}`;
+    if (a.y === b.y && a.m === b.m) return `${a.d} al ${b.d}/${b.m}/${b.y}`;
+    if (a.y === b.y) return `${a.d}/${a.m} al ${b.d}/${b.m}/${b.y}`;
+    return `${a.d}/${a.m}/${a.y} al ${b.d}/${b.m}/${b.y}`;
+  };
+  const prueba = (p) => {
+    const s = String(p || '').trim();
+    const [dist, est] = s.split(/\s+/);
+    if (!est || !/^\d|^4x/i.test(dist)) return s;
+    return dist + ' m ' + (est === 'Combinado' ? (dist.includes('x') ? 'Combinado' : 'Combinado individual') : est);
+  };
+  // El estilo se toma del nombre de la prueba ("200 Pecho", "4x50 Combinado"), que es lo que se muestra
+  const estilo = (r) => String(r.prueba || '').trim().split(/\s+/)[1] || r.estilo || '';
+  const piscina = (c) => c === 'LC' ? 'Piscina 50 m' : c === 'SC' ? 'Piscina 25 m' : 'Aguas abiertas';
+  const fold = (s) => (s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+  // Edad con la que se nadó la marca (tal como la imprime el resultado oficial)
+  const edadTxt = (e) => { const n = String(e ?? '').replace(/\D/g, ''); return n ? n + ' años' : ''; };
+  const edadSpan = (e) => { const t = edadTxt(e); return t ? ` <span class="age">${t}</span>` : ''; };
+  // Aguas abiertas: solo hay categoría ("Girls 12-13", "Boys 20&O")
+  const categoria = (c) => {
+    const s = String(c || '');
+    let m = /(\d+)\s*-\s*(\d+)/.exec(s); if (m) return `Cat. ${m[1]}-${m[2]} años`;
+    m = /(\d+)\s*&\s*(o|over)\b/i.exec(s); if (m) return `Cat. ${m[1]} años y más`;
+    return '';
+  };
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const dot = '<span class="dot" aria-hidden="true">·</span>';
+  const ESTILOS_REL = ['(E)', '(P)', '(M)', '(L)'];
+
+  // ---------- estado en la URL (para compartir un enlace directo) ----------
+  const leerHash = () => {
+    const h = new URLSearchParams(location.hash.slice(1));
+    if (['LC', 'SC', 'OW'].includes(h.get('c'))) st.curso = h.get('c');
+    if (['M', 'F'].includes(h.get('g'))) st.genero = h.get('g');
+    if (['rec', 'top'].includes(h.get('v'))) st.vista = h.get('v');
+    st.prueba = h.get('p') || null;
+  };
+  const escribirHash = () => {
+    const h = new URLSearchParams({ c: st.curso, g: st.genero, v: st.vista });
+    if (st.vista === 'top' && st.prueba && st.curso !== 'OW') h.set('p', st.prueba);
+    history.replaceState(null, '', '#' + h.toString());
+  };
+
+  // ---------- render ----------
+  function recordItem(r) {
+    const exh = r.marca === 'x';
+    return `<a class="item rowlink" href="#" data-prueba="${esc(r.prueba)}" aria-label="${esc(prueba(r.prueba))}: ${esc(r.tiempo)}, ${esc(nombre(r.nadador))}. Ver Top 10">
+      <span class="ev">${esc(prueba(r.prueba))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}</span>
+      <span class="time">${esc(r.tiempo)}</span>
+      <span class="who">${esc(nombre(r.nadador))}${edadSpan(r.edad)}</span>
+      <span class="meta">${esc(fecha(r.fecha))}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)} <span class="go">Top 10 ›</span></span>
+    </a>`;
+  }
+  function relevoItem(r) {
+    const comb = estilo(r) === 'Combinado';
+    const eds = r.edades || [];
+    const ints = (r.integrantes || []).length
+      ? '<ol class="team">' + r.integrantes.map((n, i) => `<li>${esc(nombre(n))}${comb ? ' ' + ESTILOS_REL[i] : ''}${edadSpan(eds[i])}</li>`).join('') + '</ol>'
+      : 'Integrantes no publicados en los resultados oficiales';
+    return `<div class="item relay">
+      <span class="ev">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? '<span class="tag">Mixto</span>' : ''}</span>
+      <span class="time">${esc(r.tiempo)}</span>
+      <span class="who">${ints}</span>
+      <span class="meta">${esc(fecha(r.fecha_ini, r.fecha_fin))}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)}</span>
+    </div>`;
+  }
+  const grupo = (t, items) => items.length ? `<h3 class="group">${t}</h3><div class="card">${items.join('')}</div>` : '';
+
+  function vistaRecords() {
+    const recs = D.rec.filter((r) => r.curso === st.curso && r.genero === st.genero).sort((a, b) => a.orden - b.orden);
+    const rel = D.rel.filter((r) => r.curso === st.curso && (r.genero === st.genero || r.genero === 'Mixto'))
+      .sort((a, b) => (a.genero === 'Mixto') - (b.genero === 'Mixto') || a.posta - b.posta);
+    const ESTILOS = ['Libre', 'Mariposa', 'Espalda', 'Pecho', 'Combinado'];
+    const by = (e) => recs.filter((r) => estilo(r) === e).map(recordItem);
+    const relBy = (e) => rel.filter((r) => estilo(r) === e).map(relevoItem);
+    // Nada se pierde: una prueba con un estilo desconocido sale al final en "Otras pruebas"
+    const otras = recs.filter((r) => !ESTILOS.includes(estilo(r))).map(recordItem)
+      .concat(rel.filter((r) => !['Libre', 'Combinado'].includes(estilo(r))).map(relevoItem));
+    const rama = st.genero === 'M' ? 'Varones' : 'Damas';
+    return `<h2>Récords · ${piscina(st.curso)} · ${rama}</h2>
+      <p class="sub">Una marca por prueba, la más rápida de todas las categorías, con la edad del nadador cuando la hizo. Toca una prueba para ver su Top 10. Los relevos mixtos aparecen en varones y en damas.</p>
+      ${grupo('Libre', by('Libre'))}
+      ${grupo('Relevos libres', relBy('Libre'))}
+      ${grupo('Mariposa', by('Mariposa'))}
+      ${grupo('Espalda', by('Espalda'))}
+      ${grupo('Pecho', by('Pecho'))}
+      ${grupo('Combinado individual', by('Combinado'))}
+      ${grupo('Relevos combinados', relBy('Combinado'))}
+      ${grupo('Otras pruebas', otras)}`;
+  }
+
+  function topItem(t, extra) {
+    const exh = t.marca === 'x';
+    return `<div class="item top">
+      <span class="ev"><span class="pos${t.puesto === 1 && !exh ? ' p1' : ''}">${esc(t.puesto)}.</span> <span class="time" style="text-align:left">${esc(t.tiempo)}</span></span>
+      <span class="who">${esc(nombre(t.nadador))}${t.edad !== undefined ? edadSpan(t.edad) : (categoria(t.categoria) ? ` <span class="age">${categoria(t.categoria)}</span>` : '')}${exh ? '<span class="tag warn">Exhibición</span>' : ''}${extra || ''}</span>
+      <span class="meta">${esc(fecha(t.fecha))}${dot}${esc(lugar(t.lugar))}${dot}${esc(t.torneo)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
+    </div>`;
+  }
+  const notaExh = (rows) => rows.some((t) => t.marca === 'x')
+    ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Se muestra en el ranking pero no se considera récord del club.</p>' : '';
+
+  function vistaTop() {
+    const pruebas = [...new Map(D.top.filter((t) => t.curso === st.curso && t.genero === st.genero)
+      .sort((a, b) => a.orden - b.orden).map((t) => [t.prueba, t])).keys()];
+    if (!pruebas.includes(st.prueba)) st.prueba = pruebas[0];
+    const rows = D.top.filter((t) => t.curso === st.curso && t.genero === st.genero && t.prueba === st.prueba).sort((a, b) => a.puesto - b.puesto);
+    const rama = st.genero === 'M' ? 'Varones' : 'Damas';
+    return `<h2>Top 10 · ${piscina(st.curso)} · ${rama}</h2>
+      <p class="sub">Los 10 mejores nadadores del club en la historia de cada prueba, con la mejor marca de cada uno.</p>
+      <div class="pick"><label for="sel-prueba">Prueba</label>
+        <select id="sel-prueba">${pruebas.map((p) => `<option value="${esc(p)}"${p === st.prueba ? ' selected' : ''}>${esc(prueba(p))}</option>`).join('')}</select></div>
+      ${notaExh(rows)}
+      <div class="card">${rows.map((t) => topItem(t)).join('') || '<p class="empty">Sin marcas.</p>'}</div>`;
+  }
+
+  function vistaAguas() {
+    const rama = st.genero === 'M' ? 'Varones' : 'Damas';
+    const recs = D.owRec.filter((r) => r.rama === st.genero).sort((a, b) => a.dist_km - b.dist_km);
+    const bloques = recs.map((r) => {
+      const top = D.owTop.filter((t) => t.rama === st.genero && t.distancia === r.distancia).sort((a, b) => a.puesto - b.puesto);
+      return `<h3 class="group">${esc(r.distancia)}</h3>
+        <div class="card">${top.map((t) => topItem(t, t.puesto === 1 && t.marca !== 'x' ? '<span class="tag">Récord</span>' : '')).join('')}</div>`;
+    });
+    return `<h2>Aguas abiertas · ${rama}</h2>
+      <p class="sub">Mejores marcas del club por distancia. El número es la posición dentro del club (no el lugar en la carrera); la primera es el récord.</p>
+      ${bloques.join('') || '<p class="empty">Sin marcas registradas.</p>'}`;
+  }
+
+  function vistaBusqueda() {
+    const q = fold(st.q.trim());
+    const hit = (n) => fold(nombre(n)).includes(q) || fold(n).includes(q);
+    const res = [];
+    for (const t of D.top) if (hit(t.nadador)) res.push({ n: nombre(t.nadador), where: piscina(t.curso) + ' · ' + (t.genero === 'M' ? 'Varones' : 'Damas'), ev: prueba(t.prueba), t, k: t.curso + t.orden });
+    for (const t of D.owTop) if (hit(t.nadador)) res.push({ n: nombre(t.nadador), where: 'Aguas abiertas · ' + (t.rama === 'M' ? 'Varones' : 'Damas'), ev: t.distancia, t, k: 'OW' + String(t.dist_km).padStart(5, '0') });
+    const rels = D.rel.filter((r) => (r.integrantes || []).some(hit));
+    if (!res.length && !rels.length) return `<h2>Búsqueda</h2><p class="sub">No hay marcas en el Top 10 para “${esc(st.q.trim())}”.</p>`;
+    const porNadador = new Map();
+    for (const r of res) { if (!porNadador.has(r.n)) porNadador.set(r.n, []); porNadador.get(r.n).push(r); }
+    const bloques = [...porNadador].sort((a, b) => a[0].localeCompare(b[0], 'es')).map(([n, rs]) => {
+      rs.sort((a, b) => a.k.localeCompare(b.k, 'es', { numeric: true }));
+      return `<h3 class="group">${esc(n)}</h3><div class="card">${rs.map((r) => `<div class="item">
+          <span class="ev">${esc(r.ev)}${r.t.puesto === 1 && r.t.marca !== 'x' ? '<span class="tag">Récord</span>' : ''}${r.t.marca === 'x' ? '<span class="tag warn">Exhibición</span>' : ''}</span>
+          <span class="time">${esc(r.t.tiempo)}</span>
+          <span class="who"><span class="pos${r.t.puesto === 1 && r.t.marca !== 'x' ? ' p1' : ''}">${esc(r.t.puesto)}.</span> lugar en el Top · ${esc(r.where)}${r.t.edad !== undefined ? edadSpan(r.t.edad) : (categoria(r.t.categoria) ? ` <span class="age">${categoria(r.t.categoria)}</span>` : '')}</span>
+          <span class="meta">${esc(fecha(r.t.fecha))}${dot}${esc(lugar(r.t.lugar))}${dot}${esc(r.t.torneo)}</span>
+        </div>`).join('')}</div>`;
+    });
+    const relHtml = rels.length ? grupo('Relevos récord en los que participa', rels.map((r) => relevoItem(r).replace('<span class="ev">', `<span class="ev">${esc(piscina(r.curso))} · `))) : '';
+    return `<h2>Búsqueda: “${esc(st.q.trim())}”</h2>
+      <p class="sub">Todas las marcas en el Top 10 histórico. Borra la búsqueda para volver.</p>${bloques.join('')}${relHtml}`;
+  }
+
+  const statusEl = document.getElementById('status');
+  // Qué archivos necesita la vista actual
+  const vistaActual = () => {
+    if (st.q.trim().length >= 2) return [['top', 'owTop', 'rel'], vistaBusqueda];
+    if (st.curso === 'OW') return [['owRec', 'owTop'], vistaAguas];
+    if (st.vista === 'top') return [['top'], vistaTop];
+    return [['rec', 'rel'], vistaRecords];
+  };
+  const vistaBusquedaCorta = () => '<h2>Búsqueda</h2><p class="sub">Escribe al menos 2 letras del nombre.</p>';
+
+  function draw() {
+    document.querySelectorAll('.seg').forEach((g) => {
+      const k = g.dataset.key;
+      g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st[k])));
+    });
+    document.getElementById('seg-vista').hidden = st.curso === 'OW';
+    const [need, html] = vistaActual();
+    const falla = need.find((k) => ERR[k]);
+    try {
+      if (falla) main.innerHTML = `<p class="err">No se pudieron cargar los datos (${esc(ERR[falla])}). Revisa tu conexión y recarga la página.</p>`;
+      else if (st.q.trim().length === 1) main.innerHTML = vistaBusquedaCorta();
+      else if (need.every((k) => D[k])) main.innerHTML = html();
+      else main.innerHTML = '<p class="sub">Cargando…</p>';
+    } catch (e) {
+      main.innerHTML = `<p class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba otra pestaña o recarga la página.</p>`;
+    }
+    const h2 = main.querySelector('h2');
+    statusEl.textContent = h2 ? h2.textContent : '';
+    escribirHash();
+  }
+
+  // ---------- eventos ----------
+  document.querySelectorAll('.seg').forEach((g) => g.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    st[g.dataset.key] = b.dataset.v;
+    if (st.q) { st.q = ''; qInput.value = ''; }
+    draw();
+  }));
+  main.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-prueba]'); if (!a) return;
+    e.preventDefault();
+    st.vista = 'top'; st.prueba = a.dataset.prueba;
+    draw(); window.scrollTo({ top: 0 });
+  });
+  main.addEventListener('change', (e) => {
+    if (e.target.id === 'sel-prueba') { st.prueba = e.target.value; draw(); document.getElementById('sel-prueba').focus(); }
+  });
+  window.addEventListener('hashchange', () => { leerHash(); st.q = ''; qInput.value = ''; draw(); });
+  let tmr;
+  qInput.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(() => { st.q = qInput.value; draw(); }, 150); });
+
+  // ---------- carga ----------
+  // Cada archivo se pide en paralelo y la vista se dibuja apenas llegan los que necesita
+  // (los récords no esperan al Top 10, que es el archivo más grande).
+  leerHash();
+  draw();
+  for (const [k, url] of Object.entries(FILES)) {
+    // no-cache: revalida con el servidor (respuesta 304 si no cambió) para no mezclar versiones tras una actualización
+    fetch(url, { cache: 'no-cache' })
+      .then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
+      .then((j) => { if (!Array.isArray(j)) throw new Error(url + ' con formato inválido'); D[k] = j; })
+      .catch((e) => { ERR[k] = e.message || url; })
+      .finally(() => { if (vistaActual()[0].includes(k)) draw(); });
+  }
+})();
+</script>
+</body>
+</html>

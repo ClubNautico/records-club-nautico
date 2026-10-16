@@ -1,0 +1,756 @@
+[
+    {
+        "curso":  "LC",
+        "genero":  "F",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "5:15.58",
+        "equipo":  "NAU",
+        "letra":  "A",
+        "integrantes":  [
+                            "Hidalgo, Daniela",
+                            "Martinez, Camila Tahis",
+                            "Villamarin, Sarah Marie",
+                            "Ruales, Tais Isabela"
+                        ],
+        "fecha_ini":  "2024-07-13",
+        "fecha_fin":  "2024-07-13",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "VIII CAMP NAC INTERCLUBES ABEL GILBERT V.2024",
+        "archivo":  "2024 - Piscina - VIII CAMPEONATO NACIONAL CARLOS LUIS GILBERT VASCONEZ - Resultados 5ta jornada.pdf",
+        "categoria":  "13-14",
+        "auditado":  false,
+        "edades":  [
+                       "14",
+                       "14",
+                       "13",
+                       "13"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "F",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "2:20.23",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Fustillos, Nataly",
+                            "Molina, Diana Camila",
+                            "Montalvo, Loreto Valentina",
+                            "Rodriguez Lopez, Maria Gloria"
+                        ],
+        "fecha_ini":  "2018-12-15",
+        "fecha_fin":  "2018-12-15",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "IX CAMP INTER DIANA QUINTANA JUVENIL 2018",
+        "archivo":  "2018 - Piscina - Copa Diana Quintana Noboa - Resultados - 4ta jornada (juveniles).pdf",
+        "categoria":  "13-14",
+        "auditado":  true,
+        "edades":  [
+                       "14",
+                       "13",
+                       "13",
+                       "13"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "F",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "4:30.33",
+        "equipo":  "NAU",
+        "letra":  "A",
+        "integrantes":  [
+                            "Fustillos, Nataly",
+                            "Simbaña, Maria Jose",
+                            "Gallegos, Maria Del Mar",
+                            "Montalvo, Loreto Valentina"
+                        ],
+        "fecha_ini":  "2025-03-11",
+        "fecha_fin":  "2025-03-11",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "XI CAMP NAC CARLOS LUIS GILBERT 2025",
+        "archivo":  "2025 - Piscina - XI CAMPEONATO NACIONAL CARLOS LUIS GILBERT VASCONEZ - Resultados 1era jornada.pdf",
+        "categoria":  "18 \u0026 Over",
+        "auditado":  false,
+        "edades":  [
+                       "21",
+                       "29",
+                       "36",
+                       "20"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "F",
+        "prueba":  "4x200 Libre",
+        "estilo":  "Libre",
+        "posta":  200,
+        "tiempo":  "9:51.57",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Fustillos, Nataly",
+                            "Velastegui, Belen Alejandra",
+                            "Montalvo, Loreto Valentina",
+                            "Molina, Diana Camila"
+                        ],
+        "fecha_ini":  "2021-07-03",
+        "fecha_fin":  "2021-07-03",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "IX CAMP NAC INTERCLUBES LUIS ALCIVAR ELIZALDE",
+        "archivo":  "2021 - Piscina - CAMPEONATO LUIS ALCIVAR RECALDE - Resultados cuarta jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "F",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "2:02.02",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Montalvo, Loreto Valentina",
+                            "Molina, Diana Camila",
+                            "Fustillos, Nataly",
+                            "Alvarez, Melanie"
+                        ],
+        "fecha_ini":  "2021-12-16",
+        "fecha_fin":  "2021-12-16",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "XI CAMP. DIANA QUINTANA Y ABEL GILBERT JUV",
+        "archivo":  "2021 - Piscina - XI CAMPEONATO DIANA QUINTANA Y V ALBEL GILBERT VASCONEZ - Resultados segunda jornada juvenil.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "M",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "4:26.97",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Paz Y Miño, Pablo",
+                            "Reyes Santamaria, Alejandro",
+                            "Aguas, Miguel",
+                            "Ramos, Adrian"
+                        ],
+        "fecha_ini":  "2018-06-09",
+        "fecha_fin":  "2018-06-09",
+        "lugar":  "MACHALA, ECUADOR",
+        "torneo":  "CAMPEONATO NAC. LUIS ALCIVAR ELIZALDE 2018",
+        "archivo":  "2018 - Piscina - Copa Luis Alcívar Elizalde - Resultados - 4ta reunión.pdf",
+        "categoria":  "",
+        "auditado":  true,
+        "edades":  [
+                       "16",
+                       "18",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "M",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "1:57.96",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Gonzalez, Rafael Alfonso",
+                            "Armas, Ricardo Jose",
+                            "Alvarez, Martin",
+                            "Contreras, Isaac Gabriel"
+                        ],
+        "fecha_ini":  "2021-12-18",
+        "fecha_fin":  "2021-12-18",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "XI CAMP. DIANA QUINTANA Y ABEL GILBERT JUV",
+        "archivo":  "2021 - Piscina - XI CAMPEONATO DIANA QUINTANA Y V ALBEL GILBERT VASCONEZ - Resultados cuarta jornada juvenil.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "M",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "3:50.59",
+        "equipo":  "NAU",
+        "letra":  "A",
+        "integrantes":  [
+                            "Tuquerres, Alejandro Wladimir",
+                            "Velastegui, Danilo Sebastian",
+                            "Simbaña, Mesias Josue",
+                            "Gonzalez, Rafael Alfonso"
+                        ],
+        "fecha_ini":  "2023-07-20",
+        "fecha_fin":  "2023-07-20",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "VII CAMP NAC INTER CAT ABEL GILBERT V 2023",
+        "archivo":  "2023 - Piscina - VII CAMPEONATO NACIONAL INTERCLUBES ABEL GILBERT VASCONEZ - Resultados 3era jornada.pdf",
+        "categoria":  "18\u0026O",
+        "auditado":  true,
+        "edades":  [
+                       "21",
+                       "19",
+                       "24",
+                       "19"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "M",
+        "prueba":  "4x200 Libre",
+        "estilo":  "Libre",
+        "posta":  200,
+        "tiempo":  "8:44.56",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Velasco, Nicolas Fabricio",
+                            "Gonzalez, Rafael Alfonso",
+                            "Alvarez, Martin",
+                            "Contreras, Isaac Gabriel"
+                        ],
+        "fecha_ini":  "2022-04-08",
+        "fecha_fin":  "2022-04-08",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "XXVIII CAMP NAC RICARDO PLANAS 2022",
+        "archivo":  "2022 - Piscina - CAMPEONATO NACIONAL ABSOLUTO RICARDO PLANAS - Resultados tercera Ricardo Planas 2022.pdf",
+        "categoria":  "",
+        "auditado":  true,
+        "edades":  [
+                       "16",
+                       "18",
+                       "18",
+                       "16"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "M",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "1:43.71",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Gonzalez, Rafael Alfonso",
+                            "Contreras, Isaac Gabriel",
+                            "Velasco, Nicolas Fabricio",
+                            "Armas, Ricardo Jose"
+                        ],
+        "fecha_ini":  "2021-12-16",
+        "fecha_fin":  "2021-12-16",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "XI CAMP. DIANA QUINTANA Y ABEL GILBERT JUV",
+        "archivo":  "2021 - Piscina - XI CAMPEONATO DIANA QUINTANA Y V ALBEL GILBERT VASCONEZ - Resultados segunda jornada juvenil.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "Mixto",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "4:37.72",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Armas, Ricardo Jose",
+                            "Contreras, Isaac Gabriel",
+                            "Molina, Diana Camila",
+                            "Fustillos, Nataly"
+                        ],
+        "fecha_ini":  "2021-07-01",
+        "fecha_fin":  "2021-07-01",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "IX CAMP NAC INTERCLUBES LUIS ALCIVAR ELIZALDE",
+        "archivo":  "2021 - Piscina - CAMPEONATO LUIS ALCIVAR RECALDE - Resultados segunda jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "Mixto",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "2:05.00",
+        "equipo":  "NAUT",
+        "letra":  "A",
+        "integrantes":  [
+                            "Navas, Steven",
+                            "Velasco, Nicolas Fabricio",
+                            "Molina, Diana Camila",
+                            "Fustillos, Nataly"
+                        ],
+        "fecha_ini":  "2025-12-12",
+        "fecha_fin":  "2025-12-12",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "XV CAMP DIANA QUINTANA NOBOA Y ESTEBAN SACHS",
+        "archivo":  "2025 - Piscina - XV CAMPEONATO INTERNACIONAL INTERCLUBES DIANA QUINTANA NOBOA Y CAMPEONATO N - Resultados 6ta jornada.pdf",
+        "categoria":  "18 \u0026 Over",
+        "auditado":  true,
+        "edades":  [
+                       "28",
+                       "19",
+                       "20",
+                       "21"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "Mixto",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "4:08.32",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Contreras, Isaac Gabriel",
+                            "Fustillos, Nataly",
+                            "Molina, Diana Camila",
+                            "Gonzalez, Rafael Alfonso"
+                        ],
+        "fecha_ini":  "2021-07-02",
+        "fecha_fin":  "2021-07-02",
+        "lugar":  "GUAYAQUIL, ECUADOR",
+        "torneo":  "IX CAMP NAC INTERCLUBES LUIS ALCIVAR ELIZALDE",
+        "archivo":  "2021 - Piscina - CAMPEONATO LUIS ALCIVAR RECALDE - Resultados tercera jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "LC",
+        "genero":  "Mixto",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "1:51.21",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Gonzalez, Rafael Alfonso",
+                            "Montalvo, Loreto Valentina",
+                            "Molina, Diana Camila",
+                            "Armas, Ricardo Jose"
+                        ],
+        "fecha_ini":  "2021-12-15",
+        "fecha_fin":  "2021-12-15",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "XI CAMP. DIANA QUINTANA Y ABEL GILBERT JUV",
+        "archivo":  "2021 - Piscina - XI CAMPEONATO DIANA QUINTANA Y V ALBEL GILBERT VASCONEZ - Resultados primera jornada juvenil.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "F",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "5:26.26",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Villamarin, Vanessa Alexandra",
+                            "Ruiz, Rebeca",
+                            "Gomez, Ana",
+                            "Barahona, Paula"
+                        ],
+        "fecha_ini":  "2017-10-28",
+        "fecha_fin":  "2017-10-28",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 4ta jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "F",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "2:15.40",
+        "equipo":  "NAUT",
+        "letra":  "A",
+        "integrantes":  [
+                            "Villamarin, Sarah Marie",
+                            "Jaramillo, Emilia",
+                            "Ruales, Tais Isabela",
+                            "Narea, Victoria Carolina"
+                        ],
+        "fecha_ini":  "2024-12-05",
+        "fecha_fin":  "2024-12-05",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "TORNEO CIUDAD DE QUITO DIEGO QUIROGA 2024",
+        "archivo":  "2024 - Piscina - TORNEO DE QUITO DIEGO QUIROGA - Resultados 4ta jornada.pdf",
+        "categoria":  "13-14",
+        "auditado":  true,
+        "edades":  [
+                       "13",
+                       "13",
+                       "13",
+                       "14"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "F",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "4:47.09",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Gomez, Ana",
+                            "Barahona, Paula",
+                            "Villamarin, Vanessa Alexandra",
+                            "Ruiz, Rebeca"
+                        ],
+        "fecha_ini":  "2017-10-26",
+        "fecha_fin":  "2017-10-26",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 1era jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "F",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "2:00.51",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Montalvo, Loreto Valentina",
+                            "Alvarez, Melanie",
+                            "Velastegui, Belen Alejandra",
+                            "Fustillos, Nataly"
+                        ],
+        "fecha_ini":  "2023-05-05",
+        "fecha_fin":  "2023-05-05",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "II CAMP. NAC. INTER DELFINES SWIM CLUB 2023",
+        "archivo":  "2023 - Piscina - II CAMPEONATO NACIONAL INTERCLUBES DELFINES SWIM CLUB - Resultados Tercera Jornada Delfines 2023.pdf",
+        "categoria":  "18\u0026O",
+        "auditado":  true,
+        "edades":  [
+                       "18",
+                       "18",
+                       "18",
+                       "18"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "M",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "4:41.41",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Ramos, Adrian",
+                            "Armas, Ricardo Jose",
+                            "Merino, Juan Manuel",
+                            "Barahona, Emilio"
+                        ],
+        "fecha_ini":  "2017-10-28",
+        "fecha_fin":  "2017-10-28",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 4ta jornada.pdf",
+        "categoria":  "13-14",
+        "auditado":  false,
+        "edades":  [
+                       "13",
+                       "13",
+                       "13",
+                       "13"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "M",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "1:52.03",
+        "equipo":  "Nautico",
+        "letra":  "A",
+        "integrantes":  [
+                            "Gonzalez, Rafael Alfonso",
+                            "Contreras, Isaac Gabriel",
+                            "Velasco, Nicolas Fabricio",
+                            "Navas, Steven"
+                        ],
+        "fecha_ini":  "2025-06-26",
+        "fecha_fin":  "2025-06-26",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IV CAMP NAC INTER DELFINES SWIM CLUB 2025",
+        "archivo":  "2025 - Piscina - IX CAMPEONATO NACIONAL INTERCLUBES DELFINES SWIM CLUB - Resultados 2da jornada.pdf",
+        "categoria":  "18 \u0026 Over",
+        "auditado":  true,
+        "edades":  [
+                       "21",
+                       "19",
+                       "19",
+                       "28"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "M",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "4:07.68",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Ramos, Adrian",
+                            "Barahona, Emilio",
+                            "Almachi, Andre",
+                            "Armas, Ricardo Jose"
+                        ],
+        "fecha_ini":  "2017-10-26",
+        "fecha_fin":  "2017-10-26",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 1era jornada.pdf",
+        "categoria":  "13-14",
+        "auditado":  false,
+        "edades":  [
+                       "13",
+                       "13",
+                       "13",
+                       "13"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "M",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "1:39.79",
+        "equipo":  "Nautico",
+        "letra":  "A",
+        "integrantes":  [
+                            "Velastegui, Danilo Sebastian",
+                            "Velasco, Nicolas Fabricio",
+                            "Navas, Steven",
+                            "Gonzalez, Rafael Alfonso"
+                        ],
+        "fecha_ini":  "2025-06-27",
+        "fecha_fin":  "2025-06-27",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IV CAMP NAC INTER DELFINES SWIM CLUB 2025",
+        "archivo":  "2025 - Piscina - IX CAMPEONATO NACIONAL INTERCLUBES DELFINES SWIM CLUB - Resultados 3era jornada.pdf",
+        "categoria":  "18 \u0026 Over",
+        "auditado":  true,
+        "edades":  [
+                       "21",
+                       "19",
+                       "28",
+                       "21"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "Mixto",
+        "prueba":  "4x100 Combinado",
+        "estilo":  "Combinado",
+        "posta":  100,
+        "tiempo":  "4:49.26",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Ruiz, Rebeca",
+                            "Reyes, Benjamin",
+                            "Muñoz, Franco",
+                            "Gomez, Ana"
+                        ],
+        "fecha_ini":  "2017-10-27",
+        "fecha_fin":  "2017-10-27",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 2da jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "Mixto",
+        "prueba":  "4x50 Combinado",
+        "estilo":  "Combinado",
+        "posta":  50,
+        "tiempo":  "2:02.84",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Fustillos, Nataly",
+                            "Montalvo, Loreto Valentina",
+                            "Tuquerres, Alejandro Wladimir",
+                            "Gonzalez, Rafael Alfonso"
+                        ],
+        "fecha_ini":  "2023-05-06",
+        "fecha_fin":  "2023-05-06",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "II CAMP. NAC. INTER DELFINES SWIM CLUB 2023",
+        "archivo":  "2023 - Piscina - II CAMPEONATO NACIONAL INTERCLUBES DELFINES SWIM CLUB - Resultados Cuarta Jornada Delfines 2023.pdf",
+        "categoria":  "18\u0026O",
+        "auditado":  true,
+        "edades":  [
+                       "18",
+                       "18",
+                       "18",
+                       "18"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "Mixto",
+        "prueba":  "4x100 Libre",
+        "estilo":  "Libre",
+        "posta":  100,
+        "tiempo":  "4:18.52",
+        "equipo":  "NAUTI",
+        "letra":  "A",
+        "integrantes":  [
+                            "Muñoz, Franco",
+                            "Gomez, Ana",
+                            "Villamarin, Vanessa Alexandra",
+                            "Reyes, Benjamin"
+                        ],
+        "fecha_ini":  "2017-10-28",
+        "fecha_fin":  "2017-10-28",
+        "lugar":  "QUITO, ECUADOR",
+        "torneo":  "IX TORNEO DE NATACION JOSE CUEVAS NAVAS 2017",
+        "archivo":  "2017 - Piscina - Torneo José Cuevas Navas - Resultados 3era jornada.pdf",
+        "categoria":  "15-17",
+        "auditado":  true,
+        "edades":  [
+                       "15",
+                       "15",
+                       "15",
+                       "15"
+                   ]
+    },
+    {
+        "curso":  "SC",
+        "genero":  "Mixto",
+        "prueba":  "4x50 Libre",
+        "estilo":  "Libre",
+        "posta":  50,
+        "tiempo":  "1:49.05",
+        "equipo":  "NAUT",
+        "letra":  "A",
+        "integrantes":  [
+                            "Fustillos, Nataly",
+                            "Velasco, Nicolas Fabricio",
+                            "Ruales, Tais Isabela",
+                            "Guerrero, Fausto Alberto"
+                        ],
+        "fecha_ini":  "2024-12-11",
+        "fecha_fin":  "2024-12-11",
+        "lugar":  "SAMBORONDON, ECUADOR",
+        "torneo":  "CAMP. NAC. ESTEBAN SACHS CIRES 2024",
+        "archivo":  "2024 - Piscina - XIV CAMPEONATO DIANA QUINTANA NOBOA y ESTEBAN SACHS CIRES - Resultados 1era jornada Campeonato Esteban Sachs Cires.pdf",
+        "categoria":  "",
+        "auditado":  true,
+        "edades":  [
+                       "20",
+                       "18",
+                       "13",
+                       "15"
+                   ]
+    }
+]

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Verificar página de récords</title>
+<style>
+:root{--bg:#f3f6f9;--fg:#0f2233;--muted:#526274;--ok:#0a7a3d;--bad:#b3261e;--line:#dbe3ea;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1620;--fg:#e6edf3;--muted:#9db0c2;--ok:#5fd18f;--bad:#ff8a80;--line:#24384a}}
+body{margin:0;background:var(--bg);color:var(--fg);padding:16px;line-height:1.4}
+h1{font-size:22px;margin:0 0 4px}
+p{color:var(--muted);margin:0 0 12px}
+#res{font-size:18px;font-weight:700;margin:12px 0}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+ul{padding-left:18px;font-size:14px}
+li{margin:2px 0}
+iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;background:#fff;max-width:100%}
+</style>
+</head>
+<body>
+<h1>Verificación de la página</h1>
+<p>Abre la página en un marco de 360 px (ancho de celular), recorre todas las vistas y compara lo que se muestra con los archivos de datos.</p>
+<div id="res">Ejecutando…</div>
+<ul id="log"></ul>
+<iframe id="f" title="Página bajo prueba"></iframe>
+<script>
+(async () => {
+  const log = document.getElementById('log'), res = document.getElementById('res');
+  const fallos = [];
+  let pruebas = 0;
+  const ok = (cond, msg) => { pruebas++; if (!cond) { fallos.push(msg); const li = document.createElement('li'); li.className = 'bad'; li.textContent = '✗ ' + msg; log.append(li); } return cond; };
+  const nota = (msg) => { const li = document.createElement('li'); li.textContent = msg; log.append(li); };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const get = (u) => fetch('../' + u).then((r) => r.json());
+  const nombre = (s) => { const i = s.indexOf(','); return i < 0 ? s.trim() : s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim(); };
+
+  try {
+    const [rec, top, rel, owRec, owTop] = await Promise.all(['records_piscina', 'top10_piscina', 'relevos_records', 'records_aguas_abiertas', 'top_aguas_abiertas'].map((n) => get('data/' + n + '.json')));
+    const f = document.getElementById('f');
+    const errores = [];
+    // ?pagina=otra.html permite probar una copia (solo archivos .html de la raíz del sitio)
+    const pag = new URLSearchParams(location.search).get('pagina');
+    await new Promise((r) => { f.onload = r; f.src = '../' + (pag && /^[\w-]+\.html$/.test(pag) ? pag : 'index.html'); });
+    const W = f.contentWindow, d = f.contentDocument;
+    W.addEventListener('error', (e) => errores.push(e.message));
+    W.addEventListener('unhandledrejection', (e) => errores.push(String(e.reason)));
+    // esperar a que carguen todos los datos
+    for (let i = 0; i < 100 && !d.querySelector('.item'); i++) await sleep(100);
+    await sleep(500);
+    const click = (k, v) => { d.querySelector(`.seg[data-key=${k}] button[data-v=${v}]`).click(); };
+    const main = () => d.getElementById('main');
+    const overflow = () => d.documentElement.scrollWidth > d.documentElement.clientWidth + 1;
+    const txt = (el) => el.innerText.replace(/\s+/g, ' ');
+    const RAMA = { M: 'Varones', F: 'Damas' };
+
+    // 1) Récords y relevos por piscina y rama
+    for (const c of ['LC', 'SC']) for (const g of ['M', 'F']) {
+      click('curso', c); click('genero', g); click('vista', 'rec');
+      const id = `Récords ${c} ${RAMA[g]}`;
+      const esperados = rec.filter((r) => r.curso === c && r.genero === g);
+      const items = [...main().querySelectorAll('a.item')];
+      ok(items.length === esperados.length, `${id}: se ven ${items.length} récords individuales, los datos tienen ${esperados.length}`);
+      const evs = items.map((i) => i.dataset.prueba);
+      ok(new Set(evs).size === evs.length, `${id}: hay pruebas repetidas`);
+      const ordenVisto = items.map((i) => esperados.find((r) => r.prueba === i.dataset.prueba)?.orden ?? -1);
+      ok(ordenVisto.every((o, k) => k === 0 || o > ordenVisto[k - 1]), `${id}: el orden de las pruebas no sigue el campo 'orden'`);
+      for (const r of esperados) {
+        const it = items.find((i) => i.dataset.prueba === r.prueba);
+        if (!ok(it, `${id}: falta ${r.prueba}`)) continue;
+        const t = txt(it);
+        ok(t.includes(r.tiempo), `${id} ${r.prueba}: no muestra el tiempo ${r.tiempo}`);
+        ok(t.includes(nombre(r.nadador)), `${id} ${r.prueba}: no muestra el nombre ${nombre(r.nadador)}`);
+        if (r.edad) ok(t.includes(String(r.edad).replace(/\D/g, '') + ' años'), `${id} ${r.prueba}: no muestra la edad ${r.edad}`);
+        ok(!/\d{4}-\d{2}-\d{2}/.test(t), `${id} ${r.prueba}: fecha sin formatear`);
+        ok(!/undefined|null|NaN/.test(t), `${id} ${r.prueba}: texto con undefined/null/NaN`);
+      }
+      const relEsp = rel.filter((r) => r.curso === c && (r.genero === g || r.genero === 'Mixto'));
+      const relVis = [...main().querySelectorAll('.item.relay')];
+      ok(relVis.length === relEsp.length, `${id}: se ven ${relVis.length} relevos, los datos tienen ${relEsp.length}`);
+      // Orden dentro de cada bloque de relevos: primero los del club y luego los mixtos, de menor a mayor distancia
+      for (const card of new Set(relVis.map((x) => x.parentElement))) {
+        const clave = [...card.querySelectorAll('.item.relay')].map((x) => (/Mixto/i.test(x.querySelector('.ev').innerText) ? 1000 : 0) + parseInt(x.querySelector('.ev').innerText.replace(/^\D*4x/, ''), 10));
+        ok(clave.every((v, k) => k === 0 || v > clave[k - 1]), `${id}: relevos fuera de orden (${clave.join(', ')})`);
+      }
+      for (const r of relEsp) {
+        const it = relVis.find((x) => txt(x).includes(r.tiempo) && txt(x).includes(r.prueba.split(' ')[0]));
+        if (!ok(it, `${id}: falta el relevo ${r.prueba} ${r.tiempo}`)) continue;
+        const t = txt(it);
+        for (const [k, n] of (r.integrantes || []).entries()) ok(t.includes(nombre(n)), `${id} relevo ${r.prueba} ${r.tiempo}: falta ${nombre(n)}`);
+        if (r.estilo === 'Combinado' && (r.integrantes || []).length) ok(['(E)', '(P)', '(M)', '(L)'].every((s) => t.includes(s)), `${id} relevo ${r.prueba}: faltan (E)(P)(M)(L)`);
+        if (!(r.integrantes || []).length) ok(t.includes('Integrantes no publicados'), `${id} relevo ${r.prueba}: falta la nota de integrantes`);
+        ok(!/undefined|null|NaN/.test(t), `${id} relevo ${r.prueba}: texto con undefined/null/NaN`);
+      }
+      ok(!overflow(), `${id}: hay scroll horizontal a 360 px`);
+    }
+
+    // 2) Top 10 de cada prueba
+    let filasVistas = 0;
+    for (const c of ['LC', 'SC']) for (const g of ['M', 'F']) {
+      click('curso', c); click('genero', g); click('vista', 'top');
+      const pruebasData = [...new Set(top.filter((t) => t.curso === c && t.genero === g).map((t) => t.prueba))];
+      const opciones = [...d.getElementById('sel-prueba').options].map((o) => o.value);
+      ok(opciones.length === pruebasData.length, `Top 10 ${c} ${RAMA[g]}: el selector tiene ${opciones.length} pruebas, los datos ${pruebasData.length}`);
+      for (const p of opciones) {
+        const s = d.getElementById('sel-prueba'); s.value = p; s.dispatchEvent(new Event('change', { bubbles: true }));
+        const esp = top.filter((t) => t.curso === c && t.genero === g && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
+        const filas = [...main().querySelectorAll('.item.top')];
+        filasVistas += filas.length;
+        const id = `Top 10 ${c} ${RAMA[g]} ${p}`;
+        ok(filas.length === esp.length, `${id}: se ven ${filas.length} filas, los datos tienen ${esp.length}`);
+        esp.forEach((t, k) => {
+          const x = filas[k] ? txt(filas[k]) : '';
+          ok(x.startsWith(t.puesto + '.') && x.includes(t.tiempo) && x.includes(nombre(t.nadador)), `${id}: la fila ${k + 1} no coincide (${t.puesto}. ${t.tiempo} ${nombre(t.nadador)})`);
+          ok((t.marca === 'x') === /Exhibición/i.test(x), `${id}: puesto ${t.puesto} etiqueta de exhibición incorrecta`);
+          if (t.edad) ok(x.includes(String(t.edad).replace(/\D/g, '') + ' años'), `${id}: puesto ${t.puesto} sin edad`);
+        });
+        ok(!overflow(), `${id}: hay scroll horizontal a 360 px`);
+      }
+    }
+    ok(filasVistas === top.length, `Top 10: se recorrieron ${filasVistas} filas, los datos tienen ${top.length}`);
+
+    // 3) Aguas abiertas
+    click('curso', 'OW');
+    ok(d.getElementById('seg-vista').hidden, 'Aguas abiertas: el selector Récords/Top 10 debería ocultarse');
+    for (const g of ['M', 'F']) {
+      click('genero', g);
+      const esp = owTop.filter((t) => t.rama === g);
+      const filas = [...main().querySelectorAll('.item.top')];
+      ok(filas.length === esp.length, `Aguas abiertas ${RAMA[g]}: se ven ${filas.length} filas, los datos ${esp.length}`);
+      for (const r of owRec.filter((r) => r.rama === g)) ok(filas.some((x) => txt(x).includes(r.tiempo) && /Récord/i.test(txt(x))), `Aguas abiertas ${RAMA[g]} ${r.distancia}: récord ${r.tiempo} no marcado`);
+      ok(!overflow(), `Aguas abiertas ${RAMA[g]}: scroll horizontal a 360 px`);
+    }
+
+    // 4) Búsqueda (con y sin acentos) y enlaces directos
+    const q = d.getElementById('q');
+    const buscar = async (s) => { q.value = s; q.dispatchEvent(new Event('input')); await sleep(300); return txt(main()); };
+    const n0 = nombre(rec[0].nadador);
+    ok((await buscar(n0.split(' ').pop().toUpperCase())).includes(n0), `Búsqueda: no encuentra a ${n0}`);
+    ok((await buscar('simbana')).toLowerCase().includes('simbaña'), 'Búsqueda: "simbana" sin tilde no encuentra "Simbaña"');
+    ok(!(await buscar('<img src=x onerror=alert(1)>')).includes('onerror=alert') || !d.querySelector('#main img'), 'Búsqueda: el texto buscado se inserta como HTML');
+    await buscar('');
+    W.location.hash = 'c=SC&g=F&v=top&p=100+Pecho'; await sleep(300);
+    ok(d.getElementById('sel-prueba')?.value === '100 Pecho' && /Damas/.test(txt(main())), 'Enlace directo #c=SC&g=F&v=top&p=100+Pecho no abre esa vista');
+    W.location.hash = 'c=XX&g=<b>&v=zz'; await sleep(300);
+    ok(main().querySelector('.item') && !main().querySelector('b'), 'Hash inválido rompe la página');
+
+    ok(errores.length === 0, 'Errores de JavaScript en la página: ' + errores.join(' | '));
+    nota(`Datos: ${rec.length} récords, ${top.length} filas de Top 10, ${rel.length} relevos, ${owRec.length} récords de aguas abiertas.`);
+  } catch (e) {
+    ok(false, 'La verificación no pudo completarse: ' + (e && e.message || e));
+  }
+  res.className = fallos.length ? 'bad' : 'ok';
+  res.textContent = fallos.length ? `✗ ${fallos.length} fallo(s) de ${pruebas} comprobaciones` : `✓ Todo bien: ${pruebas} comprobaciones sin fallos`;
+  document.title = (fallos.length ? 'FALLO' : 'OK') + ' · Verificar página de récords';
+  window.RESULTADO = { pruebas, fallos };
+})();
+</script>
+</body>
+</html>
