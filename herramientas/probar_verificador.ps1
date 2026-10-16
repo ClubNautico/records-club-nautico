@@ -16,15 +16,14 @@ function Correr { & powershell -NoProfile -ExecutionPolicy Bypass -File "$tmp\he
 $casos = [ordered]@{
   'Datos reales (deben pasar)'           = { }
   'Récord borrado'                       = { $r = Leer 'records_piscina.json'; Guardar 'records_piscina.json' ($r | Select-Object -Skip 1) }
-  'Récord de exhibición (x)'             = { $r = Leer 'records_piscina.json'; $r[0].marca = 'x'; Guardar 'records_piscina.json' $r }
   'Fecha imposible 2025-13-45'           = { $r = Leer 'records_piscina.json'; $r[0].fecha = '2025-13-45'; Guardar 'records_piscina.json' $r }
   'Rango de fechas invertido'            = { $r = Leer 'records_piscina.json'; $r[0].fecha = '2025-01-10 a 2020-01-01'; Guardar 'records_piscina.json' $r }
   'Tiempo y segundos distintos'          = { $r = Leer 'records_piscina.json'; $r[0].segundos = [double]$r[0].segundos + 1; Guardar 'records_piscina.json' $r }
-  'Edad no válida'                       = { $r = Leer 'top10_piscina.json'; $r[0].edad = 'J'; Guardar 'top10_piscina.json' $r }
   'Top 10 con #1 distinto del récord'    = { $r = Leer 'top10_piscina.json'; $x = $r | Where-Object { $_.puesto -eq 1 } | Select-Object -First 1; $x.nadador = 'Otro, Nombre'; Guardar 'top10_piscina.json' $r }
   'Top 10 desordenado'                   = { $r = Leer 'top10_piscina.json'; $x = $r | Where-Object { $_.puesto -eq 3 } | Select-Object -First 1; $x.segundos = 1; $x.tiempo = '1.00'; Guardar 'top10_piscina.json' $r }
   'Relevo con estilo incoherente'        = { $r = Leer 'relevos_records.json'; ($r | Where-Object { $_.prueba -like '*Combinado' })[0].estilo = 'Libre'; Guardar 'relevos_records.json' $r }
-  'Relevo con 3 edades'                  = { $r = Leer 'relevos_records.json'; $r[0].edades = @('15', '15', '15'); Guardar 'relevos_records.json' $r }
+  'Relevo con 3 integrantes'             = { $r = Leer 'relevos_records.json'; $r[0].integrantes = @($r[0].integrantes | Select-Object -First 3); Guardar 'relevos_records.json' $r }
+  'Exhibición más rápida que el récord'  = { $r = Leer 'top10_piscina.json'; $x = $r | Where-Object { $_.puesto -eq 2 } | Select-Object -First 1; $x.marca = 'x'; $x.segundos = 1; $x.tiempo = '1.00'; Guardar 'top10_piscina.json' $r }
   'Aguas abiertas vacío'                 = { Guardar 'records_aguas_abiertas.json' @(); Guardar 'top_aguas_abiertas.json' @() }
   'Prueba con estilo desconocido'        = { $r = Leer 'records_piscina.json'; $r[0].prueba = '50 Delfin'; Guardar 'records_piscina.json' $r }
   'JSON roto'                            = { [IO.File]::WriteAllText("$tmp\data\top10_piscina.json", '[{"curso":', (New-Object Text.UTF8Encoding $false)) }

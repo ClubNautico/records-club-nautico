@@ -63,13 +63,11 @@ foreach ($par in @(@{ n = 'records'; d = $rec }, @{ n = 'top10'; d = $top })) {
       if ([int]$r.orden -lt $rangoOrden[$est] -or [int]$r.orden -ge $rangoOrden[$est] + 10) { Aviso "$id orden $($r.orden) fuera del rango habitual de $est" }
     }
     if ($r.nadador -notmatch ',') { Aviso "$id nombre sin coma (no es 'Apellido, Nombre')" }
-    $e = "$($r.edad)" -replace '\D', ''
-    if ("$($r.edad)" -eq '') { Aviso "$id sin edad (no se mostrará)" } elseif ($e -eq '' -or [int]$e -lt 7 -or [int]$e -gt 90) { Err "$id edad no válida: '$($r.edad)'" }
     if ($r.marca -notin '', 'x', 'J', $null) { Aviso "$id marca desconocida '$($r.marca)'" }
   }
 }
 
-# ---- Récords: exactamente uno por prueba, nunca de exhibición ----
+# ---- Récords: exactamente uno por prueba (las marcas de exhibición "x" cuentan igual) ----
 foreach ($c in 'LC','SC') { foreach ($g in 'M','F') {
   $sub = @($rec | Where-Object { $_.curso -eq $c -and $_.genero -eq $g })
   foreach ($p in $esperadas[$c]) {
@@ -78,7 +76,6 @@ foreach ($c in 'LC','SC') { foreach ($g in 'M','F') {
   }
   foreach ($x in $sub) { if ($x.prueba -notin $esperadas[$c]) { Err "Récords $c $g prueba inesperada '$($x.prueba)'" } }
 } }
-foreach ($r in $rec) { if ($r.marca -eq 'x') { Err "Récord $($r.curso) $($r.genero) $($r.prueba) es marca de exhibición (x)" } }
 
 # ---- Top 10: puestos 1..n, orden por tiempo, un nadador una vez, #1 = récord ----
 foreach ($grupo in ($top | Group-Object curso, genero, prueba)) {
@@ -118,8 +115,6 @@ foreach ($r in $rel) {
   $ni = @($r.integrantes).Count
   if ($ni -ne 0 -and $ni -ne 4) { Err "$id tiene $ni integrantes" }
   if ($ni -eq 0) { Aviso "$id sin integrantes (se mostrará la nota)" }
-  if ($null -ne $r.edades -and @($r.edades).Count -ne $ni) { Err "${id}: $(@($r.edades).Count) edades para $ni integrantes" }
-  if ($null -eq $r.edades -and $ni -gt 0) { Aviso "$id sin edades" }
 }
 
 # ---- Aguas abiertas: campos, y récord = puesto 1 del top ----

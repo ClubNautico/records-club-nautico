@@ -71,7 +71,7 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
         const t = txt(it);
         ok(t.includes(r.tiempo), `${id} ${r.prueba}: no muestra el tiempo ${r.tiempo}`);
         ok(t.includes(nombre(r.nadador)), `${id} ${r.prueba}: no muestra el nombre ${nombre(r.nadador)}`);
-        if (r.edad) ok(t.includes(String(r.edad).replace(/\D/g, '') + ' años'), `${id} ${r.prueba}: no muestra la edad ${r.edad}`);
+        ok(!/\d+ años/.test(t), `${id} ${r.prueba}: muestra una edad (no debe mostrarse)`);
         ok(!/\d{4}-\d{2}-\d{2}/.test(t), `${id} ${r.prueba}: fecha sin formatear`);
         ok(!/undefined|null|NaN/.test(t), `${id} ${r.prueba}: texto con undefined/null/NaN`);
       }
@@ -113,7 +113,7 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
           const x = filas[k] ? txt(filas[k]) : '';
           ok(x.startsWith(t.puesto + '.') && x.includes(t.tiempo) && x.includes(nombre(t.nadador)), `${id}: la fila ${k + 1} no coincide (${t.puesto}. ${t.tiempo} ${nombre(t.nadador)})`);
           ok((t.marca === 'x') === /Exhibición/i.test(x), `${id}: puesto ${t.puesto} etiqueta de exhibición incorrecta`);
-          if (t.edad) ok(x.includes(String(t.edad).replace(/\D/g, '') + ' años'), `${id}: puesto ${t.puesto} sin edad`);
+          ok(!/\d+ años/.test(x), `${id}: puesto ${t.puesto} muestra una edad (no debe mostrarse)`);
         });
         ok(!overflow(), `${id}: hay scroll horizontal a 360 px`);
       }

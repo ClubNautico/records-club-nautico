@@ -81,8 +81,6 @@ h2{font-size:20px;margin:6px 0 2px}
 .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent);vertical-align:2px;margin-left:6px}
 .tag.warn{background:var(--warn-bg);color:var(--warn-fg)}
 .go{color:var(--accent);font-size:13px;font-weight:600}
-.age{color:var(--muted);font-size:13.5px;white-space:nowrap}
-.age::before{content:"· "}
 ol.team{margin:2px 0 0;padding-left:1.4em}
 ol.team li{margin:1px 0}
 .pos{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted);min-width:1.8em;display:inline-block}
@@ -212,16 +210,6 @@ footer p{margin:0 0 6px}
   const estilo = (r) => String(r.prueba || '').trim().split(/\s+/)[1] || r.estilo || '';
   const piscina = (c) => c === 'LC' ? 'Piscina 50 m' : c === 'SC' ? 'Piscina 25 m' : 'Aguas abiertas';
   const fold = (s) => (s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
-  // Edad con la que se nadó la marca (tal como la imprime el resultado oficial)
-  const edadTxt = (e) => { const n = String(e ?? '').replace(/\D/g, ''); return n ? n + ' años' : ''; };
-  const edadSpan = (e) => { const t = edadTxt(e); return t ? ` <span class="age">${t}</span>` : ''; };
-  // Aguas abiertas: solo hay categoría ("Girls 12-13", "Boys 20&O")
-  const categoria = (c) => {
-    const s = String(c || '');
-    let m = /(\d+)\s*-\s*(\d+)/.exec(s); if (m) return `Cat. ${m[1]}-${m[2]} años`;
-    m = /(\d+)\s*&\s*(o|over)\b/i.exec(s); if (m) return `Cat. ${m[1]} años y más`;
-    return '';
-  };
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const dot = '<span class="dot" aria-hidden="true">·</span>';
   const ESTILOS_REL = ['(E)', '(P)', '(M)', '(L)'];
@@ -246,15 +234,14 @@ footer p{margin:0 0 6px}
     return `<a class="item rowlink" href="#" data-prueba="${esc(r.prueba)}" aria-label="${esc(prueba(r.prueba))}: ${esc(r.tiempo)}, ${esc(nombre(r.nadador))}. Ver Top 10">
       <span class="ev">${esc(prueba(r.prueba))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}</span>
       <span class="time">${esc(r.tiempo)}</span>
-      <span class="who">${esc(nombre(r.nadador))}${edadSpan(r.edad)}</span>
+      <span class="who">${esc(nombre(r.nadador))}</span>
       <span class="meta">${esc(fecha(r.fecha))}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)} <span class="go">Top 10 ›</span></span>
     </a>`;
   }
   function relevoItem(r) {
     const comb = estilo(r) === 'Combinado';
-    const eds = r.edades || [];
     const ints = (r.integrantes || []).length
-      ? '<ol class="team">' + r.integrantes.map((n, i) => `<li>${esc(nombre(n))}${comb ? ' ' + ESTILOS_REL[i] : ''}${edadSpan(eds[i])}</li>`).join('') + '</ol>'
+      ? '<ol class="team">' + r.integrantes.map((n, i) => `<li>${esc(nombre(n))}${comb ? ' ' + ESTILOS_REL[i] : ''}</li>`).join('') + '</ol>'
       : 'Integrantes no publicados en los resultados oficiales';
     return `<div class="item relay">
       <span class="ev">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? '<span class="tag">Mixto</span>' : ''}</span>
@@ -277,7 +264,7 @@ footer p{margin:0 0 6px}
       .concat(rel.filter((r) => !['Libre', 'Combinado'].includes(estilo(r))).map(relevoItem));
     const rama = st.genero === 'M' ? 'Varones' : 'Damas';
     return `<h2>Récords · ${piscina(st.curso)} · ${rama}</h2>
-      <p class="sub">Una marca por prueba, la más rápida de todas las categorías, con la edad del nadador cuando la hizo. Toca una prueba para ver su Top 10. Los relevos mixtos aparecen en varones y en damas.</p>
+      <p class="sub">Una marca por prueba, la más rápida de todas las categorías (incluidas las marcas de exhibición). Toca una prueba para ver su Top 10. Los relevos mixtos aparecen en varones y en damas.</p>
       ${grupo('Libre', by('Libre'))}
       ${grupo('Relevos libres', relBy('Libre'))}
       ${grupo('Mariposa', by('Mariposa'))}
@@ -291,13 +278,13 @@ footer p{margin:0 0 6px}
   function topItem(t, extra) {
     const exh = t.marca === 'x';
     return `<div class="item top">
-      <span class="ev"><span class="pos${t.puesto === 1 && !exh ? ' p1' : ''}">${esc(t.puesto)}.</span> <span class="time" style="text-align:left">${esc(t.tiempo)}</span></span>
-      <span class="who">${esc(nombre(t.nadador))}${t.edad !== undefined ? edadSpan(t.edad) : (categoria(t.categoria) ? ` <span class="age">${categoria(t.categoria)}</span>` : '')}${exh ? '<span class="tag warn">Exhibición</span>' : ''}${extra || ''}</span>
+      <span class="ev"><span class="pos${t.puesto === 1 ? ' p1' : ''}">${esc(t.puesto)}.</span> <span class="time" style="text-align:left">${esc(t.tiempo)}</span></span>
+      <span class="who">${esc(nombre(t.nadador))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}${extra || ''}</span>
       <span class="meta">${esc(fecha(t.fecha))}${dot}${esc(lugar(t.lugar))}${dot}${esc(t.torneo)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
     </div>`;
   }
   const notaExh = (rows) => rows.some((t) => t.marca === 'x')
-    ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Se muestra en el ranking pero no se considera récord del club.</p>' : '';
+    ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Cuenta igual para el ranking y para los récords del club.</p>' : '';
 
   function vistaTop() {
     const pruebas = [...new Map(D.top.filter((t) => t.curso === st.curso && t.genero === st.genero)
@@ -319,7 +306,7 @@ footer p{margin:0 0 6px}
     const bloques = recs.map((r) => {
       const top = D.owTop.filter((t) => t.rama === st.genero && t.distancia === r.distancia).sort((a, b) => a.puesto - b.puesto);
       return `<h3 class="group">${esc(r.distancia)}</h3>
-        <div class="card">${top.map((t) => topItem(t, t.puesto === 1 && t.marca !== 'x' ? '<span class="tag">Récord</span>' : '')).join('')}</div>`;
+        <div class="card">${top.map((t) => topItem(t, t.puesto === 1 ?'<span class="tag">Récord</span>' : '')).join('')}</div>`;
     });
     return `<h2>Aguas abiertas · ${rama}</h2>
       <p class="sub">Mejores marcas del club por distancia. El número es la posición dentro del club (no el lugar en la carrera); la primera es el récord.</p>
@@ -339,9 +326,9 @@ footer p{margin:0 0 6px}
     const bloques = [...porNadador].sort((a, b) => a[0].localeCompare(b[0], 'es')).map(([n, rs]) => {
       rs.sort((a, b) => a.k.localeCompare(b.k, 'es', { numeric: true }));
       return `<h3 class="group">${esc(n)}</h3><div class="card">${rs.map((r) => `<div class="item">
-          <span class="ev">${esc(r.ev)}${r.t.puesto === 1 && r.t.marca !== 'x' ? '<span class="tag">Récord</span>' : ''}${r.t.marca === 'x' ? '<span class="tag warn">Exhibición</span>' : ''}</span>
+          <span class="ev">${esc(r.ev)}${r.t.puesto === 1 ? '<span class="tag">Récord</span>' : ''}${r.t.marca === 'x' ? '<span class="tag warn">Exhibición</span>' : ''}</span>
           <span class="time">${esc(r.t.tiempo)}</span>
-          <span class="who"><span class="pos${r.t.puesto === 1 && r.t.marca !== 'x' ? ' p1' : ''}">${esc(r.t.puesto)}.</span> lugar en el Top · ${esc(r.where)}${r.t.edad !== undefined ? edadSpan(r.t.edad) : (categoria(r.t.categoria) ? ` <span class="age">${categoria(r.t.categoria)}</span>` : '')}</span>
+          <span class="who"><span class="pos${r.t.puesto === 1 ? ' p1' : ''}">${esc(r.t.puesto)}.</span> lugar en el Top · ${esc(r.where)}</span>
           <span class="meta">${esc(fecha(r.t.fecha))}${dot}${esc(lugar(r.t.lugar))}${dot}${esc(r.t.torneo)}</span>
         </div>`).join('')}</div>`;
     });
