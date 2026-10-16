@@ -50,19 +50,14 @@ h1{font-size:26px;line-height:1.15;margin:4px 0 6px;font-weight:700}
 .controls{background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line)}
 @media (min-width:760px) and (min-height:600px){.controls{position:sticky;top:0;z-index:5}}
 .seg{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:4px;margin-bottom:8px}
-.seg[hidden]{display:none}
 .item.top .ev{white-space:nowrap}
 .seg button{flex:1 1 0;min-height:44px;border:0;border-radius:9px;background:transparent;color:var(--fg);font:inherit;font-size:15px;font-weight:600;cursor:pointer;padding:6px 8px}
 .seg button[aria-pressed="true"]{background:var(--on);color:var(--on-fg)}
-.seg button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.seg button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .rowlink:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.row2{display:flex;gap:8px}
-.row2 .seg{flex:1 1 0}
-@media (max-width:520px){.seg button{font-size:14px;padding:6px 4px}.row2{gap:6px}}
-.search{position:relative}
-.search input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--fg);font:inherit;padding:8px 12px 8px 38px}
-.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+@media (max-width:520px){.seg button{font-size:14px;padding:6px 4px}}
+.controls .seg:last-child{margin-bottom:0}
 
 main{padding:16px 0 8px}
 h2{font-size:20px;margin:6px 0 2px}
@@ -72,7 +67,16 @@ h2{font-size:20px;margin:6px 0 2px}
 .item{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 14px;border-top:1px solid var(--line);color:inherit;text-decoration:none}
 .item:first-child{border-top:0}
 .rowlink{cursor:pointer}
-.rowlink:hover{background:var(--accent-soft)}
+.rowlink:hover,.rowlink[aria-expanded="true"]{background:var(--accent-soft)}
+.rowlink[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--accent)}
+/* Top 10 desplegado bajo la prueba */
+.top10{background:var(--bg);border-top:1px solid var(--line);padding:4px 0 10px;box-shadow:inset 4px 0 0 var(--accent)}
+.top10 .t10head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 14px 4px 18px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.top10 .t10head small{font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted)}
+.top10 .item{padding:9px 14px 9px 18px;border-top:1px dashed var(--line)}
+.top10 .item:first-of-type{border-top:0}
+.top10 .note{margin:6px 14px 6px 18px}
+.top10 .empty{padding:10px 18px}
 .ev{font-weight:700;font-size:16px}
 .time{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .who{grid-column:1/-1;font-size:15px}
@@ -88,9 +92,6 @@ ol.team li{margin:1px 0}
 .note{background:var(--warn-bg);color:var(--warn-fg);border-radius:10px;padding:10px 12px;font-size:14px;margin:12px 0}
 .empty{color:var(--muted);padding:16px 14px}
 
-.pick{display:block;margin:0 0 12px}
-.pick label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
-.pick select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--fg);font:inherit;font-size:16px;font-weight:600;padding:8px 12px}
 
 @media (min-width:760px){
   h1{font-size:34px}
@@ -136,19 +137,9 @@ footer p{margin:0 0 6px}
       <button type="button" data-v="SC">Piscina 25 m</button>
       <button type="button" data-v="OW">Aguas abiertas</button>
     </div>
-    <div class="row2">
-      <div class="seg" role="group" aria-label="Rama" data-key="genero">
-        <button type="button" data-v="M">Varones</button>
-        <button type="button" data-v="F">Damas</button>
-      </div>
-      <div class="seg" role="group" aria-label="Vista" data-key="vista" id="seg-vista">
-        <button type="button" data-v="rec">Récords</button>
-        <button type="button" data-v="top">Top 10</button>
-      </div>
-    </div>
-    <div class="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Buscar nadador/a…" aria-label="Buscar nadador o nadadora por nombre" autocomplete="off">
+    <div class="seg" role="group" aria-label="Rama" data-key="genero">
+      <button type="button" data-v="M">Varones</button>
+      <button type="button" data-v="F">Damas</button>
     </div>
   </div>
 </div>
@@ -175,9 +166,9 @@ footer p{margin:0 0 6px}
     owTop: 'data/top_aguas_abiertas.json'
   };
   const D = {}, ERR = {};
-  const st = { curso: 'LC', genero: 'M', vista: 'rec', prueba: null, q: '' };
+  // abierta = prueba cuyo Top 10 está desplegado (una a la vez)
+  const st = { curso: 'LC', genero: 'M', abierta: null };
   const main = document.getElementById('main');
-  const qInput = document.getElementById('q');
 
   // ---------- formato ----------
   const nombre = (s) => {
@@ -209,7 +200,6 @@ footer p{margin:0 0 6px}
   // El estilo se toma del nombre de la prueba ("200 Pecho", "4x50 Combinado"), que es lo que se muestra
   const estilo = (r) => String(r.prueba || '').trim().split(/\s+/)[1] || r.estilo || '';
   const piscina = (c) => c === 'LC' ? 'Piscina 50 m' : c === 'SC' ? 'Piscina 25 m' : 'Aguas abiertas';
-  const fold = (s) => (s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const dot = '<span class="dot" aria-hidden="true">·</span>';
   const ESTILOS_REL = ['(E)', '(P)', '(M)', '(L)'];
@@ -219,24 +209,34 @@ footer p{margin:0 0 6px}
     const h = new URLSearchParams(location.hash.slice(1));
     if (['LC', 'SC', 'OW'].includes(h.get('c'))) st.curso = h.get('c');
     if (['M', 'F'].includes(h.get('g'))) st.genero = h.get('g');
-    if (['rec', 'top'].includes(h.get('v'))) st.vista = h.get('v');
-    st.prueba = h.get('p') || null;
+    st.abierta = h.get('p') || null;
   };
   const escribirHash = () => {
-    const h = new URLSearchParams({ c: st.curso, g: st.genero, v: st.vista });
-    if (st.vista === 'top' && st.prueba && st.curso !== 'OW') h.set('p', st.prueba);
+    const h = new URLSearchParams({ c: st.curso, g: st.genero });
+    if (st.abierta && st.curso !== 'OW') h.set('p', st.abierta);
     history.replaceState(null, '', '#' + h.toString());
   };
 
   // ---------- render ----------
   function recordItem(r) {
     const exh = r.marca === 'x';
-    return `<a class="item rowlink" href="#" data-prueba="${esc(r.prueba)}" aria-label="${esc(prueba(r.prueba))}: ${esc(r.tiempo)}, ${esc(nombre(r.nadador))}. Ver Top 10">
+    const abierta = st.abierta === r.prueba;
+    return `<a class="item rowlink" href="#" role="button" data-prueba="${esc(r.prueba)}" aria-expanded="${abierta}">
       <span class="ev">${esc(prueba(r.prueba))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}</span>
       <span class="time">${esc(r.tiempo)}</span>
       <span class="who">${esc(nombre(r.nadador))}</span>
-      <span class="meta">${esc(fecha(r.fecha))}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)} <span class="go">Top 10 ›</span></span>
-    </a>`;
+      <span class="meta">${esc(fecha(r.fecha))}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)} <span class="go">${abierta ? 'Ocultar Top 10 ▴' : 'Ver Top 10 ▾'}</span></span>
+    </a>${abierta ? top10Html(r.prueba) : ''}`;
+  }
+  // Top 10 de una prueba, desplegado justo debajo de su fila
+  function top10Html(p) {
+    if (!D.top) return `<div class="top10" data-prueba="${esc(p)}"><p class="empty">Cargando Top 10…</p></div>`;
+    const rows = D.top.filter((t) => t.curso === st.curso && t.genero === st.genero && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
+    return `<div class="top10" data-prueba="${esc(p)}" role="region" aria-label="Top 10 de ${esc(prueba(p))}">
+      <div class="t10head"><span>Top 10 · ${esc(prueba(p))}</span><small>mejor marca de cada nadador</small></div>
+      ${notaExh(rows)}
+      ${rows.map((t) => topItem(t)).join('') || '<p class="empty">Sin marcas.</p>'}
+    </div>`;
   }
   function relevoItem(r) {
     const comb = estilo(r) === 'Combinado';
@@ -286,20 +286,6 @@ footer p{margin:0 0 6px}
   const notaExh = (rows) => rows.some((t) => t.marca === 'x')
     ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Cuenta igual para el ranking y para los récords del club.</p>' : '';
 
-  function vistaTop() {
-    const pruebas = [...new Map(D.top.filter((t) => t.curso === st.curso && t.genero === st.genero)
-      .sort((a, b) => a.orden - b.orden).map((t) => [t.prueba, t])).keys()];
-    if (!pruebas.includes(st.prueba)) st.prueba = pruebas[0];
-    const rows = D.top.filter((t) => t.curso === st.curso && t.genero === st.genero && t.prueba === st.prueba).sort((a, b) => a.puesto - b.puesto);
-    const rama = st.genero === 'M' ? 'Varones' : 'Damas';
-    return `<h2>Top 10 · ${piscina(st.curso)} · ${rama}</h2>
-      <p class="sub">Los 10 mejores nadadores del club en la historia de cada prueba, con la mejor marca de cada uno.</p>
-      <div class="pick"><label for="sel-prueba">Prueba</label>
-        <select id="sel-prueba">${pruebas.map((p) => `<option value="${esc(p)}"${p === st.prueba ? ' selected' : ''}>${esc(prueba(p))}</option>`).join('')}</select></div>
-      ${notaExh(rows)}
-      <div class="card">${rows.map((t) => topItem(t)).join('') || '<p class="empty">Sin marcas.</p>'}</div>`;
-  }
-
   function vistaAguas() {
     const rama = st.genero === 'M' ? 'Varones' : 'Damas';
     const recs = D.owRec.filter((r) => r.rama === st.genero).sort((a, b) => a.dist_km - b.dist_km);
@@ -313,80 +299,74 @@ footer p{margin:0 0 6px}
       ${bloques.join('') || '<p class="empty">Sin marcas registradas.</p>'}`;
   }
 
-  function vistaBusqueda() {
-    const q = fold(st.q.trim());
-    const hit = (n) => fold(nombre(n)).includes(q) || fold(n).includes(q);
-    const res = [];
-    for (const t of D.top) if (hit(t.nadador)) res.push({ n: nombre(t.nadador), where: piscina(t.curso) + ' · ' + (t.genero === 'M' ? 'Varones' : 'Damas'), ev: prueba(t.prueba), t, k: t.curso + t.orden });
-    for (const t of D.owTop) if (hit(t.nadador)) res.push({ n: nombre(t.nadador), where: 'Aguas abiertas · ' + (t.rama === 'M' ? 'Varones' : 'Damas'), ev: t.distancia, t, k: 'OW' + String(t.dist_km).padStart(5, '0') });
-    const rels = D.rel.filter((r) => (r.integrantes || []).some(hit));
-    if (!res.length && !rels.length) return `<h2>Búsqueda</h2><p class="sub">No hay marcas en el Top 10 para “${esc(st.q.trim())}”.</p>`;
-    const porNadador = new Map();
-    for (const r of res) { if (!porNadador.has(r.n)) porNadador.set(r.n, []); porNadador.get(r.n).push(r); }
-    const bloques = [...porNadador].sort((a, b) => a[0].localeCompare(b[0], 'es')).map(([n, rs]) => {
-      rs.sort((a, b) => a.k.localeCompare(b.k, 'es', { numeric: true }));
-      return `<h3 class="group">${esc(n)}</h3><div class="card">${rs.map((r) => `<div class="item">
-          <span class="ev">${esc(r.ev)}${r.t.puesto === 1 ? '<span class="tag">Récord</span>' : ''}${r.t.marca === 'x' ? '<span class="tag warn">Exhibición</span>' : ''}</span>
-          <span class="time">${esc(r.t.tiempo)}</span>
-          <span class="who"><span class="pos${r.t.puesto === 1 ? ' p1' : ''}">${esc(r.t.puesto)}.</span> lugar en el Top · ${esc(r.where)}</span>
-          <span class="meta">${esc(fecha(r.t.fecha))}${dot}${esc(lugar(r.t.lugar))}${dot}${esc(r.t.torneo)}</span>
-        </div>`).join('')}</div>`;
-    });
-    const relHtml = rels.length ? grupo('Relevos récord en los que participa', rels.map((r) => relevoItem(r).replace('<span class="ev">', `<span class="ev">${esc(piscina(r.curso))} · `))) : '';
-    return `<h2>Búsqueda: “${esc(st.q.trim())}”</h2>
-      <p class="sub">Todas las marcas en el Top 10 histórico. Borra la búsqueda para volver.</p>${bloques.join('')}${relHtml}`;
-  }
-
   const statusEl = document.getElementById('status');
   // Qué archivos necesita la vista actual
-  const vistaActual = () => {
-    if (st.q.trim().length >= 2) return [['top', 'owTop', 'rel'], vistaBusqueda];
-    if (st.curso === 'OW') return [['owRec', 'owTop'], vistaAguas];
-    if (st.vista === 'top') return [['top'], vistaTop];
-    return [['rec', 'rel'], vistaRecords];
-  };
-  const vistaBusquedaCorta = () => '<h2>Búsqueda</h2><p class="sub">Escribe al menos 2 letras del nombre.</p>';
+  const vistaActual = () => st.curso === 'OW' ? [['owRec', 'owTop'], vistaAguas] : [['rec', 'rel'], vistaRecords];
+  let porDesplazar = true; // al abrir un enlace directo con Top 10, llevar la prueba a la vista una vez
 
   function draw() {
     document.querySelectorAll('.seg').forEach((g) => {
       const k = g.dataset.key;
       g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st[k])));
     });
-    document.getElementById('seg-vista').hidden = st.curso === 'OW';
     const [need, html] = vistaActual();
     const falla = need.find((k) => ERR[k]);
     try {
       if (falla) main.innerHTML = `<p class="err">No se pudieron cargar los datos (${esc(ERR[falla])}). Revisa tu conexión y recarga la página.</p>`;
-      else if (st.q.trim().length === 1) main.innerHTML = vistaBusquedaCorta();
       else if (need.every((k) => D[k])) main.innerHTML = html();
       else main.innerHTML = '<p class="sub">Cargando…</p>';
     } catch (e) {
-      main.innerHTML = `<p class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba otra pestaña o recarga la página.</p>`;
+      main.innerHTML = `<p class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba recargar la página.</p>`;
     }
     const h2 = main.querySelector('h2');
     statusEl.textContent = h2 ? h2.textContent : '';
+    escribirHash();
+    if (porDesplazar && st.abierta && D.top) {
+      const fila = filaDe(st.abierta);
+      if (fila) { fila.scrollIntoView({ block: 'start' }); porDesplazar = false; }
+    }
+  }
+
+  const filaDe = (p) => [...main.querySelectorAll('a.rowlink')].find((a) => a.dataset.prueba === p);
+  const marcarFila = (a, abierta) => {
+    a.setAttribute('aria-expanded', String(abierta));
+    const go = a.querySelector('.go'); if (go) go.textContent = abierta ? 'Ocultar Top 10 ▴' : 'Ver Top 10 ▾';
+  };
+  // Abre o cierra el Top 10 bajo la fila tocada, sin redibujar la página (la fila no se mueve de la pantalla)
+  function alternar(a) {
+    const p = a.dataset.prueba;
+    const antes = a.getBoundingClientRect().top;
+    const prev = st.abierta ? filaDe(st.abierta) : null;
+    main.querySelectorAll('.top10').forEach((d) => d.remove());
+    if (prev) marcarFila(prev, false);
+    if (st.abierta === p) st.abierta = null;
+    else {
+      st.abierta = p;
+      a.insertAdjacentHTML('afterend', top10Html(p));
+      marcarFila(a, true);
+    }
+    window.scrollBy(0, a.getBoundingClientRect().top - antes);
+    statusEl.textContent = st.abierta ? 'Top 10 de ' + prueba(p) + ' abierto' : 'Top 10 cerrado';
     escribirHash();
   }
 
   // ---------- eventos ----------
   document.querySelectorAll('.seg').forEach((g) => g.addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
+    if (st[g.dataset.key] !== b.dataset.v) st.abierta = null;
     st[g.dataset.key] = b.dataset.v;
-    if (st.q) { st.q = ''; qInput.value = ''; }
     draw();
   }));
   main.addEventListener('click', (e) => {
-    const a = e.target.closest('a[data-prueba]'); if (!a) return;
+    const a = e.target.closest('a.rowlink'); if (!a) return;
     e.preventDefault();
-    st.vista = 'top'; st.prueba = a.dataset.prueba;
-    draw(); window.scrollTo({ top: 0 });
+    alternar(a);
   });
-  main.addEventListener('change', (e) => {
-    if (e.target.id === 'sel-prueba') { st.prueba = e.target.value; draw(); document.getElementById('sel-prueba').focus(); }
+  main.addEventListener('keydown', (e) => {
+    const a = e.target.closest && e.target.closest('a.rowlink');
+    if (a && e.key === ' ') { e.preventDefault(); alternar(a); }
   });
-  window.addEventListener('hashchange', () => { leerHash(); st.q = ''; qInput.value = ''; draw(); });
-  let tmr;
-  qInput.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(() => { st.q = qInput.value; draw(); }, 150); });
+  window.addEventListener('hashchange', () => { leerHash(); porDesplazar = true; draw(); });
 
   // ---------- carga ----------
   // Cada archivo se pide en paralelo y la vista se dibuja apenas llegan los que necesita
@@ -399,7 +379,7 @@ footer p{margin:0 0 6px}
       .then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
       .then((j) => { if (!Array.isArray(j)) throw new Error(url + ' con formato inválido'); D[k] = j; })
       .catch((e) => { ERR[k] = e.message || url; })
-      .finally(() => { if (vistaActual()[0].includes(k)) draw(); });
+      .finally(() => { if (vistaActual()[0].includes(k) || (k === 'top' && st.abierta && st.curso !== 'OW')) draw(); });
   }
 })();
 </script>

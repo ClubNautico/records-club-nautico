@@ -29,7 +29,15 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
   const log = document.getElementById('log'), res = document.getElementById('res');
   const fallos = [];
   let pruebas = 0;
-  const ok = (cond, msg) => { pruebas++; if (!cond) { fallos.push(msg); const li = document.createElement('li'); li.className = 'bad'; li.textContent = '✗ ' + msg; log.append(li); } return cond; };
+  const MAXLOG = 200;
+  const ok = (cond, msg) => {
+    pruebas++;
+    if (!cond) {
+      fallos.push(msg);
+      if (fallos.length <= MAXLOG) { const li = document.createElement('li'); li.className = 'bad'; li.textContent = '✗ ' + msg; log.append(li); }
+    }
+    return !!cond;
+  };
   const nota = (msg) => { const li = document.createElement('li'); li.textContent = msg; log.append(li); };
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const get = (u) => fetch('../' + u).then((r) => r.json());
@@ -48,36 +56,60 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
     // esperar a que carguen todos los datos
     for (let i = 0; i < 100 && !d.querySelector('.item'); i++) await sleep(100);
     await sleep(500);
-    const click = (k, v) => { d.querySelector(`.seg[data-key=${k}] button[data-v=${v}]`).click(); };
+
     const main = () => d.getElementById('main');
     const overflow = () => d.documentElement.scrollWidth > d.documentElement.clientWidth + 1;
     const txt = (el) => el.innerText.replace(/\s+/g, ' ');
     const RAMA = { M: 'Varones', F: 'Damas' };
+    const ESPERA = 40;
+    const seg = async (k, v) => {
+      const b = d.querySelector(`.seg[data-key=${k}] button[data-v=${v}]`);
+      if (!ok(b, `No existe el botón .seg[data-key=${k}] [data-v=${v}]`)) return false;
+      b.click();
+      await sleep(ESPERA);
+      ok(b.getAttribute('aria-pressed') === 'true', `El botón ${k}=${v} no queda con aria-pressed="true"`);
+      return true;
+    };
+    const filas = () => [...main().querySelectorAll('a.item.rowlink')];
+    const fila = (p) => filas().find((a) => a.dataset.prueba === p);
+    const clickFila = async (p) => { const a = fila(p); if (!a) return null; a.click(); await sleep(ESPERA); return fila(p); };
+    const tops = () => [...d.querySelectorAll('div.top10')];
+
+    // 0) Elementos que ya no deben existir
+    ok(!d.getElementById('q'), 'Existe el buscador #q (ya no debe existir)');
+    ok(!d.getElementById('sel-prueba'), 'Existe el selector #sel-prueba (ya no debe existir)');
+    ok(!d.getElementById('seg-vista') && !d.querySelector('.seg[data-key=vista]'), 'Existe el selector de vista Récords/Top 10 (ya no debe existir)');
+    for (const k of ['curso', 'genero']) ok(d.querySelector(`.seg[data-key=${k}]`), `Falta .seg[data-key=${k}]`);
 
     // 1) Récords y relevos por piscina y rama
     for (const c of ['LC', 'SC']) for (const g of ['M', 'F']) {
-      click('curso', c); click('genero', g); click('vista', 'rec');
+      await seg('curso', c); await seg('genero', g);
       const id = `Récords ${c} ${RAMA[g]}`;
       const esperados = rec.filter((r) => r.curso === c && r.genero === g);
-      const items = [...main().querySelectorAll('a.item')];
+      const items = filas();
       ok(items.length === esperados.length, `${id}: se ven ${items.length} récords individuales, los datos tienen ${esperados.length}`);
       const evs = items.map((i) => i.dataset.prueba);
       ok(new Set(evs).size === evs.length, `${id}: hay pruebas repetidas`);
       const ordenVisto = items.map((i) => esperados.find((r) => r.prueba === i.dataset.prueba)?.orden ?? -1);
       ok(ordenVisto.every((o, k) => k === 0 || o > ordenVisto[k - 1]), `${id}: el orden de las pruebas no sigue el campo 'orden'`);
+      ok(!tops().length, `${id}: hay un Top 10 abierto al cambiar de vista`);
       for (const r of esperados) {
         const it = items.find((i) => i.dataset.prueba === r.prueba);
         if (!ok(it, `${id}: falta ${r.prueba}`)) continue;
         const t = txt(it);
         ok(t.includes(r.tiempo), `${id} ${r.prueba}: no muestra el tiempo ${r.tiempo}`);
         ok(t.includes(nombre(r.nadador)), `${id} ${r.prueba}: no muestra el nombre ${nombre(r.nadador)}`);
-        ok(!/\d+ años/.test(t), `${id} ${r.prueba}: muestra una edad (no debe mostrarse)`);
+        ok(!/años/.test(t), `${id} ${r.prueba}: muestra una edad (no debe mostrarse)`);
         ok(!/\d{4}-\d{2}-\d{2}/.test(t), `${id} ${r.prueba}: fecha sin formatear`);
         ok(!/undefined|null|NaN/.test(t), `${id} ${r.prueba}: texto con undefined/null/NaN`);
+        ok(it.getAttribute('aria-expanded') === 'false', `${id} ${r.prueba}: aria-expanded debería ser "false" al inicio`);
       }
+      ok(!/años/.test(txt(main())), `${id}: aparece "años" en la página`);
+      ok(!/undefined|null|NaN/.test(txt(main())), `${id}: la página muestra undefined/null/NaN`);
       const relEsp = rel.filter((r) => r.curso === c && (r.genero === g || r.genero === 'Mixto'));
       const relVis = [...main().querySelectorAll('.item.relay')];
       ok(relVis.length === relEsp.length, `${id}: se ven ${relVis.length} relevos, los datos tienen ${relEsp.length}`);
+      ok(!relVis.some((x) => x.matches('a.rowlink')), `${id}: hay relevos clicables (no deben serlo)`);
       // Orden dentro de cada bloque de relevos: primero los del club y luego los mixtos, de menor a mayor distancia
       for (const card of new Set(relVis.map((x) => x.parentElement))) {
         const clave = [...card.querySelectorAll('.item.relay')].map((x) => (/Mixto/i.test(x.querySelector('.ev').innerText) ? 1000 : 0) + parseInt(x.querySelector('.ev').innerText.replace(/^\D*4x/, ''), 10));
@@ -87,66 +119,112 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
         const it = relVis.find((x) => txt(x).includes(r.tiempo) && txt(x).includes(r.prueba.split(' ')[0]));
         if (!ok(it, `${id}: falta el relevo ${r.prueba} ${r.tiempo}`)) continue;
         const t = txt(it);
-        for (const [k, n] of (r.integrantes || []).entries()) ok(t.includes(nombre(n)), `${id} relevo ${r.prueba} ${r.tiempo}: falta ${nombre(n)}`);
+        for (const n of (r.integrantes || [])) ok(t.includes(nombre(n)), `${id} relevo ${r.prueba} ${r.tiempo}: falta ${nombre(n)}`);
         if (r.estilo === 'Combinado' && (r.integrantes || []).length) ok(['(E)', '(P)', '(M)', '(L)'].every((s) => t.includes(s)), `${id} relevo ${r.prueba}: faltan (E)(P)(M)(L)`);
         if (!(r.integrantes || []).length) ok(t.includes('Integrantes no publicados'), `${id} relevo ${r.prueba}: falta la nota de integrantes`);
+        if (r.genero === 'Mixto') ok(/Mixto/i.test(t), `${id} relevo ${r.prueba}: falta la etiqueta Mixto`);
         ok(!/undefined|null|NaN/.test(t), `${id} relevo ${r.prueba}: texto con undefined/null/NaN`);
+        ok(!/años/.test(t), `${id} relevo ${r.prueba}: muestra "años"`);
       }
       ok(!overflow(), `${id}: hay scroll horizontal a 360 px`);
     }
 
-    // 2) Top 10 de cada prueba
-    let filasVistas = 0;
+    // 2) Top 10 desplegable de CADA récord
+    let filasVistas = 0, recorridos = 0;
     for (const c of ['LC', 'SC']) for (const g of ['M', 'F']) {
-      click('curso', c); click('genero', g); click('vista', 'top');
-      const pruebasData = [...new Set(top.filter((t) => t.curso === c && t.genero === g).map((t) => t.prueba))];
-      const opciones = [...d.getElementById('sel-prueba').options].map((o) => o.value);
-      ok(opciones.length === pruebasData.length, `Top 10 ${c} ${RAMA[g]}: el selector tiene ${opciones.length} pruebas, los datos ${pruebasData.length}`);
-      for (const p of opciones) {
-        const s = d.getElementById('sel-prueba'); s.value = p; s.dispatchEvent(new Event('change', { bubbles: true }));
-        const esp = top.filter((t) => t.curso === c && t.genero === g && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
-        const filas = [...main().querySelectorAll('.item.top')];
-        filasVistas += filas.length;
+      await seg('curso', c); await seg('genero', g);
+      const pruebas = filas().map((a) => a.dataset.prueba);
+      for (let n = 0; n < pruebas.length; n++) {
+        const p = pruebas[n];
         const id = `Top 10 ${c} ${RAMA[g]} ${p}`;
-        ok(filas.length === esp.length, `${id}: se ven ${filas.length} filas, los datos tienen ${esp.length}`);
-        esp.forEach((t, k) => {
-          const x = filas[k] ? txt(filas[k]) : '';
-          ok(x.startsWith(t.puesto + '.') && x.includes(t.tiempo) && x.includes(nombre(t.nadador)), `${id}: la fila ${k + 1} no coincide (${t.puesto}. ${t.tiempo} ${nombre(t.nadador)})`);
-          ok((t.marca === 'x') === /Exhibición/i.test(x), `${id}: puesto ${t.puesto} etiqueta de exhibición incorrecta`);
-          ok(!/\d+ años/.test(x), `${id}: puesto ${t.puesto} muestra una edad (no debe mostrarse)`);
-        });
+        const esp = top.filter((t) => t.curso === c && t.genero === g && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
+        // abrir
+        const a = await clickFila(p);
+        if (!ok(a, `${id}: no se encontró la fila para hacer click`)) continue;
+        recorridos++;
+        ok(a.getAttribute('aria-expanded') === 'true', `${id}: aria-expanded no pasó a "true"`);
+        const sig = a.nextElementSibling;
+        if (ok(sig && sig.matches('div.top10') && sig.dataset.prueba === p, `${id}: el div.top10 no está justo después de la fila`)) {
+          ok(sig.parentElement === a.parentElement && a.parentElement.classList.contains('card'), `${id}: el Top 10 no está dentro de la misma .card`);
+          const fs = [...sig.querySelectorAll('.item.top')];
+          filasVistas += fs.length;
+          ok(fs.length === esp.length, `${id}: se ven ${fs.length} filas, los datos tienen ${esp.length}`);
+          esp.forEach((t, k) => {
+            const x = fs[k] ? txt(fs[k]) : '';
+            ok(x.startsWith(t.puesto + '.'), `${id}: la fila ${k + 1} no empieza con "${t.puesto}."`);
+            ok(x.includes(t.tiempo), `${id}: la fila ${k + 1} no muestra el tiempo ${t.tiempo}`);
+            ok(x.includes(nombre(t.nadador)), `${id}: la fila ${k + 1} no muestra el nombre ${nombre(t.nadador)}`);
+            ok((t.marca === 'x') === /Exhibición/i.test(x), `${id}: puesto ${t.puesto} etiqueta de exhibición incorrecta`);
+            ok(!/años/.test(x), `${id}: puesto ${t.puesto} muestra "años"`);
+            ok(!/\d{4}-\d{2}-\d{2}/.test(x), `${id}: puesto ${t.puesto} fecha sin formatear`);
+            ok(!/undefined|null|NaN/.test(x), `${id}: puesto ${t.puesto} texto con undefined/null/NaN`);
+          });
+        }
+        ok(tops().length === 1, `${id}: hay ${tops().length} div.top10 abiertos (debe haber 1)`);
         ok(!overflow(), `${id}: hay scroll horizontal a 360 px`);
+        // abrir otra fila: solo debe quedar un Top 10
+        const otra = pruebas[(n + 1) % pruebas.length];
+        if (otra !== p) {
+          const b = await clickFila(otra);
+          ok(b && b.getAttribute('aria-expanded') === 'true', `${id}: al abrir "${otra}" no queda expandida`);
+          ok(tops().length === 1 && tops()[0].dataset.prueba === otra, `${id}: al abrir "${otra}" debe quedar un solo div.top10 (hay ${tops().length})`);
+          ok(fila(p).getAttribute('aria-expanded') === 'false', `${id}: al abrir "${otra}" la fila anterior sigue expandida`);
+          // volver a hacer click en la abierta: se cierra
+          const b2 = await clickFila(otra);
+          ok(b2 && b2.getAttribute('aria-expanded') === 'false', `${id}: al repetir click en "${otra}" aria-expanded no vuelve a "false"`);
+          ok(tops().length === 0, `${id}: al cerrar "${otra}" quedan ${tops().length} div.top10`);
+        } else {
+          const b2 = await clickFila(p);
+          ok(b2 && b2.getAttribute('aria-expanded') === 'false' && tops().length === 0, `${id}: no se cierra al repetir el click`);
+        }
       }
+      ok(!tops().length, `Top 10 ${c} ${RAMA[g]}: quedó un Top 10 abierto`);
     }
+    ok(recorridos === rec.length, `Top 10: se recorrieron ${recorridos} récords, los datos tienen ${rec.length}`);
     ok(filasVistas === top.length, `Top 10: se recorrieron ${filasVistas} filas, los datos tienen ${top.length}`);
 
     // 3) Aguas abiertas
-    click('curso', 'OW');
-    ok(d.getElementById('seg-vista').hidden, 'Aguas abiertas: el selector Récords/Top 10 debería ocultarse');
+    await seg('curso', 'OW');
     for (const g of ['M', 'F']) {
-      click('genero', g);
+      await seg('genero', g);
       const esp = owTop.filter((t) => t.rama === g);
-      const filas = [...main().querySelectorAll('.item.top')];
-      ok(filas.length === esp.length, `Aguas abiertas ${RAMA[g]}: se ven ${filas.length} filas, los datos ${esp.length}`);
-      for (const r of owRec.filter((r) => r.rama === g)) ok(filas.some((x) => txt(x).includes(r.tiempo) && /Récord/i.test(txt(x))), `Aguas abiertas ${RAMA[g]} ${r.distancia}: récord ${r.tiempo} no marcado`);
-      ok(!overflow(), `Aguas abiertas ${RAMA[g]}: scroll horizontal a 360 px`);
+      const fs = [...main().querySelectorAll('.item.top')];
+      const id = `Aguas abiertas ${RAMA[g]}`;
+      ok(fs.length === esp.length, `${id}: se ven ${fs.length} filas, los datos ${esp.length}`);
+      ok(!main().querySelector('a.item.rowlink'), `${id}: hay filas clicables de piscina`);
+      for (const t of esp) {
+        const x = fs.find((y) => txt(y).includes(t.tiempo) && txt(y).includes(nombre(t.nadador)));
+        if (!ok(x, `${id} ${t.distancia} puesto ${t.puesto}: no aparece ${t.tiempo} ${nombre(t.nadador)}`)) continue;
+        const tx = txt(x);
+        ok((t.puesto === 1) === /Récord/i.test(tx), `${id} ${t.distancia} puesto ${t.puesto}: etiqueta "Récord" ${t.puesto === 1 ? 'ausente' : 'indebida'}`);
+        ok(!/años/.test(tx), `${id} ${t.distancia} puesto ${t.puesto}: muestra "años"`);
+      }
+      for (const r of owRec.filter((r) => r.rama === g)) ok(fs.some((x) => txt(x).includes(r.tiempo) && /Récord/i.test(txt(x))), `${id} ${r.distancia}: récord ${r.tiempo} no marcado`);
+      ok(!/años/.test(txt(main())), `${id}: aparece "años"`);
+      ok(!/undefined|null|NaN/.test(txt(main())), `${id}: undefined/null/NaN`);
+      ok(!overflow(), `${id}: scroll horizontal a 360 px`);
     }
 
-    // 4) Búsqueda (con y sin acentos) y enlaces directos
-    const q = d.getElementById('q');
-    const buscar = async (s) => { q.value = s; q.dispatchEvent(new Event('input')); await sleep(300); return txt(main()); };
-    const n0 = nombre(rec[0].nadador);
-    ok((await buscar(n0.split(' ').pop().toUpperCase())).includes(n0), `Búsqueda: no encuentra a ${n0}`);
-    ok((await buscar('simbana')).toLowerCase().includes('simbaña'), 'Búsqueda: "simbana" sin tilde no encuentra "Simbaña"');
-    ok(!(await buscar('<img src=x onerror=alert(1)>')).includes('onerror=alert') || !d.querySelector('#main img'), 'Búsqueda: el texto buscado se inserta como HTML');
-    await buscar('');
-    W.location.hash = 'c=SC&g=F&v=top&p=100+Pecho'; await sleep(300);
-    ok(d.getElementById('sel-prueba')?.value === '100 Pecho' && /Damas/.test(txt(main())), 'Enlace directo #c=SC&g=F&v=top&p=100+Pecho no abre esa vista');
-    W.location.hash = 'c=XX&g=<b>&v=zz'; await sleep(300);
-    ok(main().querySelector('.item') && !main().querySelector('b'), 'Hash inválido rompe la página');
+    // 4) Enlace directo e hash inválido
+    W.location.hash = 'c=SC&g=F&p=100+Pecho'; await sleep(300);
+    const pr = (k, v) => d.querySelector(`.seg[data-key=${k}] button[data-v=${v}]`)?.getAttribute('aria-pressed') === 'true';
+    ok(pr('curso', 'SC') && pr('genero', 'F'), 'Enlace directo #c=SC&g=F&p=100+Pecho: no marca piscina 25 m / damas');
+    const a100 = fila('100 Pecho');
+    ok(a100 && a100.getAttribute('aria-expanded') === 'true', 'Enlace directo: "100 Pecho" no aparece expandida');
+    ok(a100 && a100.nextElementSibling && a100.nextElementSibling.matches('div.top10') && a100.nextElementSibling.dataset.prueba === '100 Pecho', 'Enlace directo: el Top 10 de "100 Pecho" no está desplegado tras la fila');
+    ok(tops().length === 1, `Enlace directo: hay ${tops().length} div.top10 (debe haber 1)`);
+    const nEsp = top.filter((t) => t.curso === 'SC' && t.genero === 'F' && t.prueba === '100 Pecho').length;
+    ok(a100 && a100.nextElementSibling && a100.nextElementSibling.querySelectorAll('.item.top').length === nEsp, 'Enlace directo: el Top 10 de "100 Pecho" no tiene todas las filas');
 
+    W.location.hash = 'c=XX&g=<b>'; await sleep(300);
+    ok(main().querySelector('.item'), 'Hash inválido: la página quedó sin contenido');
+    ok(!main().querySelector('b') && !d.body.querySelector('b'), 'Hash inválido: se insertó HTML (<b>)');
+    ok(d.querySelector('.seg[data-key=curso] [aria-pressed=true]') && d.querySelector('.seg[data-key=genero] [aria-pressed=true]'), 'Hash inválido: no queda ningún botón de curso/género activo');
+
+    ok(!/años/.test(txt(d.body)), 'Aparece "años" en la página');
     ok(errores.length === 0, 'Errores de JavaScript en la página: ' + errores.join(' | '));
-    nota(`Datos: ${rec.length} récords, ${top.length} filas de Top 10, ${rel.length} relevos, ${owRec.length} récords de aguas abiertas.`);
+    nota(`Datos: ${rec.length} récords, ${top.length} filas de Top 10 (recorridas: ${filasVistas}), ${rel.length} relevos, ${owRec.length} récords de aguas abiertas.`);
+    if (fallos.length > MAXLOG) nota(`(se muestran solo los primeros ${MAXLOG} de ${fallos.length} fallos)`);
   } catch (e) {
     ok(false, 'La verificación no pudo completarse: ' + (e && e.message || e));
   }
