@@ -5,7 +5,10 @@ La página lee todo de la carpeta `data/`. Para actualizar **no hace falta tocar
 ## Pasos
 
 1. Pide a Claude (proyecto "Club - Reportes y tests") que regenere los JSON.
-   Recuérdale que **las marcas de exhibición (x) cuentan para los récords** si son las más rápidas.
+   Recuérdale que **las marcas de exhibición (x) cuentan para los récords** si son las más rápidas, y que
+   los nuevos JSON deben conservar estas correcciones (18/10/2026):
+   - Incluir las marcas del **Excel oficial de Cali 2023** (`Resultados XL Torneo Interclubes de Natación - Ciudad de Cali 2023 NAUE.xlsx`, piscina de 50 m).
+   - La nadadora se escribe **"Fustillos, Natalí"** (no Nataly).
 2. Reemplaza los archivos de `data/` por los nuevos, con los mismos nombres:
    - `records_piscina.json`
    - `top10_piscina.json`
