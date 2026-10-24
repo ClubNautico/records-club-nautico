@@ -142,13 +142,20 @@ th,td{border:1px solid var(--line);padding:4px 8px;text-align:left}
     }
     for (const c of carriles) {
       const padre = c.parentElement;
-      ok(W.getComputedStyle(c).pointerEvents === 'none' && (!padre || W.getComputedStyle(padre).pointerEvents === 'none'),
+      const padreCuenta = padre && padre !== d.body && padre !== d.documentElement;
+      ok(W.getComputedStyle(c).pointerEvents === 'none' && (!padreCuenta || W.getComputedStyle(padre).pointerEvents === 'none'),
         `${corto(c)}: el carril o su contenedor no tiene pointer-events:none`);
+      ok([...c.querySelectorAll('*')].every((h) => W.getComputedStyle(h).pointerEvents === 'none'), `${corto(c)}: algún hijo del carril recibe toques`);
       ok(c.getAttribute('aria-hidden') === 'true', `${corto(c)}: el carril no tiene aria-hidden="true"`);
       if (esVisible(c)) {
         const r = c.getBoundingClientRect();
         ok(r.left >= -1 && r.right <= W.innerWidth + 1, `${corto(c)}: el carril queda fuera del viewport (${Math.round(r.left)}..${Math.round(r.right)})`);
-        if (W.innerWidth <= 414) ok(r.width <= 24, `${corto(c)}: el carril ocupa ${Math.round(r.width)} px en celular (máximo 24)`);
+        if (c.dataset.carril === 'horizontal') {
+          // Carril horizontal arriba: debe ser delgado y el contenido debe empezar debajo (no lo tapa)
+          ok(r.height <= 32 + (parseFloat(W.getComputedStyle(c).paddingTop) || 0), `${corto(c)}: el carril horizontal mide ${Math.round(r.height)} px de alto (máximo 32)`);
+          const pt = parseFloat(W.getComputedStyle(d.body).paddingTop) || 0;
+          ok(pt + 0.5 >= r.height, `${corto(c)}: el carril horizontal tapa el contenido (padding-top ${pt}px < ${Math.round(r.height)}px)`);
+        } else if (W.innerWidth <= 414) ok(r.width <= 24, `${corto(c)}: el carril ocupa ${Math.round(r.width)} px en celular (máximo 24)`);
       }
     }
 
