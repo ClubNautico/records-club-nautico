@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Vista en dispositivos</title>
+<style>
+  body{margin:0;padding:12px;background:#5b6472;font:14px system-ui,sans-serif;color:#fff}
+  .fila{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+  figure{margin:0}
+  figcaption{margin:0 0 4px}
+  iframe{border:0;background:#fff;display:block}
+</style>
+</head>
+<body>
+<div class="fila" id="fila"></div>
+<script>
+  // Uso: vista.html?w=360&h=740&hash=c%3DLC%26g%3DM&scroll=0  (varios w separados por coma)
+  // Muestra la página dentro de marcos del tamaño exacto de cada dispositivo, para revisarla a simple vista.
+  const q = new URLSearchParams(location.search);
+  const anchos = (q.get('w') || '360').split(',').map(Number).filter(Boolean);
+  const alto = Number(q.get('h')) || 740;
+  const hash = q.get('hash') || 'c=LC&g=M';
+  const scroll = Number(q.get('scroll')) || 0;
+  const fila = document.getElementById('fila');
+  for (const w of anchos) {
+    const fig = document.createElement('figure');
+    fig.innerHTML = `<figcaption>${w}×${alto}</figcaption>`;
+    const f = document.createElement('iframe');
+    f.width = w; f.height = alto; f.src = '../index.html#' + hash;
+    // ?escala=3 amplía el marco (lupa) para revisar detalles como el carril
+    if (Number(q.get('escala')) > 1) f.style.zoom = q.get('escala');
+    if (scroll) f.addEventListener('load', () => setTimeout(() => f.contentWindow.scrollTo(0, scroll), 1500));
+    fig.append(f); fila.append(fig);
+  }
+</script>
+</body>
+</html>

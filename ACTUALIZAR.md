@@ -34,6 +34,10 @@ La página lee todo de la carpeta `data/`. Para actualizar **no hace falta tocar
 6. Espera 1–2 minutos y abre la verificación de la página publicada. Debe decir **"✓ Todo bien"**:
    `https://clubnautico.github.io/records-club-nautico/herramientas/verificar.html`
 
+   Si cambiaste el diseño (`index.html`), abre también la prueba de celulares, que debe decir **"OK"**:
+   `https://clubnautico.github.io/records-club-nautico/herramientas/dispositivos.html`
+   (y `herramientas/vista.html?w=360,390` para mirar la página en tamaños de teléfono).
+
    Recarga en el celular. GitHub guarda la página en caché unos 10 minutos: si no ves el cambio, espera y recarga.
 
 ## Qué hace la página con los datos

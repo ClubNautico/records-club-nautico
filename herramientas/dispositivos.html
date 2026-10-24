@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Prueba de dispositivos</title>
+<style>
+:root{--bg:#f3f6f9;--fg:#0f2233;--muted:#526274;--ok:#0a7a3d;--bad:#b3261e;--line:#dbe3ea;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1620;--fg:#e6edf3;--muted:#9db0c2;--ok:#5fd18f;--bad:#ff8a80;--line:#24384a}}
+:root[data-theme="dark"]{--bg:#0c1620;--fg:#e6edf3;--muted:#9db0c2;--ok:#5fd18f;--bad:#ff8a80;--line:#24384a}
+body{margin:0;background:var(--bg);color:var(--fg);padding:16px;line-height:1.4}
+h1{font-size:22px;margin:0 0 4px}
+p{color:var(--muted);margin:0 0 12px}
+#res{font-size:18px;font-weight:700;margin:12px 0}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+ul{padding-left:18px;font-size:14px}
+li{margin:2px 0}
+table{border-collapse:collapse;font-size:14px;margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:4px 8px;text-align:left}
+#marco{margin-top:12px}
+#marco iframe{display:block;border:0;background:#fff}
+</style>
+</head>
+<body>
+<h1>Prueba de dispositivos</h1>
+<p>Carga la página en marcos de distintos tamaños de celular, tableta y computadora. Revisa desbordes, objetivos táctiles, tamaño del texto, errores de JavaScript, el toque en los récords y el carril de nadador.</p>
+<div id="res">Ejecutando…</div>
+<table id="tabla"></table>
+<ul id="log"></ul>
+<div id="marco"></div>
+<script>
+(async () => {
+  const log = document.getElementById('log');
+  const res = document.getElementById('res');
+  const tabla = document.getElementById('tabla');
+  const marco = document.getElementById('marco');
+  const fallos = [];
+  let pruebas = 0;
+  let ctx = '';
+  let notaCarril = false;
+  const MAXLOG = 300;
+  const ok = (cond, msg) => {
+    pruebas++;
+    if (!cond) fallos.push(ctx ? `${ctx} · ${msg}` : msg);
+    return !!cond;
+  };
+  const nota = (msg) => { const li = document.createElement('li'); li.textContent = msg; log.append(li); };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  const TAMANOS = [[320, 568], [360, 740], [375, 667], [390, 844], [414, 896], [768, 1024], [844, 390], [1024, 768], [1440, 900]];
+  const VISTAS = [
+    { nombre: 'Piscina 50 m varones', hash: 'c=LC&g=M', toque: true },
+    { nombre: 'Piscina 25 m damas', hash: 'c=SC&g=F' },
+    { nombre: 'Aguas abiertas varones', hash: 'c=OW&g=M' },
+    { nombre: 'Top 10 abierto 50 m varones', hash: 'c=LC&g=M&p=100+Libre' }
+  ];
+  const archivo = (() => {
+    const p = new URLSearchParams(location.search).get('pagina');
+    return p && /^[\w-]+\.html$/.test(p) ? p : 'index.html';
+  })();
+
+  // Ventana y documento del iframe actual (se asignan en probarTamano)
+  let W = null, d = null;
+
+  const esVisible = (el) => {
+    const cs = W.getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  };
+  const corto = (el) => {
+    const s = el.tagName.toLowerCase();
+    if (el.id) return s + '#' + el.id;
+    const cl = [...el.classList].slice(0, 2);
+    return cl.length ? s + '.' + cl.join('.') : s;
+  };
+  const tres = (lista) => lista.slice(0, 3).join(', ') + (lista.length > 3 ? ` (+${lista.length - 3} más)` : '');
+  // Decorativo: dentro de aria-hidden="true" o descendiente de un <svg>
+  const decorativo = (el) => !!el.closest('[aria-hidden="true"]') || !!(el.parentElement && el.parentElement.closest('svg'));
+  // Recortado: algún ancestro con overflow-x distinto de visible cuyo borde derecho cae dentro del viewport
+  const recortadoPorAncestro = (el) => {
+    for (let a = el.parentElement; a && a !== d.documentElement; a = a.parentElement) {
+      if (W.getComputedStyle(a).overflowX !== 'visible' && a.getBoundingClientRect().right <= W.innerWidth + 1) return true;
+    }
+    return false;
+  };
+
+  // Comprobaciones 1, 2, 3, 6 y 7 sobre la vista actual
+  const probarVistaBase = () => {
+    // 1) Sin scroll horizontal ni elementos que sobresalgan
+    const de = d.documentElement;
+    ok(de.scrollWidth <= de.clientWidth + 1, `hay scroll horizontal (scrollWidth ${de.scrollWidth} > clientWidth ${de.clientWidth})`);
+    for (const sel of ['#main', 'header', 'footer']) {
+      const raices = [...d.querySelectorAll(sel)];
+      if (sel === '#main') ok(raices.length > 0, 'no existe #main');
+      const malos = [];
+      for (const raiz of raices) {
+        for (const el of [raiz, ...raiz.querySelectorAll('*')]) {
+          if (!esVisible(el) || el.getBoundingClientRect().right <= W.innerWidth + 1) continue;
+          if (decorativo(el) || recortadoPorAncestro(el)) continue;
+          malos.push(corto(el));
+        }
+      }
+      ok(malos.length === 0, `${sel} sobresale del viewport por la derecha: ${tres(malos)}`);
+    }
+
+    // 2) Objetivos táctiles de al menos 44x44 px
+    const chicos = [];
+    for (const el of d.querySelectorAll('a[href], button, [role=button], select, input, summary')) {
+      if (!esVisible(el)) continue;
+      if (el.closest('[aria-hidden="true"]')) continue;
+      if (W.getComputedStyle(el).pointerEvents === 'none') continue;
+      if (el.tagName === 'A' && el.closest('footer p')) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 44 || r.height < 44) chicos.push(`${corto(el)} ${Math.round(r.width)}×${Math.round(r.height)}`);
+    }
+    ok(chicos.length === 0, `objetivos táctiles menores de 44 px (${chicos.length}): ${tres(chicos)}`);
+
+    // 3) Texto legible: nada menor de 12 px; los .time >= 16 px en celulares
+    const pequenos = [];
+    const walker = d.createTreeWalker(d.body, NodeFilter.SHOW_TEXT);
+    for (let nodo = walker.nextNode(); nodo; nodo = walker.nextNode()) {
+      if (!nodo.nodeValue.trim()) continue;
+      const el = nodo.parentElement;
+      if (!el || el.closest('script, style, noscript') || decorativo(el) || !esVisible(el)) continue;
+      const fs = parseFloat(W.getComputedStyle(el).fontSize);
+      if (fs < 12) pequenos.push(`"${nodo.nodeValue.trim().slice(0, 20)}" ${fs}px`);
+    }
+    ok(pequenos.length === 0, `texto menor de 12 px (${pequenos.length}): ${tres(pequenos)}`);
+    if (W.innerWidth <= 414) {
+      const tiempos = [...d.querySelectorAll('.time')].filter(esVisible);
+      const cortos = tiempos.filter((el) => parseFloat(W.getComputedStyle(el).fontSize) < 16).map(corto);
+      ok(cortos.length === 0, `.time menor de 16 px en celular (${cortos.length} de ${tiempos.length}): ${tres(cortos)}`);
+    }
+
+    // 6) Carril de nadador (si existe) no debe estorbar
+    const carriles = [...d.querySelectorAll('[data-carril], .carril')];
+    if (!carriles.length && !notaCarril) {
+      nota('Información: no hay [data-carril] ni .carril en la página; el chequeo del carril no se aplicó.');
+      notaCarril = true;
+    }
+    for (const c of carriles) {
+      const padre = c.parentElement;
+      ok(W.getComputedStyle(c).pointerEvents === 'none' && (!padre || W.getComputedStyle(padre).pointerEvents === 'none'),
+        `${corto(c)}: el carril o su contenedor no tiene pointer-events:none`);
+      ok(c.getAttribute('aria-hidden') === 'true', `${corto(c)}: el carril no tiene aria-hidden="true"`);
+      if (esVisible(c)) {
+        const r = c.getBoundingClientRect();
+        ok(r.left >= -1 && r.right <= W.innerWidth + 1, `${corto(c)}: el carril queda fuera del viewport (${Math.round(r.left)}..${Math.round(r.right)})`);
+        if (W.innerWidth <= 414) ok(r.width <= 24, `${corto(c)}: el carril ocupa ${Math.round(r.width)} px en celular (máximo 24)`);
+      }
+    }
+
+    // 7) Imágenes y medios no más anchos que el viewport
+    const anchos = [];
+    for (const el of d.querySelectorAll('img, picture, video, canvas, svg, object, embed, iframe')) {
+      if (esVisible(el) && el.getBoundingClientRect().width > W.innerWidth + 1) anchos.push(corto(el));
+    }
+    ok(anchos.length === 0, `imagen o medio más ancho que el viewport: ${tres(anchos)}`);
+  };
+
+  // Comprobación 5: un toque (pointerdown, pointerup y click) abre el Top 10 y otro toque lo cierra
+  const probarToque = async () => {
+    const PE = W.PointerEvent || W.MouseEvent;
+    const toque = (el) => {
+      const base = { bubbles: true, cancelable: true, composed: true, button: 0, pointerType: 'touch', isPrimary: true, pointerId: 1 };
+      el.dispatchEvent(new PE('pointerdown', { ...base, buttons: 1 }));
+      el.dispatchEvent(new PE('pointerup', { ...base, buttons: 0 }));
+      el.dispatchEvent(new W.MouseEvent('click', { bubbles: true, cancelable: true, composed: true, button: 0 }));
+    };
+    const filas = () => [...d.querySelectorAll('a.item.rowlink')];
+    const primera = filas()[0];
+    if (!ok(primera, 'Toque: no hay ningún a.item.rowlink en la vista')) return;
+    const p = primera.dataset.prueba;
+    const fila = () => filas().find((x) => x.dataset.prueba === p);
+    const topDe = (x) => (x && x.nextElementSibling && x.nextElementSibling.matches('div.top10') ? x.nextElementSibling : null);
+
+    toque(primera);
+    await sleep(150);
+    let x = fila();
+    ok(x && x.getAttribute('aria-expanded') === 'true', `Toque en "${p}": aria-expanded no es "true" tras 150 ms`);
+    const top = topDe(x);
+    ok(top && top.querySelectorAll('.item.top').length > 0, `Toque en "${p}": el hermano siguiente no es div.top10 con filas .item.top`);
+
+    if (x) toque(x);
+    await sleep(150);
+    x = fila();
+    ok(x && x.getAttribute('aria-expanded') === 'false' && !topDe(x), `Segundo toque en "${p}": el Top 10 no se cierra`);
+  };
+
+  // Carga la página en un iframe del tamaño indicado y recorre las vistas
+  const probarTamano = async ([w, h]) => {
+    const tam = `${w}×${h}`;
+    ctx = tam;
+    const f = document.createElement('iframe');
+    f.title = `Página bajo prueba ${tam}`;
+    f.style.cssText = `width:${w}px;height:${h}px;max-width:none;`;
+    const errores = [];
+    try {
+      await Promise.race([
+        new Promise((resolver) => {
+          f.onload = resolver;
+          f.src = '../' + archivo;
+          marco.append(f);
+        }),
+        sleep(10000)
+      ]);
+      W = f.contentWindow;
+      d = f.contentDocument;
+      if (!W || !d) { ok(false, 'no se pudo cargar la página en el iframe'); return; }
+      W.addEventListener('error', (e) => errores.push(e.message));
+      W.addEventListener('unhandledrejection', (e) => errores.push(String(e.reason)));
+
+      // esperar a que aparezcan récords (máx. 10 s)
+      for (let i = 0; i < 100 && !d.querySelector('a.item.rowlink, .item.top'); i++) await sleep(100);
+      if (!ok(d.querySelector('a.item.rowlink, .item.top'), 'no aparecieron récords en 10 s')) return;
+      await sleep(300);
+
+      for (const v of VISTAS) {
+        ctx = `${tam} · ${v.nombre}`;
+        W.location.hash = v.hash;
+        await sleep(400);
+        const n0 = errores.length;
+        probarVistaBase();
+        if (v.toque) await probarToque();
+        ok(errores.length === n0, `errores de JavaScript: ${errores.slice(n0).join(' | ')}`);
+      }
+    } catch (e) {
+      ok(false, 'la prueba se interrumpió: ' + ((e && e.message) || e));
+    } finally {
+      f.remove();
+      W = null;
+      d = null;
+    }
+  };
+
+  // Recorrido de todos los tamaños, uno a la vez
+  const resumen = [];
+  try {
+    for (const t of TAMANOS) {
+      const p0 = pruebas, f0 = fallos.length;
+      await probarTamano(t);
+      resumen.push({ tam: `${t[0]}×${t[1]}`, pruebas: pruebas - p0, fallos: fallos.length - f0 });
+    }
+  } catch (e) {
+    ctx = '';
+    ok(false, 'La prueba no pudo completarse: ' + ((e && e.message) || e));
+  }
+  ctx = '';
+
+  // Tabla resumen por tamaño
+  const cab = document.createElement('tr');
+  ['Tamaño', 'Pruebas', 'Fallos'].forEach((t) => { const th = document.createElement('th'); th.textContent = t; cab.append(th); });
+  tabla.append(cab);
+  for (const r of resumen) {
+    const tr = document.createElement('tr');
+    [r.tam, r.pruebas, r.fallos].forEach((v, k) => {
+      const td = document.createElement('td');
+      td.textContent = v;
+      if (k === 2 && v) td.className = 'bad';
+      tr.append(td);
+    });
+    tabla.append(tr);
+  }
+
+  // Lista de fallos (con tamaño y vista)
+  fallos.slice(0, MAXLOG).forEach((m) => { const li = document.createElement('li'); li.className = 'bad'; li.textContent = '✗ ' + m; log.append(li); });
+  if (fallos.length > MAXLOG) nota(`(se muestran solo los primeros ${MAXLOG} de ${fallos.length} fallos)`);
+  nota(`Tamaños probados: ${resumen.length} de ${TAMANOS.length}.`);
+
+  res.className = fallos.length ? 'bad' : 'ok';
+  res.textContent = fallos.length ? `✗ ${fallos.length} fallo(s) de ${pruebas} comprobaciones` : `✓ Todo bien: ${pruebas} comprobaciones sin fallos`;
+  document.title = (fallos.length ? 'FALLO' : 'OK') + ' · Prueba de dispositivos';
+  window.RESULTADO = { pruebas, fallos, resumen };
+})();
+</script>
+</body>
+</html>
