@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Récords Club Náutico</title>
+<meta name="description" content="Récords históricos y Top 10 del Club Náutico de natación: piscina de 50 m, piscina de 25 m y aguas abiertas.">
+<meta name="theme-color" content="#22409A" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C3480" media="(prefers-color-scheme: dark)">
+<!-- La página incluye menores de edad: se comparte por enlace, no se indexa en buscadores. -->
+<meta name="robots" content="noindex, nofollow">
+<!-- Vista previa en WhatsApp: og:image y og:url deben ser URLs completas. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clubnautico.github.io/records-club-nautico/">
+<meta property="og:locale" content="es_EC">
+<meta property="og:title" content="Récords Club Náutico">
+<meta property="og:description" content="Récords del club y Top 10 histórico por prueba: piscina 50 m, 25 m y aguas abiertas.">
+<meta property="og:image" content="https://clubnautico.github.io/records-club-nautico/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2322409A'/%3E%3Ccircle cx='14' cy='32' r='6' fill='%23fff'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23fff'/%3E%3Ccircle cx='50' cy='32' r='6' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600..700&family=Open+Sans:wght@400..800&display=swap">
+<style>
+:root{
+  --bg:#F3F5FA; --surface:#FFFFFF; --surface-2:#E6EAF5;
+  --ink:#292B2D; --ink-2:#313E4F; --muted:#4A5668;
+  --brand:#22409A; --on-brand:#FFFFFF; --sel:#22409A;
+  --hero:#22409A; --hero-ink:#FFFFFF; --hero-sub:#C8CFE6;
+  --board:#313E4F; --board-ink:#FFFFFF; --board-muted:#BEC7CD;
+  --line:#CBD3E6; --agua:#DCE3F5;
+  --float-a:#22409A; --float-b:#5970B3; --end-float:#FFC93C; --end-stroke:#22409A;
+  --sw-body:#22409A; --sw-cap:#FFC93C; --wall:#22409A; --pervinca:#5970B3;
+  --record:#8A5A00; --warn-bg:#FFF3D6; --warn-fg:#5E4200;
+  --tag-bg:#DDE3F4; --tag-fg:#22409A; --err-bg:#FDECEC; --err-fg:#6B1D1D;
+  --focus:#22409A; --amber:#FFC93C;
+  --cork:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8'%3E%3Ccircle cx='4' cy='4' r='3.2' fill='%2322409A'/%3E%3Ccircle cx='12' cy='4' r='3.2' fill='%235970B3'/%3E%3C/svg%3E");
+  --out:cubic-bezier(.22,1,.36,1); --io:cubic-bezier(.4,0,.2,1);
+  --f-display:"Josefin Slab","Roboto Slab",Rockwell,Georgia,serif;
+  --f-text:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --fs-hero:clamp(2.5rem,1.6rem + 4.6vw,4.75rem);
+  --fs-h2:clamp(1.625rem,1.3rem + 1.6vw,2.5rem);
+  --fs-h3:clamp(1.375rem,1.2rem + .9vw,1.875rem);
+  --fs-ev:clamp(1.0625rem,1rem + .3vw,1.25rem);
+  --fs-time:clamp(1.375rem,1.1rem + 1.2vw,1.875rem);
+  --fs-body:1rem; --fs-meta:.875rem; --fs-ctl:1rem;
+  --lane-w:24px; --cork-w:6px; --sw-w:calc(var(--lane-w) - var(--cork-w) - 2px);
+  --gl:max(16px,env(safe-area-inset-left,0px));
+  --pool-h:38px;
+  --controls-h:0px;
+  --sticky-top:calc(48px + env(safe-area-inset-top,0px));
+  color-scheme:light dark;
+}
+:root[data-theme="light"]{color-scheme:light}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1524; --surface:#18203A; --surface-2:#121A31;
+    --ink:#E8ECF5; --ink-2:#C8CFE6; --muted:#A7B3CC;
+    --brand:#9FB2F2; --on-brand:#0F1524; --sel:#C8CFE6;
+    --hero:#1C3480; --board:#313E4F;
+    --line:#2C3858; --agua:#16215A;
+    --float-a:#C8CFE6; --end-stroke:transparent;
+    --sw-body:#C8CFE6; --wall:#C8CFE6;
+    --record:#FFC93C; --warn-bg:#3A2C10; --warn-fg:#F3D79C;
+    --tag-bg:#26346B; --tag-fg:#DDE3F8; --err-bg:#4A1B1B; --err-fg:#FFD6D6;
+    --focus:#C8CFE6;
+    --cork:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8'%3E%3Ccircle cx='4' cy='4' r='3.2' fill='%239FB2F2'/%3E%3Ccircle cx='12' cy='4' r='3.2' fill='%235970B3'/%3E%3C/svg%3E");
+  }
+}
+@media (min-width:481px){:root{--lane-w:clamp(32px,2.6vw,40px);--cork-w:8px}}
+@media (min-width:768px) and (min-height:600px){:root{--sticky-top:var(--controls-h)}}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--hero);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  margin:0;margin-inline-end:calc(var(--lane-w) + env(safe-area-inset-right,0px));
+  background:var(--bg);color:var(--ink);
+  font:400 var(--fs-body)/1.45 var(--f-text);
+  min-height:100vh;
+}
+::selection{background:var(--brand);color:var(--on-brand)}
+@media (pointer:fine){html{scrollbar-width:thin;scrollbar-color:var(--pervinca) transparent}}
+@media (pointer:coarse){html{scrollbar-width:none}html::-webkit-scrollbar{display:none}}
+.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gl) 16px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font:inherit;color:inherit}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+header.top{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:var(--hero);color:var(--hero-ink);
+  min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-top:max(40px,calc(env(safe-area-inset-top,0px) + 28px));
+  padding-bottom:calc(var(--pool-h) + 8px);
+}
+.art{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-in{position:relative;z-index:2}
+.flags{
+  position:absolute;left:0;right:0;top:env(safe-area-inset-top,0px);height:28px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cline x1='0' y1='10' x2='56' y2='10' stroke='%23C8CFE6' stroke-width='1'/%3E%3Cpolygon points='0,10 14,10 7,28' fill='%23fff'/%3E%3Cpolygon points='14,10 28,10 21,28' fill='%23C8CFE6'/%3E%3Cpolygon points='28,10 42,10 35,28' fill='%23fff'/%3E%3Cpolygon points='42,10 56,10 49,28' fill='%23C8CFE6'/%3E%3C/svg%3E") repeat-x 0 0/56px 28px;
+  animation:drop 420ms var(--out) both;
+}
+.pool{position:absolute;left:0;bottom:0;width:100%;height:var(--pool-h);display:block}
+.pool-edge{fill:var(--bg)}
+.hero-lanes{display:none}
+.hl{stroke-width:8;stroke-linecap:round;stroke-dasharray:.1 16}
+.hl-a{stroke:#fff;opacity:.55}
+.hl-b{stroke:#C8CFE6;opacity:.85}
+.hero-lanes text{font:700 20px var(--f-display);fill:#fff;opacity:.7}
+.hero-lanes .wk{stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:14 10;opacity:.35}
+.brand{display:flex;align-items:center;gap:10px;margin:0 0 6px;font:700 22px/1.2 var(--f-display)}
+.brand-dots{display:inline-flex;gap:4px}
+.brand-dots i{width:8px;height:8px;border-radius:999px;background:#fff}
+.brand-dots i:nth-child(2){background:#C8CFE6}
+h1{
+  margin:0 0 10px;font:700 var(--fs-hero)/1 var(--f-display);letter-spacing:-.01em;color:var(--hero-ink);
+}
+h1 .w{display:inline-block;animation:rise 360ms var(--out) both}
+h1 .w + .w{animation-delay:60ms}
+.lede{margin:0;max-width:34ch;font-size:var(--fs-body);color:var(--hero-sub)}
+.controls{background:var(--bg);padding:12px 0;border-bottom:1px solid transparent}
+.controls.stuck{border-bottom-color:var(--line)}
+.controls .wrap{display:grid;gap:8px}
+.seg{
+  --n:3;--i:0;position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));
+  background:var(--surface);border-radius:4px;padding:4px;
+}
+.seg[data-key="genero"]{--n:2}
+.seg::before{
+  content:"";position:absolute;top:4px;bottom:4px;left:4px;
+  width:calc((100% - 8px) / var(--n));background:var(--sel);border-radius:3px;
+  transform:translateX(calc(var(--i) * 100%));transition:transform 220ms var(--out);
+}
+.seg button{
+  position:relative;z-index:1;min-height:56px;padding:6px 4px;border:0;border-radius:3px;
+  background:transparent;color:var(--ink);font-size:var(--fs-ctl);font-weight:700;line-height:1.15;
+  text-wrap:balance;cursor:pointer;transition:color 220ms var(--out),transform 90ms var(--io);
+  -webkit-tap-highlight-color:transparent;
+}
+.seg button[aria-pressed="true"]{color:var(--on-brand);font-weight:800}
+.seg button:active,#ctx-b:active,.t10close:active{transform:scale(.97)}
+#ctx{
+  position:fixed;z-index:30;top:0;left:0;right:calc(var(--lane-w) + env(safe-area-inset-right,0px));
+  height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 8px 0 var(--gl);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:#313E4F;color:#fff;
+  transform:translateY(calc(-100% - 16px));visibility:hidden;
+  transition:transform 200ms var(--out),visibility 0s linear 200ms;
+}
+#ctx.show{transform:none;visibility:visible;transition:transform 200ms var(--out);box-shadow:0 4px 12px rgb(15 21 36 / .18)}
+.ctx-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--fs-meta);font-weight:600}
+#ctx-b{
+  flex:none;min-width:44px;min-height:44px;padding:0 10px;border:0;background:transparent;color:#fff;
+  font-size:var(--fs-ctl);font-weight:700;cursor:pointer;
+  text-decoration:underline;text-decoration-color:var(--amber);text-decoration-thickness:2px;text-underline-offset:5px;transition:transform 90ms var(--io);
+}
+#ctx :focus-visible{outline-color:var(--amber)}
+@media (min-width:768px) and (min-height:600px){#ctx{display:none}}
+main{padding-bottom:8px;min-height:60vh}
+h2{margin:32px 0 8px;font:700 var(--fs-h2)/1.1 var(--f-display);color:var(--ink)}
+.sub{margin:0 0 8px;max-width:62ch;font-size:15px;color:var(--muted)}
+.grp{margin-top:48px}
+h3.group{margin:0 0 12px;font:700 var(--fs-h3)/1.15 var(--f-display);color:var(--ink)}
+h3.group::after{content:"";display:block;width:96px;height:8px;margin-top:8px;background:var(--cork) repeat-x 0 0/16px 8px}
+.card{
+  background:var(--surface);overflow:hidden;
+  margin:0 -16px 0 calc(-1 * var(--gl));
+}
+.card > .item{border-top:1px solid var(--line)}
+.card > .item:first-child{border-top:0}
+.card.board{background:var(--board);color:var(--board-ink)}
+.item{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:2px;
+  padding:14px 16px 14px var(--gl);color:inherit;text-decoration:none;
+}
+.ev{font-size:var(--fs-ev);font-weight:700;line-height:1.25;overflow-wrap:break-word}
+.time{font-size:var(--fs-time);font-weight:800;line-height:1.1;color:var(--brand);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
+.who{font-size:var(--fs-body);overflow-wrap:break-word}
+.meta{font-size:var(--fs-meta);color:var(--muted);overflow-wrap:break-word}
+.meta .dot{padding:0 4px}
+.tag{
+  display:inline-block;margin-left:8px;padding:2px 8px;border-radius:4px;vertical-align:2px;
+  background:var(--tag-bg);color:var(--tag-fg);font-size:var(--fs-meta);font-weight:700;line-height:1.3;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.go{display:inline-flex;align-items:center;font-size:var(--fs-meta);font-weight:700;color:var(--brand);white-space:nowrap}
+.go::after{
+  content:"";width:7px;height:7px;margin-left:10px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:translateY(-2px) rotate(45deg);transition:transform 200ms var(--out);
+}
+.rowlink[aria-expanded="true"] .go::after{transform:translateY(2px) rotate(225deg)}
+/* Fila de récord */
+.rowlink{
+  min-height:72px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  grid-template-areas:"ev time" "who who" "meta go";align-items:baseline;
+  scroll-margin-top:calc(var(--sticky-top) + 8px);
+  transition:transform 90ms var(--io);
+}
+.rowlink > .ev{grid-area:ev}
+.rowlink > .time{grid-area:time}
+.rowlink > .who{grid-area:who}
+.rowlink .tail{display:contents}
+.rowlink .meta{grid-area:meta}
+.rowlink .go{grid-area:go;align-self:end}
+.rowlink:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.rowlink:active{background:var(--surface-2);transform:scale(.995)}
+.rowlink[aria-expanded="true"]{background:var(--surface-2)}
+.rowlink[aria-expanded="true"] .ev{color:var(--brand)}
+/* Relevo */
+.relay{grid-template-areas:"ev time" "who who" "meta meta";align-items:baseline}
+.relay > .ev{grid-area:ev}
+.relay > .time{grid-area:time}
+.relay > .who{grid-area:who;margin:4px 0}
+.relay > .meta{grid-area:meta}
+ol.team{margin:0;padding:0;list-style:none}
+ol.team li{font-size:var(--fs-body);break-inside:avoid;padding:1px 0}
+ol.team .st{margin-left:4px;font-size:var(--fs-meta);color:var(--muted)}
+.nota-int{font-size:var(--fs-meta);color:var(--muted)}
+/* Tablero Top 10 */
+.top10{background:var(--board);color:var(--board-ink);animation:t10in 220ms var(--out) both}
+.t10head{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:16px 16px 8px var(--gl)}
+.t10title{font:700 22px/1.2 var(--f-display);color:var(--board-ink)}
+.t10head small{font-size:var(--fs-meta);color:var(--board-muted)}
+.note{margin:8px 16px;padding:10px 12px;border-radius:4px;background:var(--warn-bg);color:var(--warn-fg);font-size:var(--fs-meta)}
+.board .item,.top10 .item{border-top:1px solid rgb(255 255 255 / .14);min-height:64px;padding-block:12px}
+.board .item:first-child{border-top:0}
+.item.top{grid-template-columns:minmax(0,1fr);grid-template-areas:"ev" "who" "meta";cursor:default}
+.item.top > .ev{grid-area:ev;display:flex;align-items:baseline;gap:8px;color:var(--board-ink)}
+.item.top > .who{grid-area:who;color:var(--board-ink)}
+.item.top > .meta{grid-area:meta;color:var(--board-muted)}
+.item.top .meta strong{color:var(--board-ink)}
+.item.top .time{font-size:1.375rem;color:var(--board-ink);text-align:left}
+.pos{display:inline-block;min-width:2.6ch;font-weight:800;color:var(--board-muted);font-variant-numeric:tabular-nums lining-nums}
+.item.top.p1 .pos,.item.top.p1 .time{color:var(--amber)}
+.board .tag{background:var(--claro,#C8CFE6);color:#16215A}
+.board .tag.warn{background:var(--amber);color:#292B2D}
+.top10 .empty,.board .empty{color:var(--board-muted)}
+.t10foot{padding:16px 16px 16px var(--gl)}
+.t10close{
+  display:block;width:100%;min-height:48px;padding:0 20px;background:transparent;color:#fff;
+  border:2px solid var(--board-muted);border-radius:4px;font-size:var(--fs-ctl);font-weight:700;cursor:pointer;
+  transition:transform 90ms var(--io);
+}
+.top10 :focus-visible,.board :focus-visible{outline-color:var(--amber)}
+.top10 .item.top{animation:rowin-b 180ms var(--out) backwards;animation-delay:min(calc(var(--i,0) * 25ms),250ms)}
+.anim .card > .item{animation:rowin 200ms var(--out) backwards;animation-delay:calc(var(--i,0) * 18ms)}
+.anim .card.board > .item{animation-name:rowin-b}
+/* Estados */
+.skel{margin:16px -16px 0 calc(-1 * var(--gl));display:grid;gap:1px;background:var(--line)}
+.sk{height:72px;background:var(--surface-2);animation:pulse 1200ms var(--io) infinite alternate}
+.empty{margin:0;padding:32px 16px;text-align:center;color:var(--muted);font-size:var(--fs-body)}
+.err{margin:24px 0;padding:16px;border-radius:4px;background:var(--err-bg);color:var(--err-fg)}
+.err p{margin:0 0 12px}
+.btn{
+  min-height:48px;padding:0 20px;border:0;border-radius:4px;background:var(--sel);color:var(--on-brand);
+  font-size:var(--fs-ctl);font-weight:700;cursor:pointer;transition:transform 90ms var(--io);
+}
+.btn:active{transform:scale(.98)}
+footer{margin-top:48px}
+.cork-full{height:8px;background:var(--cork) repeat-x 0 0/16px 8px}
+footer .wrap{padding-top:32px;padding-bottom:max(72px,calc(32px + env(safe-area-inset-bottom,0px)));color:var(--muted);font-size:var(--fs-meta)}
+footer p{margin:0 0 6px;max-width:62ch}
+.lane-host{
+  position:fixed;z-index:40;top:0;right:env(safe-area-inset-right,0px);width:var(--lane-w);
+  height:100vh;height:100dvh;pointer-events:none;
+}
+.lane,.lane *{pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.lane{position:relative;width:100%;height:100%;background:var(--agua);contain:layout paint;isolation:isolate}
+.lane{--r:calc(var(--cork-w) * .4)}
+.lane-bg{position:absolute;left:var(--cork-w);top:0;width:calc(100% - var(--cork-w));height:100%;display:block}
+.tline{stroke:var(--pervinca);stroke-width:2;opacity:.45}
+.m5{stroke:var(--pervinca);stroke-width:1;opacity:.6}
+.ripple{fill:none;stroke:var(--wall);stroke-width:1.5;opacity:0;transform-box:fill-box;transform-origin:center}
+.lane[data-edge="end"] .ripple{animation:rip 600ms var(--out) both}
+.cork-col,.cork-end{position:absolute;left:0;width:var(--cork-w);background-size:var(--cork-w) calc(var(--cork-w) * 3)}
+.cork-col{
+  top:0;bottom:0;
+  background-image:
+    radial-gradient(circle at 50% 25%,var(--float-a) var(--r),transparent calc(var(--r) + .6px)),
+    radial-gradient(circle at 50% 75%,var(--float-b) var(--r),transparent calc(var(--r) + .6px));
+}
+.cork-end{
+  height:7%;
+  background-image:
+    radial-gradient(circle at 50% 25%,var(--end-float) calc(var(--r) - 1px),var(--end-stroke) calc(var(--r) - .9px) var(--r),transparent calc(var(--r) + .6px)),
+    radial-gradient(circle at 50% 75%,var(--end-float) calc(var(--r) - 1px),var(--end-stroke) calc(var(--r) - .9px) var(--r),transparent calc(var(--r) + .6px));
+}
+.cork-end.t{top:0}
+.cork-end.b{bottom:0}
+.rope{position:absolute;top:0;bottom:0;left:calc(var(--cork-w) / 2 - .5px);width:1px;background:var(--pervinca)}
+.wall{position:absolute;left:0;right:0;height:6px;background:var(--wall)}
+.wall.t{top:0}
+.wall.b{bottom:0}
+.sw-y{position:absolute;left:0;top:0;width:100%;will-change:transform}
+/* x = corchera + 1 px. En reposo se desplaza para que la mano izquierda (x = -1.476 en el dibujo) quede sobre la cuerda (x = cork/2) */
+.sw-x{
+  margin-left:calc(var(--cork-w) + 1px);width:var(--sw-w);
+  transition:transform 260ms var(--out);
+}
+.lane[data-state="rest"] .sw-x{transform:translateX(calc(var(--cork-w) * -.5 - 1px + var(--sw-w) * .0738))}
+.sw{
+  display:block;width:100%;height:auto;aspect-ratio:20 / 44;overflow:visible;
+  filter:drop-shadow(0 0 .6px var(--agua)) drop-shadow(0 0 .6px var(--agua));
+}
+.sw-flip{transform-origin:10px 22px;transition:transform 240ms var(--out)}
+.lane[data-dir="down"] .sw-flip{transform:scaleY(-1)}
+.sw-float{transform-origin:-1.476px 13.3px}
+.sw .arm path,.sw .legs path{stroke:var(--sw-body);stroke-linecap:round;fill:none}
+.sw .arm path{stroke-width:2.4}
+.sw .legs path{stroke-width:2}
+.sw .arm circle{fill:var(--sw-body)}
+.sw .torso{fill:var(--sw-body)}
+.sw .cap{fill:var(--sw-cap);stroke:var(--sw-body);stroke-width:1.1}
+.sw .goggle{fill:#101A3A}
+.sw .wake path{stroke:var(--float-b);stroke-width:1.2;stroke-linecap:round;fill:none}
+.sw .wake{opacity:0}
+.arm-l{--m:1;transform-origin:5.8px 11.6px}
+.arm-r{--m:-1;transform-origin:14.2px 11.6px}
+.leg-l{transform-origin:8.6px 25px}
+.leg-r{transform-origin:11.4px 25px}
+.lane[data-state="swim"] .arm{animation:brazada .9s linear infinite}
+.lane[data-state="swim"] .arm-r{animation-delay:-.45s}
+.lane[data-state="swim"] .leg-l{animation:patada-l .18s linear infinite alternate}
+.lane[data-state="swim"] .leg-r{animation:patada-r .18s linear infinite alternate}
+.lane[data-state="swim"] .wake{opacity:.85;animation:estela 400ms var(--io) infinite alternate}
+/* Reposo: agarrado de la cuerda con la mano izquierda; el cuerpo cuelga y oscila desde la mano */
+.lane[data-state="rest"] .arm-l{transform:rotate(-86deg) scaleY(.7)}
+.lane[data-state="rest"] .arm-l circle{fill:var(--agua);stroke:var(--sw-body);stroke-width:1}
+.lane[data-state="rest"] .arm-r{transform:rotate(172deg) scaleY(.8)}
+.lane[data-state="rest"] .leg-l{transform:rotate(-5deg)}
+.lane[data-state="rest"] .leg-r{transform:rotate(7deg)}
+.lane[data-state="rest"] .sw-float{animation:cuelga 3s var(--io) infinite}
+@keyframes drop{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes rowin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes rowin-b{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes t10in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes pulse{from{opacity:.55}to{opacity:1}}
+@keyframes brazada{
+  0%,100%{transform:translateX(0) rotate(calc(var(--m) * -10deg)) scaleY(1)}
+  40%{transform:translateX(calc(var(--m) * 1.6px)) rotate(calc(var(--m) * -160deg)) scaleY(.6)}
+  52%{transform:translateX(calc(var(--m) * 1.6px)) rotate(calc(var(--m) * -170deg)) scaleY(.85)}
+  64%{transform:translateX(calc(var(--m) * .6px)) rotate(calc(var(--m) * -118deg)) scaleY(.45)}
+  76%{transform:translateX(0) rotate(calc(var(--m) * -50deg)) scaleY(.4)}
+}
+@keyframes patada-l{from{transform:rotate(14deg)}to{transform:rotate(-14deg)}}
+@keyframes patada-r{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+@keyframes estela{from{opacity:.85}to{opacity:.4}}
+@keyframes cuelga{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(-12deg)}}
+@keyframes rip{from{opacity:.6;transform:scale(.4)}to{opacity:0;transform:scale(1.6)}}
+@media (max-width:767px){
+  header.top{min-height:0;padding-top:max(34px,calc(env(safe-area-inset-top,0px) + 30px));padding-bottom:calc(var(--pool-h) + 4px)}
+  .brand{margin-bottom:2px;font-size:20px}
+  h1{min-height:0;margin-bottom:6px;font-size:clamp(2rem,1.2rem + 3.4vw,2.5rem)}
+  .lede{font-size:15px;line-height:1.4}
+  main h2{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+  .sub{margin-top:16px}
+}
+@media (min-width:480px){
+  .grp{margin-top:56px}
+  .lede{max-width:62ch}
+}
+@media (max-width:767px){
+  .grp{margin-top:32px}
+}
+@media (min-width:768px){
+  header.top{min-height:320px}
+  .controls .wrap{display:flex;gap:12px}
+  .seg[data-key="curso"]{flex:3}
+  .seg[data-key="genero"]{flex:2}
+  .seg button{min-height:48px}
+  .card{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+  .card.board{border-color:transparent}
+  .item{padding-left:16px}
+  .t10head,.t10foot{padding-left:16px}
+  .skel{margin-inline:0}
+  ol.team{columns:2;column-gap:24px}
+  .t10close{width:auto;min-width:200px}
+}
+@media (min-width:768px) and (min-height:600px){
+  .controls{position:sticky;top:0;z-index:20}
+}
+@media (min-width:1024px){
+  header.top{min-height:380px}
+  .grp{margin-top:72px}
+  .hero-lanes{
+    display:block;position:absolute;right:12px;top:34px;width:calc(40% - 12px);height:calc(100% - 34px - var(--pool-h) - 8px);overflow:visible;
+  }
+  .rowlink{
+    min-height:60px;align-items:center;column-gap:24px;
+    grid-template-columns:minmax(140px,.9fr) 132px minmax(150px,1fr) minmax(0,2.4fr) auto;
+    grid-template-areas:"ev time who meta go";
+  }
+  .rowlink .go{align-self:center;justify-self:end}
+  .relay{
+    align-items:center;column-gap:24px;
+    grid-template-columns:minmax(140px,.9fr) 132px minmax(0,1.9fr) minmax(0,1.5fr);
+    grid-template-areas:"ev time who meta";
+  }
+  .relay > .who{margin:0}
+  .item.top{
+    grid-template-columns:170px minmax(200px,1.4fr) minmax(260px,2fr);
+    grid-template-areas:"ev who meta";align-items:center;column-gap:16px;
+  }
+}
+@media (orientation:landscape) and (max-height:500px){
+  header.top{min-height:0;padding-top:max(16px,calc(env(safe-area-inset-top,0px) + 28px))}
+  h1{font-size:2rem;min-height:0;margin-bottom:0}
+  .lede{display:none}
+  .brand{margin-bottom:2px}
+}
+@media (hover:hover){
+  .rowlink:hover{background:var(--surface-2)}
+  .seg button[aria-pressed="false"]:hover{background:var(--surface-2)}
+  .t10close:hover{background:rgb(255 255 255 / .1)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .lane[data-state="swim"] .arm-l{transform:rotate(-10deg)}
+  .lane[data-state="swim"] .arm-r{transform:translateX(-1.6px) rotate(160deg) scaleY(.6)}
+  .lane[data-state="rest"] .sw-float{transform:rotate(-8deg)}
+  .lane .wake{opacity:0 !important}
+}
+@media (forced-colors:active){
+  .lane-host{display:none}
+  body{margin-inline-end:0}
+}
+@media print{
+  :root{--bg:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--muted:#333;--brand:#000;--line:#999;--board:#fff;--board-ink:#000;--board-muted:#333;--hero-ink:#000;--warn-bg:#eee;--warn-fg:#000;--tag-bg:#eee;--tag-fg:#000;--lane-w:0px}
+  @page{margin:12mm}
+  body{margin:0;background:#fff;color:#000;font-size:11pt}
+  .art,.controls,#ctx,.lane-host,.go,.t10close,.t10foot,.cork-full,h3.group::after{display:none !important}
+  header.top{background:none;color:#000;min-height:0;padding:0}
+  .brand,.lede{color:#000}
+  h1{font-size:24pt;min-height:0}
+  .grp{margin-top:16px}
+  .card,.top10{border:1px solid #999;margin:0;background:#fff}
+  .item{break-inside:avoid;padding:5px 8px;animation:none}
+  .item.top.p1 .pos,.item.top.p1 .time,.board .tag{color:#000}
+  .board .tag,.board .tag.warn{background:#eee}
+  a[href]::after{content:none !important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="art" aria-hidden="true">
+    <div class="flags"></div>
+    <svg class="hero-lanes" width="100%" height="100%" focusable="false">
+      <line class="hl hl-a" x1="8" x2="100%" y1="5%" y2="5%"/><line class="hl hl-b" x1="8" x2="100%" y1="23%" y2="23%"/>
+      <line class="hl hl-a" x1="8" x2="100%" y1="41%" y2="41%"/><line class="hl hl-b" x1="8" x2="100%" y1="59%" y2="59%"/>
+      <line class="hl hl-a" x1="8" x2="100%" y1="77%" y2="77%"/><line class="hl hl-b" x1="8" x2="100%" y1="95%" y2="95%"/>
+      <line class="wk" x1="25%" x2="70%" y1="50%" y2="50%"/>
+      <text x="92%" y="14%" text-anchor="end" dominant-baseline="central">1</text>
+      <text x="92%" y="32%" text-anchor="end" dominant-baseline="central">2</text>
+      <text x="92%" y="50%" text-anchor="end" dominant-baseline="central">3</text>
+      <text x="92%" y="68%" text-anchor="end" dominant-baseline="central">4</text>
+      <text x="92%" y="86%" text-anchor="end" dominant-baseline="central">5</text>
+    </svg>
+    <svg class="pool" width="100%" height="38" focusable="false">
+      <defs>
+        <pattern id="pf1" width="32" height="38" patternUnits="userSpaceOnUse">
+          <circle cx="8" cy="6" r="4" fill="#fff" opacity=".85"/><circle cx="24" cy="6" r="4" fill="#C8CFE6" opacity=".55"/>
+          <circle cx="8" cy="22" r="4" fill="#C8CFE6" opacity=".55"/><circle cx="24" cy="22" r="4" fill="#fff" opacity=".85"/>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="100%" height="38" fill="url(#pf1)"/>
+      <rect x="0" y="13" width="100%" height="2" fill="#C8CFE6" opacity=".6"/>
+      <rect class="pool-edge" x="0" y="28" width="100%" height="10"/>
+    </svg>
+  </div>
+  <div class="wrap hero-in">
+    <p class="brand"><span class="brand-dots" aria-hidden="true"><i></i><i></i><i></i></span>Club Náutico</p>
+    <h1><span class="w">Récords</span> <span class="w">del club</span></h1>
+    <p class="lede">Las mejores marcas de la historia del club, todas las categorías y máster juntas.</p>
+  </div>
+</header>
+
+<div id="ctx" aria-hidden="true" inert>
+  <span class="ctx-t" id="ctx-t"></span>
+  <button type="button" id="ctx-b">Cambiar</button>
+</div>
+
+<div class="controls" id="controls">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Piscina" data-key="curso">
+      <button type="button" data-v="LC">Piscina 50 m</button>
+      <button type="button" data-v="SC">Piscina 25 m</button>
+      <button type="button" data-v="OW">Aguas abiertas</button>
+    </div>
+    <div class="seg" role="group" aria-label="Rama" data-key="genero">
+      <button type="button" data-v="M">Varones</button>
+      <button type="button" data-v="F">Damas</button>
+    </div>
+  </div>
+</div>
+
+<p id="status" class="sr-only" role="status"></p>
+<main class="wrap" id="main" tabindex="-1" aria-busy="true">
+  <p class="sub">Cargando…</p>
+  <noscript><div class="err"><p>Esta página necesita JavaScript. Actívalo o ábrela en otro navegador.</p></div></noscript>
+</main>
+
+<footer>
+  <div class="cork-full" aria-hidden="true"></div>
+  <div class="wrap">
+    <div id="notas-rec">
+      <p>Una marca por prueba: la más rápida de todas las categorías. Las marcas de exhibición cuentan como récord del club.</p>
+      <p>Los relevos mixtos aparecen en varones y en damas.</p>
+    </div>
+    <p>Fuente: resultados oficiales FENA 2017–2026 y torneos internacionales verificados. Actualizado al 18/10/2026.</p>
+    <p>Página del Club Náutico. No es una página oficial de la FENA.</p>
+  </div>
+</footer>
+
+<!-- Carril de piscina: indicador de avance (decorativo) -->
+<div class="lane-host" aria-hidden="true">
+  <div class="lane carril" data-carril aria-hidden="true" data-state="rest" data-dir="down" data-edge="start">
+    <svg class="lane-bg" width="100%" height="100%" focusable="false">
+      <line class="tline" x1="62%" x2="62%" y1="0" y2="100%"/>
+      <line class="m5" x1="0" x2="100%" y1="7%" y2="7%"/>
+      <line class="m5" x1="0" x2="100%" y1="93%" y2="93%"/>
+      <ellipse class="ripple" cx="50%" cy="97%" rx="10" ry="4"/>
+    </svg>
+    <div class="cork-col"></div>
+    <div class="cork-end t"></div><div class="cork-end b"></div>
+    <div class="rope"></div>
+    <div class="wall t"></div><div class="wall b"></div>
+    <div class="sw-y"><div class="sw-x">
+      <svg class="sw" viewBox="0 0 20 44" focusable="false"><g class="sw-flip"><g class="sw-float"><g class="wake"><path d="M6 40.2q4-2.4 8 0M4.4 43.2q5.6-3.2 11.2 0"/></g><g class="legs"><path class="leg-l" d="M8.6 25 8.2 37"/><path class="leg-r" d="M11.4 25 11.8 37"/></g><g class="arm arm-l"><path d="M5.8 11.6 3.6 1.4"/><circle cx="3.6" cy="1.4" r="1.7"/></g><g class="arm arm-r"><path d="M14.2 11.6 16.4 1.4"/><circle cx="16.4" cy="1.4" r="1.7"/></g><path class="torso" d="M4.4 12.4Q4.4 9.6 7.2 9.4H12.8Q15.6 9.6 15.6 12.4L13.9 23.4Q13.3 26.4 10 26.4Q6.7 26.4 6.1 23.4Z"/><circle class="cap" cx="10" cy="6.4" r="3.6"/><rect class="goggle" x="7.9" y="3.5" width="2" height="1.5" rx=".75"/><rect class="goggle" x="10.1" y="3.5" width="2" height="1.5" rx=".75"/></g></g></svg>
+    </div></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const FILES = {
+    rec: 'data/records_piscina.json',
+    top: 'data/top10_piscina.json',
+    rel: 'data/relevos_records.json',
+    owRec: 'data/records_aguas_abiertas.json',
+    owTop: 'data/top_aguas_abiertas.json'
+  };
+  const D = {}, ERR = {};
+  // abierta = prueba cuyo Top 10 está desplegado (una a la vez)
+  const st = { curso: 'LC', genero: 'M', abierta: null };
+  const $ = (s, r = document) => r.querySelector(s);
+  const main = $('#main'), statusEl = $('#status'), controls = $('#controls');
+  const ctx = $('#ctx'), ctxT = $('#ctx-t');
+  const segs = [...document.querySelectorAll('.seg')];
+  const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // ---------- formato ----------
+  const nombre = (s) => {
+    if (!s) return '';
+    const i = s.indexOf(',');
+    return i < 0 ? s.trim() : (s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim());
+  };
+  const titulo = (s) => (s || '').toLowerCase().replace(/(^|[\s,(\-\/])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  const lugar = (s) => {
+    const t = (s || '').trim();
+    return t ? titulo(t) : 'Ecuador'; // el PDF no imprime la ciudad (IV Abel Gilbert 2019)
+  };
+  const ymd = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((s || '').trim()); return m ? { y: m[1], m: m[2], d: m[3] } : null; };
+  const fecha = (ini, fin) => {
+    if (fin === undefined && /\sa\s/.test(ini || '')) [ini, fin] = ini.split(/\s+a\s+/);
+    const a = ymd(ini), b = ymd(fin);
+    if (!a) return ini || '';
+    if (!b || (a.y === b.y && a.m === b.m && a.d === b.d)) return `${a.d}/${a.m}/${a.y}`;
+    if (a.y === b.y && a.m === b.m) return `${a.d} al ${b.d}/${b.m}/${b.y}`;
+    if (a.y === b.y) return `${a.d}/${a.m} al ${b.d}/${b.m}/${b.y}`;
+    return `${a.d}/${a.m}/${a.y} al ${b.d}/${b.m}/${b.y}`;
+  };
+  const prueba = (p) => {
+    const s = String(p || '').trim();
+    const [dist, est] = s.split(/\s+/);
+    if (!est || !/^\d|^4x/i.test(dist)) return s;
+    return dist + ' m ' + (est === 'Combinado' ? (dist.includes('x') ? 'Combinado' : 'Combinado individual') : est);
+  };
+  // El estilo se toma del nombre de la prueba ("200 Pecho", "4x50 Combinado"), que es lo que se muestra
+  const estilo = (r) => String(r.prueba || '').trim().split(/\s+/)[1] || r.estilo || '';
+  const piscina = (c) => c === 'LC' ? 'Piscina 50 m' : c === 'SC' ? 'Piscina 25 m' : 'Aguas abiertas';
+  const rama = () => st.genero === 'M' ? 'Varones' : 'Damas';
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const dot = '<span class="dot" aria-hidden="true">·</span>';
+  const ESTILOS_REL = ['(E)', '(P)', '(M)', '(L)'];
+  const idx = (i) => Math.min(i | 0, 10); // índice acotado para el retardo de entrada
+  // fecha · lugar · torneo (f ya viene formateada)
+  const metaHtml = (f, r) => `${esc(f)}${dot}${esc(lugar(r.lugar))}${dot}${esc(r.torneo)}`;
+
+  // ---------- estado en la URL (para compartir un enlace directo) ----------
+  const leerHash = () => {
+    const h = new URLSearchParams(location.hash.slice(1));
+    if (['LC', 'SC', 'OW'].includes(h.get('c'))) st.curso = h.get('c');
+    if (['M', 'F'].includes(h.get('g'))) st.genero = h.get('g');
+    st.abierta = h.get('p') || null;
+  };
+  const escribirHash = () => {
+    const h = new URLSearchParams({ c: st.curso, g: st.genero });
+    if (st.abierta && st.curso !== 'OW') h.set('p', st.abierta);
+    history.replaceState(null, '', '#' + h.toString());
+  };
+
+  // ---------- render ----------
+  function recordItem(r, i) {
+    const exh = r.marca === 'x';
+    const abierta = st.abierta === r.prueba;
+    return `<a class="item rowlink" href="#" role="button" data-prueba="${esc(r.prueba)}" aria-expanded="${abierta}" style="--i:${idx(i)}">
+      <span class="ev">${esc(prueba(r.prueba))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}</span>
+      <span class="time">${esc(r.tiempo)}</span>
+      <span class="who">${esc(nombre(r.nadador))}</span>
+      <span class="tail"><span class="meta">${metaHtml(fecha(r.fecha), r)}</span><span class="go">${abierta ? 'Ocultar Top 10' : 'Ver Top 10'}</span></span>
+    </a>${abierta ? top10Html(r.prueba) : ''}`;
+  }
+  const CIERRE = '<div class="t10foot"><button type="button" class="t10close">Cerrar Top 10</button></div>';
+  // Top 10 de una prueba, desplegado justo debajo de su fila
+  function top10Html(p) {
+    if (!D.top) return `<div class="top10" data-prueba="${esc(p)}"><p class="empty">Cargando Top 10…</p>${CIERRE}</div>`;
+    const rows = D.top.filter((t) => t.curso === st.curso && t.genero === st.genero && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
+    return `<div class="top10" data-prueba="${esc(p)}" role="region" aria-label="Top 10 de ${esc(prueba(p))}">
+      <div class="t10head"><span class="t10title">Top 10 · ${esc(prueba(p))}</span><small>mejor marca de cada nadador</small></div>
+      ${notaExh(rows)}
+      ${rows.map((t, i) => topItem(t, i)).join('') || '<p class="empty">Sin marcas.</p>'}
+      ${CIERRE}
+    </div>`;
+  }
+  function relevoItem(r, i) {
+    const comb = estilo(r) === 'Combinado';
+    const ints = (r.integrantes || []).length
+      ? '<ol class="team">' + r.integrantes.map((n, k) => `<li>${esc(nombre(n))}${comb ? ` <span class="st">${ESTILOS_REL[k] || ''}</span>` : ''}</li>`).join('') + '</ol>'
+      : '<span class="nota-int">Integrantes no publicados en los resultados oficiales</span>';
+    return `<div class="item relay" style="--i:${idx(i)}">
+      <span class="ev">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? '<span class="tag">Mixto</span>' : ''}</span>
+      <span class="time">${esc(r.tiempo)}</span>
+      <span class="who">${ints}</span>
+      <span class="meta">${metaHtml(fecha(r.fecha_ini, r.fecha_fin), r)}</span>
+    </div>`;
+  }
+  const grupo = (t, items, clase = '') => items.length
+    ? `<section class="grp"><h3 class="group">${t}</h3><div class="card${clase}">${items.join('')}</div></section>` : '';
+  const encabezado = (sub) => `<h2>${st.curso === 'OW' ? 'Aguas abiertas' : 'Récords · ' + piscina(st.curso)} · ${rama()}</h2><p class="sub">${sub}</p>`;
+  const SUB_REC = 'Toca una prueba para ver su Top 10.';
+  const SUB_OW = 'Mejores marcas del club por distancia. El número es la posición dentro del club (no el lugar en la carrera); la primera es el récord.';
+
+  function vistaRecords() {
+    const recs = D.rec.filter((r) => r.curso === st.curso && r.genero === st.genero).sort((a, b) => a.orden - b.orden);
+    const rel = D.rel.filter((r) => r.curso === st.curso && (r.genero === st.genero || r.genero === 'Mixto'))
+      .sort((a, b) => (a.genero === 'Mixto') - (b.genero === 'Mixto') || a.posta - b.posta);
+    const ESTILOS = ['Libre', 'Mariposa', 'Espalda', 'Pecho', 'Combinado'];
+    const by = (e) => recs.filter((r) => estilo(r) === e).map(recordItem);
+    const relBy = (e) => rel.filter((r) => estilo(r) === e).map(relevoItem);
+    // Nada se pierde: una prueba con un estilo desconocido sale al final en "Otras pruebas"
+    const otras = recs.filter((r) => !ESTILOS.includes(estilo(r))).map(recordItem)
+      .concat(rel.filter((r) => !['Libre', 'Combinado'].includes(estilo(r))).map(relevoItem));
+    const cuerpo = [
+      grupo('Libre', by('Libre')),
+      grupo('Relevos libres', relBy('Libre')),
+      grupo('Mariposa', by('Mariposa')),
+      grupo('Espalda', by('Espalda')),
+      grupo('Pecho', by('Pecho')),
+      grupo('Combinado individual', by('Combinado')),
+      grupo('Relevos combinados', relBy('Combinado')),
+      grupo('Otras pruebas', otras)
+    ].join('');
+    return encabezado(SUB_REC) + (cuerpo || '<p class="empty">Sin marcas.</p>');
+  }
+
+  function topItem(t, i, extra) {
+    const exh = t.marca === 'x';
+    return `<div class="item top${t.puesto === 1 ? ' p1' : ''}" style="--i:${idx(i)}">
+      <span class="ev"><span class="pos">${esc(t.puesto)}.</span> <span class="time">${esc(t.tiempo)}</span></span>
+      <span class="who">${esc(nombre(t.nadador))}${exh ? '<span class="tag warn">Exhibición</span>' : ''}${extra || ''}</span>
+      <span class="meta">${metaHtml(fecha(t.fecha), t)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
+    </div>`;
+  }
+  const notaExh = (rows) => rows.some((t) => t.marca === 'x')
+    ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Cuenta igual para el ranking y para los récords del club.</p>' : '';
+
+  function vistaAguas() {
+    const recs = D.owRec.filter((r) => r.rama === st.genero).sort((a, b) => a.dist_km - b.dist_km);
+    const bloques = recs.map((r) => {
+      const top = D.owTop.filter((t) => t.rama === st.genero && t.distancia === r.distancia).sort((a, b) => a.puesto - b.puesto);
+      return grupo(esc(r.distancia), top.map((t, i) => topItem(t, i, t.puesto === 1 ? '<span class="tag">Récord</span>' : '')), ' board');
+    });
+    return encabezado(SUB_OW) + (bloques.join('') || '<p class="empty">Sin marcas registradas.</p>');
+  }
+
+  // Qué archivos necesita la vista actual
+  const vistaActual = () => st.curso === 'OW' ? [['owRec', 'owTop'], vistaAguas] : [['rec', 'rel'], vistaRecords];
+  let porDesplazar = true; // al abrir un enlace directo con Top 10, llevar la prueba a la vista una vez
+
+  const filaDe = (p) => [...main.querySelectorAll('a.rowlink')].find((a) => a.dataset.prueba === p);
+  function desplazarInicial() {
+    if (!porDesplazar || !st.abierta || !D.top) return;
+    const fila = filaDe(st.abierta);
+    if (fila) { fila.scrollIntoView({ block: 'start' }); porDesplazar = false; }
+  }
+
+  function draw(anim = true) {
+    segs.forEach((g) => {
+      const bs = [...g.querySelectorAll('button')];
+      let activo = 0;
+      bs.forEach((b, i) => {
+        const on = b.dataset.v === st[g.dataset.key];
+        if (on) activo = i;
+        b.setAttribute('aria-pressed', String(on));
+      });
+      g.style.setProperty('--i', activo);
+      g.style.setProperty('--n', bs.length);
+    });
+    $('#notas-rec').hidden = st.curso === 'OW';
+    ctxT.textContent = piscina(st.curso) + ' · ' + rama();
+    const [need, html] = vistaActual();
+    const falla = need.find((k) => ERR[k]);
+    const listo = need.every((k) => D[k]);
+    main.classList.toggle('anim', anim && !sinMovimiento.matches);
+    main.setAttribute('aria-busy', String(!falla && !listo));
+    try {
+      if (falla) main.innerHTML = `<div class="err" role="alert"><p>No se pudieron cargar los datos (${esc(ERR[falla])}). Revisa tu conexión y recarga la página.</p><button type="button" class="btn" data-act="reload">Reintentar</button></div>`;
+      else if (listo) main.innerHTML = html();
+      else main.innerHTML = encabezado('Cargando…') + '<div class="skel" aria-hidden="true">' + '<div class="sk"></div>'.repeat(6) + '</div>';
+    } catch (e) {
+      main.setAttribute('aria-busy', 'false');
+      main.innerHTML = `<div class="err" role="alert"><p>Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba recargar la página.</p><button type="button" class="btn" data-act="reload">Reintentar</button></div>`;
+    }
+    const h2 = $('h2', main);
+    statusEl.textContent = h2 ? h2.textContent : '';
+    escribirHash();
+    desplazarInicial();
+  }
+
+  // Llegó el Top 10 con una prueba ya abierta: se cambia solo el tablero, sin redibujar la página
+  function refrescarTop() {
+    const t = $('.top10', main);
+    if (!t || !st.abierta) return;
+    t.outerHTML = top10Html(st.abierta);
+    desplazarInicial();
+  }
+
+  const marcarFila = (a, abierta) => {
+    a.setAttribute('aria-expanded', String(abierta));
+    const go = $('.go', a); if (go) go.textContent = abierta ? 'Ocultar Top 10' : 'Ver Top 10';
+  };
+  // Abre o cierra el Top 10 bajo la fila tocada, sin redibujar la página (la fila no se mueve de la pantalla)
+  function alternar(a) {
+    const p = a.dataset.prueba;
+    const antes = a.getBoundingClientRect().top;
+    const prev = st.abierta ? filaDe(st.abierta) : null;
+    main.querySelectorAll('.top10').forEach((d) => d.remove());
+    if (prev) marcarFila(prev, false);
+    if (st.abierta === p) st.abierta = null;
+    else {
+      st.abierta = p;
+      a.insertAdjacentHTML('afterend', top10Html(p));
+      marcarFila(a, true);
+    }
+    window.scrollBy(0, a.getBoundingClientRect().top - antes);
+    statusEl.textContent = st.abierta ? 'Top 10 de ' + prueba(p) + ' abierto' : 'Top 10 cerrado';
+    escribirHash();
+  }
+
+  // ---------- eventos ----------
+  segs.forEach((g) => g.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (st[g.dataset.key] !== b.dataset.v) st.abierta = null;
+    st[g.dataset.key] = b.dataset.v;
+    draw();
+  }));
+  main.addEventListener('click', (e) => {
+    if (e.target.closest('[data-act="reload"]')) { location.reload(); return; }
+    const cierre = e.target.closest('.t10close');
+    const a = cierre ? cierre.closest('.top10').previousElementSibling : e.target.closest('a.rowlink');
+    if (!a || !a.matches('a.rowlink')) return;
+    e.preventDefault();
+    alternar(a);
+    if (cierre) a.focus(); // devuelve el foco a la fila
+  });
+  main.addEventListener('keydown', (e) => {
+    const a = e.target.closest && e.target.closest('a.rowlink');
+    if (a && e.key === ' ') { e.preventDefault(); alternar(a); }
+  });
+  window.addEventListener('hashchange', () => { leerHash(); porDesplazar = true; draw(); });
+
+  // ---------- carga ----------
+  // Cada archivo se pide en paralelo y la vista se dibuja apenas llegan los que necesita
+  // (los récords no esperan al Top 10, que es el archivo más grande).
+  leerHash();
+  draw();
+  for (const [k, url] of Object.entries(FILES)) {
+    // no-cache: revalida con el servidor (respuesta 304 si no cambió) para no mezclar versiones tras una actualización
+    fetch(url, { cache: 'no-cache' })
+      .then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
+      .then((j) => { if (!Array.isArray(j)) throw new Error(url + ' con formato inválido'); D[k] = j; })
+      .catch((e) => { ERR[k] = e.message || url; })
+      .finally(() => {
+        const need = vistaActual()[0];
+        if (need.includes(k)) {
+          // dibuja cuando están todos los archivos de la vista, o ya falló alguno
+          if (need.every((n) => D[n]) || need.some((n) => ERR[n])) draw();
+        } else if (k === 'top' && st.abierta && st.curso !== 'OW') refrescarTop();
+      });
+  }
+
+  // ---------- barra de contexto (móvil): aparece al salir de los selectores ----------
+  const irASelectores = () => {
+    controls.scrollIntoView({ block: 'start', behavior: sinMovimiento.matches ? 'auto' : 'smooth' });
+    const b = $('.seg button', controls);
+    if (b) b.focus({ preventScroll: true });
+  };
+  $('#ctx-b').addEventListener('click', irASelectores);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((es) => {
+      const e = es[es.length - 1];
+      const mostrar = !e.isIntersecting && e.boundingClientRect.top < 0;
+      ctx.classList.toggle('show', mostrar);
+      ctx.toggleAttribute('inert', !mostrar);
+      ctx.setAttribute('aria-hidden', String(!mostrar));
+    }, { rootMargin: '-48px 0px 0px 0px' }).observe(controls);
+  }
+
+  // ---------- carril: progreso de scroll (un solo listener pasivo + rAF) ----------
+  const lane = $('.lane'), sy = $('.sw-y', lane), cabecera = $('header.top');
+  let docH = 0, laneH = 0, swH = 0, headH = 0, pegable = false, pegada = false;
+  let tick = false, rest = 0, lastY = window.scrollY;
+
+  function frame() {
+    tick = false;
+    const y = window.scrollY;
+    const p = docH > 1 ? Math.min(1, Math.max(0, y / docH)) : 0;
+    sy.style.transform = `translate3d(0,${(10 + p * Math.max(0, laneH - swH - 20)).toFixed(1)}px,0)`;
+    const edge = p <= .005 ? 'start' : p >= .995 ? 'end' : 'mid';
+    if (lane.dataset.edge !== edge) lane.dataset.edge = edge;
+    if (edge === 'start' && lane.dataset.dir !== 'down') lane.dataset.dir = 'down'; // vira en la pared de salida
+    const pega = pegable && y >= headH - 1;
+    if (pega !== pegada) { pegada = pega; controls.classList.toggle('stuck', pega); }
+  }
+  // Única lectura de layout: solo al cambiar el tamaño de la página o la ventana
+  function medir() {
+    docH = document.documentElement.scrollHeight - window.innerHeight;
+    laneH = lane.clientHeight;
+    swH = sy.offsetHeight;
+    headH = cabecera.offsetHeight;
+    pegable = getComputedStyle(controls).position === 'sticky';
+    document.documentElement.style.setProperty('--controls-h', pegable ? controls.offsetHeight + 'px' : '0px');
+    frame();
+  }
+  addEventListener('scroll', () => {
+    if (!tick) { tick = true; requestAnimationFrame(frame); }
+    const y = window.scrollY;
+    const dir = y >= lastY ? 'down' : 'up';
+    lastY = y;
+    if (lane.dataset.dir !== dir && lane.dataset.edge !== 'start') lane.dataset.dir = dir; // solo escribe si cambia
+    if (lane.dataset.state !== 'swim') lane.dataset.state = 'swim';
+    clearTimeout(rest);
+    rest = setTimeout(() => { lane.dataset.state = 'rest'; }, 380);
+  }, { passive: true });
+  addEventListener('resize', medir);
+  addEventListener('orientationchange', medir);
+  if ('ResizeObserver' in window) new ResizeObserver(medir).observe(document.body); // cambia al abrir un Top 10
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+  medir();
+})();
+</script>
+</body>
+</html>
