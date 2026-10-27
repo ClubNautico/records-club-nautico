@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Prueba de fluidez</title>
+<style>
+:root{--bg:#f3f6f9;--fg:#0f2233;--muted:#526274;--ok:#0a7a3d;--bad:#b3261e;--line:#dbe3ea;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1620;--fg:#e6edf3;--muted:#9db0c2;--ok:#5fd18f;--bad:#ff8a80;--line:#24384a}}
+:root[data-theme="dark"]{--bg:#0c1620;--fg:#e6edf3;--muted:#9db0c2;--ok:#5fd18f;--bad:#ff8a80;--line:#24384a}
+body{margin:0;background:var(--bg);color:var(--fg);padding:16px;line-height:1.4}
+h1{font-size:22px;margin:0 0 4px}
+p{color:var(--muted);margin:0 0 12px}
+#res{font-size:18px;font-weight:700;margin:12px 0}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+ul{padding-left:18px;font-size:14px}
+li{margin:2px 0}
+table{border-collapse:collapse;font-size:14px;margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:4px 8px;text-align:left}
+#marco{margin-top:12px;max-width:100%;overflow:auto}
+</style>
+</head>
+<body>
+<h1>Prueba de fluidez</h1>
+<p>Mide la fluidez de la página de récords dentro de un marco de 390×844 px: cuadros, tirones y long tasks al cargar, desplazarse, abrir el Top 10, correr carreras y cambiar de vista. Con ?repetir=3 corre todo tres veces y reporta la mediana.</p>
+<div id="res">Ejecutando…</div>
+<table id="tabla"></table>
+<ul id="log"></ul>
+<div id="marco"></div>
+<script>
+(async () => {
+  const log = document.getElementById('log');
+  const res = document.getElementById('res');
+  const tabla = document.getElementById('tabla');
+  const marco = document.getElementById('marco');
+  const fallos = [];
+  let pruebas = 0;
+  let metricas = [];
+  const MAXLOG = 200;
+  const ok = (cond, msg) => {
+    pruebas++;
+    if (!cond) {
+      fallos.push(msg);
+      if (fallos.length <= MAXLOG) { const li = document.createElement('li'); li.className = 'bad'; li.textContent = '✗ ' + msg; log.append(li); }
+    }
+    return !!cond;
+  };
+  const nota = (msg) => { const li = document.createElement('li'); li.textContent = msg; log.append(li); };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, Math.max(0, ms)));
+  const ahora = () => performance.now();
+  const fmt = (x) => (x === null || x === undefined ? '—' : String(Math.round(x * 10) / 10));
+  const mediana = (xs) => {
+    const v = xs.filter((x) => typeof x === 'number' && Number.isFinite(x)).sort((a, b) => a - b);
+    if (!v.length) return null;
+    const m = Math.floor(v.length / 2);
+    return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+  };
+
+  const params = new URLSearchParams(location.search);
+  const pag = params.get('pagina');
+  const archivo = pag && /^[\w-]+\.html$/.test(pag) ? pag : 'index.html';
+  const REP = Math.min(5, Math.max(1, parseInt(params.get('repetir'), 10) || 1));
+  const DESP_PX = 12;
+  const CLAVES = ['cuadros', 'fps', 't20', 't50', 'peor', 'lt', 'ltMs'];
+
+  const SEL_SC = '.seg[data-key=curso] button[data-v=SC]';
+  const SEL_OW = '.seg[data-key=curso] button[data-v=OW]';
+  const SEL_LC = '.seg[data-key=curso] button[data-v=LC]';
+
+  // carga: true = el escenario mide desde que se asigna src (ventana fija de 4 s)
+  const ESCENARIOS = [
+    { nombre: 'Carga inicial', hash: 'c=LC&g=M', carga: true },
+    { nombre: 'Desplazamiento', hash: 'c=LC&g=M',
+      medir: async (c) => { await c.sleep(1000); await c.desplazar(3000); await c.sleep(1000); } },
+    { nombre: 'Abrir Top 10', hash: 'c=LC&g=M',
+      medir: async (c) => { c.clic('a.item.rowlink[data-prueba="100 Libre"]'); await c.sleep(1500); } },
+    { nombre: 'Carrera 100 m', hash: 'c=LC&g=M',
+      preparar: async (c) => {
+        c.clic('a.item.rowlink[data-prueba="100 Libre"]');
+        if (!(await c.esperarEl('.race-go', 3000))) throw new Error('no aparece .race-go con el Top 10 de 100 Libre abierto');
+      },
+      medir: async (c) => { c.clic('.race-go'); await c.sleep(7000); } },
+    { nombre: 'Carrera 1500 m', hash: 'c=LC&g=F&p=1500+Libre',
+      preparar: async (c) => {
+        if (!(await c.esperarEl('.race-go', 5000))) throw new Error('no aparece .race-go en 1500 Libre');
+      },
+      medir: async (c) => { c.clic('.race-go'); await c.sleep(8000); } },
+    { nombre: 'Cambiar de vista', hash: 'c=LC&g=M',
+      medir: async (c) => {
+        const t = c.ahora();
+        c.clic(SEL_SC); await c.sleep(600);
+        c.clic(SEL_OW); await c.sleep(600);
+        c.clic(SEL_LC);
+        await c.sleep(2500 - (c.ahora() - t));
+      } },
+  ];
+
+  // Métricas de una corrida: cuadros dentro de la ventana [vIni, vFin] (reloj del padre)
+  const calcular = (M) => {
+    const tramo = M.primerIframe === null ? M.tPad : M.tPad.filter((t) => t < M.primerIframe).concat(M.tIframe);
+    const ts = tramo.filter((t) => t >= M.vIni && t <= M.vFin);
+    const iv = [];
+    for (let i = 1; i < ts.length; i++) iv.push(ts[i] - ts[i - 1]);
+    const n = iv.length;
+    if (!n) return { sinDatos: true, cuadros: ts.length };
+    const suma = iv.reduce((a, b) => a + b, 0);
+    const lt = M.ltOk ? M.lt.filter((l) => l.ini >= M.vIni && l.ini <= M.vFin) : null;
+    return {
+      sinDatos: false,
+      cuadros: ts.length,
+      fps: suma > 0 ? (n * 1000) / suma : 0,
+      t20: (100 * iv.filter((v) => v > 20).length) / n,
+      t50: (100 * iv.filter((v) => v > 50).length) / n,
+      peor: Math.max(...iv),
+      lt: lt ? lt.length : null,
+      ltMs: lt ? lt.reduce((a, l) => a + l.dur, 0) : null,
+    };
+  };
+
+  // Carga la página, mide y elimina el iframe. Devuelve métricas, errores y avisos.
+  const correr = async (esc) => {
+    const M = { tPad: [], tIframe: [], primerIframe: null, lt: [], po: null, ltOk: false, parada: false, vIni: 0, vFin: 0 };
+    const errores = [];
+    const f = document.createElement('iframe');
+    f.title = 'Página bajo prueba · ' + esc.nombre;
+    f.style.cssText = 'width:390px;height:844px;border:0;display:block;background:#fff';
+    let W = null;
+
+    const guardarLT = (entradas, w) => {
+      const desfase = w.performance.timeOrigin - performance.timeOrigin;
+      for (const e of entradas) M.lt.push({ ini: e.startTime + desfase, dur: e.duration });
+    };
+    // Respaldo: rAF del documento padre desde antes de asignar src
+    const padre = () => { if (M.parada) return; M.tPad.push(ahora()); requestAnimationFrame(padre); };
+    // rAF del iframe: registra cada cuadro del iframe
+    const latido = () => {
+      if (M.parada) return;
+      const t = ahora();
+      M.tIframe.push(t);
+      if (M.primerIframe === null) M.primerIframe = t;
+      W.requestAnimationFrame(latido);
+    };
+    // Al evento load del iframe: observador de longtask, errores y bucle rAF del iframe
+    const cargada = new Promise((resolver) => {
+      f.addEventListener('load', () => {
+        const w = f.contentWindow;
+        if (!w || W || w.location.href === 'about:blank') return;
+        W = w;
+        w.addEventListener('error', (e) => errores.push(e.message));
+        w.addEventListener('unhandledrejection', (e) => errores.push(String(e.reason)));
+        const tipos = (w.PerformanceObserver && w.PerformanceObserver.supportedEntryTypes) || [];
+        M.ltOk = tipos.includes('longtask');
+        if (M.ltOk) {
+          M.po = new w.PerformanceObserver((lista) => guardarLT(lista.getEntries(), w));
+          M.po.observe({ type: 'longtask', buffered: true });
+        }
+        latido();
+        resolver(true);
+      });
+    });
+
+    const buscar = (sel) => { const dd = f.contentDocument; return dd ? dd.querySelector(sel) : null; };
+    const esperarEl = async (sel, ms) => {
+      for (let t = 0; t <= ms; t += 100) {
+        const el = buscar(sel);
+        if (el) return el;
+        await sleep(100);
+      }
+      return null;
+    };
+    const c = {
+      sleep, ahora, esperarEl,
+      clic: (sel) => { const el = buscar(sel); if (!el) throw new Error('no existe ' + sel); el.click(); },
+      desplazar: (ms) => new Promise((resolver) => {
+        const w = f.contentWindow;
+        const t0 = ahora();
+        const paso = () => {
+          if (ahora() - t0 >= ms) return resolver();
+          w.scrollBy(0, DESP_PX);
+          w.requestAnimationFrame(paso);
+        };
+        w.requestAnimationFrame(paso);
+      }),
+    };
+
+    const t0 = ahora();
+    requestAnimationFrame(padre);
+    f.src = '../' + archivo + '#' + esc.hash;
+    marco.append(f);
+    try {
+      const cargo = await Promise.race([cargada, sleep(10000).then(() => false)]);
+      if (esc.carga) {
+        M.vIni = t0;
+        M.vFin = t0 + 4000;
+        await sleep(M.vFin - ahora());
+        ok(buscar('a.item.rowlink'), `${esc.nombre}: no aparece a.item.rowlink en 4 s`);
+      } else {
+        if (!cargo) throw new Error('la página no cargó en 10 s');
+        if (!(await esperarEl('a.item.rowlink', 10000))) throw new Error('no aparece a.item.rowlink en 10 s');
+        if (esc.preparar) await esc.preparar(c);
+        M.vIni = ahora();
+        await esc.medir(c);
+      }
+    } catch (e) {
+      ok(false, `${esc.nombre}: ${(e && e.message) || e}`);
+    } finally {
+      if (!M.vFin) M.vFin = ahora();
+      if (!M.vIni) M.vIni = M.vFin;
+      M.parada = true;
+      if (M.po) {
+        if (W) guardarLT(M.po.takeRecords(), W);
+        M.po.disconnect();
+      }
+      f.remove();
+    }
+    return { metricas: calcular(M), errores, ltOk: M.ltOk, respaldo: M.primerIframe === null };
+  };
+
+  try {
+    const corridas = ESCENARIOS.map(() => []);
+    const errores = ESCENARIOS.map(() => []);
+    let respaldo = false, ltAusente = false;
+    for (let r = 0; r < REP; r++) {
+      for (let k = 0; k < ESCENARIOS.length; k++) {
+        res.textContent = `Ejecutando… ${ESCENARIOS[k].nombre} (corrida ${r + 1} de ${REP})`;
+        const out = await correr(ESCENARIOS[k]);
+        corridas[k].push(out.metricas);
+        errores[k].push(...out.errores);
+        respaldo = respaldo || out.respaldo;
+        ltAusente = ltAusente || !out.ltOk;
+      }
+    }
+
+    ESCENARIOS.forEach((esc, k) => {
+      const antes = fallos.length;
+      const med = {};
+      for (const key of CLAVES) med[key] = mediana(corridas[k].map((v) => v[key]));
+      const n = esc.nombre;
+      if (med.peor === null || med.t20 === null) {
+        ok(false, `${n}: no se midió ningún cuadro`);
+      } else if (esc.carga) {
+        ok(med.peor <= 250, `${n}: el peor cuadro dura ${fmt(med.peor)} ms (máximo 250)`);
+        ok(med.t20 <= 15, `${n}: ${fmt(med.t20)} % de cuadros tardan más de 20 ms (máximo 15 %)`);
+      } else {
+        ok(med.t20 <= 5, `${n}: ${fmt(med.t20)} % de cuadros tardan más de 20 ms (máximo 5 %)`);
+        ok(med.peor <= 100, `${n}: el peor cuadro dura ${fmt(med.peor)} ms (ningún cuadro debe pasar de 100)`);
+      }
+      ok(errores[k].length === 0, `${n}: errores de JavaScript: ${errores[k].slice(0, 3).join(' | ')}`);
+      metricas.push({
+        escenario: n,
+        cuadros: med.cuadros,
+        fps: med.fps,
+        pct20: med.t20,
+        pct50: med.t50,
+        peor: med.peor,
+        longtasks: med.lt,
+        longtaskMs: med.ltMs,
+        corridas: REP,
+        resultado: fallos.length === antes ? 'OK' : 'FALLO'
+      });
+    });
+
+    const cab = ['Escenario', 'Cuadros', 'FPS medio', 'Tirones >20 ms (%)', 'Tirones graves >50 ms (%)', 'Peor cuadro (ms)', 'Long tasks', 'Tiempo en long tasks (ms)', 'Resultado'];
+    const trCab = document.createElement('tr');
+    for (const t of cab) { const th = document.createElement('th'); th.textContent = t; trCab.append(th); }
+    tabla.append(trCab);
+    for (const m of metricas) {
+      const tr = document.createElement('tr');
+      const vals = [m.escenario, fmt(m.cuadros), fmt(m.fps), fmt(m.pct20), fmt(m.pct50), fmt(m.peor), fmt(m.longtasks), fmt(m.longtaskMs), m.resultado];
+      vals.forEach((v, i) => {
+        const td = document.createElement('td');
+        td.textContent = v;
+        if (i === vals.length - 1) td.className = m.resultado === 'OK' ? 'ok' : 'bad';
+        tr.append(td);
+      });
+      tabla.append(tr);
+    }
+
+    nota(`Corridas por escenario: ${REP}${REP > 1 ? ' (se reporta la mediana de cada métrica)' : ''}.`);
+    if (ltAusente) nota("PerformanceObserver de 'longtask' no disponible en este navegador: las columnas de long tasks quedan en —.");
+    else nota("Las long tasks se registran desde el evento load del iframe (buffered: true incluye las del búfer del navegador).");
+    if (respaldo) nota('Algún escenario no pudo usar el rAF del iframe; sus cuadros vienen del rAF del documento padre.');
+  } catch (e) {
+    ok(false, 'La prueba no pudo completarse: ' + ((e && e.message) || e));
+  }
+
+  res.className = fallos.length ? 'bad' : 'ok';
+  res.textContent = fallos.length ? `✗ ${fallos.length} fallo(s) de ${pruebas} comprobaciones` : `✓ Todo bien: ${pruebas} comprobaciones sin fallos`;
+  document.title = (fallos.length ? 'FALLO' : 'OK') + ' · Prueba de fluidez';
+  window.RESULTADO = { pruebas, fallos, metricas };
+})();
+</script>
+</body>
+</html>

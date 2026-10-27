@@ -21,8 +21,12 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2322409A'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='16' cy='44' r='5'/%3E%3Ccircle cx='32' cy='44' r='5'/%3E%3Ccircle cx='48' cy='44' r='5'/%3E%3C/g%3E%3Ccircle cx='40' cy='20' r='7' fill='%23FFC93C'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+<!-- Las fuentes no bloquean el primer dibujo: se cargan como precarga y se activan al llegar (display=swap) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Open+Sans:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Open+Sans:wght@400;600;700;800&display=swap"></noscript>
 <style>
+/* Letra de respaldo con las medidas de Open Sans: al llegar la fuente real el texto casi no se mueve */
+@font-face{font-family:"Open Sans Ajuste";src:local("Arial"),local("Helvetica"),local("Liberation Sans");size-adjust:105%;ascent-override:101.8%;descent-override:27.9%;line-gap-override:0%}
 /* ===================== Tokens ===================== */
 :root{
   color-scheme: light dark;
@@ -33,7 +37,7 @@
   --board:#313E4F; --board-2:#3A4860; --board-ink:#FFFFFF; --board-muted:#C9D0D8; --board-line:#4A5870;
   --focus:#22409A;
   --f-display:"Josefin Slab","Roboto Slab",Rockwell,Georgia,serif;
-  --f-text:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-text:"Open Sans","Open Sans Ajuste",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --strip:26px; --safe-t:env(safe-area-inset-top,0px);
   --ease:cubic-bezier(.2,.7,.2,1);
   --r:6px;
@@ -57,7 +61,7 @@ button{font:inherit;color:inherit}
 
 /* ===================== Carril superior (indicador de desplazamiento) ===================== */
 .strip{position:fixed;z-index:50;top:0;left:0;right:0;height:calc(var(--strip) + var(--safe-t));padding-top:var(--safe-t);
-  background:var(--agua);pointer-events:none;border-bottom:1px solid var(--agua-2)}
+  background:var(--agua);pointer-events:none;border-bottom:1px solid var(--agua-2);contain:strict}
 .strip *{pointer-events:none}
 .strip .rope{position:absolute;left:0;right:0;bottom:1px;height:6px;
   background:radial-gradient(circle at 4px 3px,var(--brand) 2.6px,transparent 3px) 0 0/16px 6px,
@@ -67,38 +71,37 @@ button{font:inherit;color:inherit}
 .strip .rope::before{left:0}.strip .rope::after{right:0}
 .strip .wall{position:absolute;top:var(--safe-t);bottom:0;width:4px;background:var(--brand)}
 .strip .wall.a{left:0}.strip .wall.b{right:0}
-.sw-x{position:absolute;left:0;top:calc(var(--safe-t) + 1px);width:40px;height:18px;will-change:transform}
+/* Nadador: hoja de sprites (6 cuadros) que se desplaza con transform + steps() -> corre en el compositor aunque el hilo principal este ocupado */
+.sw-x{position:absolute;left:0;top:calc(var(--safe-t) + 1px);width:40px;height:18px;will-change:transform;transform:translate3d(4px,0,0)}
 .sw-d{width:100%;height:100%;transition:transform .25s var(--ease)}
 .strip[data-dir="back"] .sw-d{transform:scaleX(-1)}
-.sw{display:block;width:100%;height:100%;overflow:visible;transition:transform .3s var(--ease)}
+.sw-f{position:relative;width:100%;height:100%;will-change:transform}
+.sw-win{position:absolute;left:0;top:0;width:40px;height:18px;overflow:hidden;contain:strict;opacity:0}
+.sw-sheet{display:block;width:240px;height:18px;will-change:transform;transform:translate3d(0,0,0)}
+.sw-rest{position:absolute;left:0;top:0;width:40px;height:18px;overflow:visible;display:block}
+.strip[data-state="swim"] .sw-win{opacity:1}
+.strip[data-state="swim"] .sw-rest{opacity:0}
+.strip[data-state="swim"] .sw-sheet{animation:nado .8s steps(6) infinite}
+@keyframes nado{from{transform:translate3d(0,0,0)}to{transform:translate3d(-240px,0,0)}}
 .sw .bd{fill:var(--brand)}.sw .cap{fill:var(--amber);stroke:var(--brand);stroke-width:1}
 .sw .gg{fill:var(--ink)}
 .sw .arm{stroke:var(--brand);stroke-width:2.4;stroke-linecap:round;fill:none}
 .sw .hand{fill:var(--brand)}
 .sw .leg{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
-.sw .wake{stroke:var(--peri);stroke-width:1.2;fill:none;opacity:0}
-.a1{transform-origin:26px 6px}.a2{transform-origin:26px 12px}.l1{transform-origin:11px 8px}.l2{transform-origin:11px 10px}
-.strip[data-state="swim"] .a1{animation:braza .8s linear infinite}
-.strip[data-state="swim"] .a2{animation:braza .8s linear infinite -.4s}
-.strip[data-state="swim"] .l1{animation:patea .16s linear infinite alternate}
-.strip[data-state="swim"] .l2{animation:patea .16s linear infinite alternate-reverse}
-.strip[data-state="swim"] .wake{opacity:.9}
-@keyframes braza{0%,100%{transform:rotate(0) scaleX(1)}35%{transform:rotate(0) scaleX(-.55)}55%{transform:rotate(-14deg) scaleX(-.8)}80%{transform:rotate(-20deg) scaleX(.4)}}
-@keyframes patea{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}
-/* Reposo: baja hasta la corchera y se agarra con un brazo */
-.strip[data-state="rest"] .sw{transform:translateY(3px) rotate(-6deg)}
-.strip[data-state="rest"] .a2{transform:rotate(58deg) scaleX(.62)}
-.strip[data-state="rest"] .a1{transform:rotate(-8deg) scaleX(.55)}
-.strip[data-state="rest"] .hold{fill:var(--agua);stroke:var(--brand);stroke-width:1}
-.strip[data-state="rest"] .sw-d{animation:flota 2.8s ease-in-out infinite}
-@keyframes flota{0%,100%{translate:0 0}50%{translate:0 1.5px}}
+.sw .wake{stroke:var(--peri);stroke-width:1.2;fill:none;opacity:.9}
+/* Reposo: baja hasta la corchera y se agarra con un brazo; leve flotacion solo con transform */
+.sw-rest .hold{fill:var(--agua);stroke:var(--brand);stroke-width:1}
+.strip[data-state="rest"] .sw-f{animation:flota 2.8s ease-in-out 3}
+@keyframes flota{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,1.5px,0)}}
 
 /* ===================== Hero ===================== */
 .hero{position:relative;overflow:hidden;background:var(--hero);color:#fff;isolation:isolate}
-/* Reflejos de luz en el agua: el SVG ocupa exactamente el hero; lo que se mueve es el grupo interno */
-.hero .caus{position:absolute;inset:0;width:100%;height:100%;z-index:-1;opacity:.32}
-.hero .cg{animation:deriva 26s linear infinite alternate}
-@keyframes deriva{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(-24px,14px) rotate(2deg)}}
+/* Reflejos de luz en el agua: imagen pre-renderizada (assets/reflejos.jpg); la deriva es solo transform (compositor) */
+.hero .caus{position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:.32;mix-blend-mode:screen;contain:strict;pointer-events:none}
+.hero .cg{position:absolute;inset:-40px -50px;background:url(assets/reflejos.jpg) center/cover no-repeat;will-change:transform;transform:translate3d(0,0,0)}
+.hero.on .cg{animation:deriva 26s linear infinite alternate}
+.hero.on.fuera .cg{animation-play-state:paused}
+@keyframes deriva{from{transform:translate3d(0,0,0) rotate(0deg)}to{transform:translate3d(-24px,14px,0) rotate(2deg)}}
 .hero .in{position:relative;padding-block:28px 0}
 .kick{margin:0;font:700 15px/1.2 var(--f-text);color:var(--claro)}
 .hero h1{margin:6px 0 10px;font:700 clamp(2.4rem,1.6rem + 4.2vw,4.6rem)/1 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
@@ -106,7 +109,7 @@ button{font:inherit;color:inherit}
 .stats{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
   border-top:1px solid rgba(200,207,230,.35)}
 .stats li{padding:12px 4px 18px 0}
-.stats .num{display:block;font:800 clamp(1.5rem,1.1rem + 1.8vw,2.4rem)/1.05 var(--f-text);color:#fff}
+.stats .num{display:block;min-height:1.05em;font:800 clamp(1.5rem,1.1rem + 1.8vw,2.4rem)/1.05 var(--f-text);color:#fff;font-variant-numeric:tabular-nums;contain:layout}
 .stats span{display:block;font-size:13px;line-height:1.3;color:var(--claro)}
 .edge{display:block;height:22px;background:
   radial-gradient(circle at 6px 6px,#fff 4px,transparent 4.5px) 0 2px/24px 12px repeat-x,
@@ -130,8 +133,8 @@ button{font:inherit;color:inherit}
 
 /* ===================== Contenido ===================== */
 main{padding-block:8px 32px;min-height:60vh}
-main.entra>*{animation:entra .38s var(--ease) both}
-main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animation-delay:.08s}main.entra>*:nth-child(n+4){animation-delay:.12s}
+main.entra>*:nth-child(-n+3){animation:entra .38s var(--ease) backwards}
+main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animation-delay:.08s}
 @keyframes entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .vt{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
 .vt h2{margin:0;font:700 clamp(1.5rem,1.2rem + 1.4vw,2.3rem)/1.1 var(--f-display)}
@@ -149,11 +152,11 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .card>.item:first-child,.card>.rowlink:first-child{border-top:0}
 .rowlink{grid-template-columns:1fr auto;grid-template-areas:"ev time" "who who" "meta go";column-gap:12px;row-gap:2px;cursor:pointer;
   scroll-margin-top:calc(var(--strip) + var(--safe-t) + 140px);-webkit-tap-highlight-color:transparent;transition:background .15s}
-.rowlink:hover{background:var(--surface-2)}
+@media (hover:hover){.rowlink:hover{background:var(--surface-2)}}
 .rowlink:active{background:var(--surface-2)}
 .rowlink[aria-expanded="true"]{background:var(--surface-2)}
 .ev{grid-area:ev;font:700 17px/1.3 var(--f-text);align-self:center}
-.time{grid-area:time;position:relative;justify-self:end;font:800 clamp(1.4rem,1.15rem + 1.1vw,1.9rem)/1.1 var(--f-text);color:var(--brand);white-space:nowrap}
+.time{grid-area:time;position:relative;justify-self:end;font:800 clamp(1.4rem,1.15rem + 1.1vw,1.9rem)/1.1 var(--f-text);color:var(--brand);white-space:nowrap;contain:layout paint}
 .time.counting{color:transparent}
 .time .tc{position:absolute;right:0;top:0;color:var(--brand)}
 .who{grid-area:who;font-size:16px}
@@ -186,15 +189,15 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .acts{display:flex;gap:8px;flex-wrap:wrap}
 .btn{min-height:44px;padding:8px 14px;border-radius:4px;border:1px solid var(--board-line);background:var(--board-2);color:#fff;
   font:700 14px/1.2 var(--f-text);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
-.btn:hover{border-color:var(--claro)}
+@media (hover:hover){.btn:hover{border-color:var(--claro)}}
 .btn.pri{background:var(--amber);border-color:var(--amber);color:#1E2430}
 .btn:active{transform:scale(.97)}
 .btn[disabled]{opacity:.6;cursor:default}
 .btn svg{width:14px;height:14px;fill:currentColor}
 
-.race{margin:0 -4px 14px;padding:10px 4px 6px;border-radius:4px;background:#26324A}
+.race{margin:0 -4px 14px;padding:10px 4px 6px;border-radius:4px;background:#26324A;contain:layout paint}
 .rhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 6px 8px;flex-wrap:wrap}
-.rclock{font:800 22px/1 var(--f-text);color:var(--amber);min-width:6.5ch}
+.rclock{font:800 22px/1 var(--f-text);color:var(--amber);display:inline-block;min-width:10ch;font-variant-numeric:tabular-nums;contain:layout paint}
 .rlab{font-size:13px;color:var(--board-muted)}
 .ln{display:grid;grid-template-columns:minmax(64px,92px) 1fr minmax(70px,92px);align-items:center;gap:8px;padding:3px 6px;position:relative}
 .ln+.ln::before{content:"";position:absolute;left:calc(min(92px,24%) + 14px);right:calc(min(92px,24%) + 14px);top:-1px;height:3px;
@@ -202,13 +205,15 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .lb{font:600 13px/1.2 var(--f-text);color:var(--board-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tr{position:relative;height:24px;border-right:4px solid var(--amber)}
 .tr::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:rgba(200,207,230,.18)}
-.dot{position:absolute;top:1px;left:calc(var(--x,0) * (100% - 22px));width:22px;height:22px;border-radius:50%;
+.dot{position:absolute;top:1px;left:0;width:22px;height:22px;border-radius:50%;
   background:var(--claro);color:#1E2430;font:800 12px/22px var(--f-text);text-align:center;font-style:normal;
-  transition:left .7s var(--ease);box-shadow:0 0 0 2px #26324A}
+  transform:translate3d(0,0,0);transition:transform .7s var(--ease);box-shadow:0 0 0 2px #26324A}
 .dot.p1{background:var(--amber)}
-.race.racing .dot{transition:none}
-.dot.in{animation:toque .5s var(--ease)}
-@keyframes toque{0%{box-shadow:0 0 0 2px #26324A,0 0 0 0 rgba(255,201,60,.9)}100%{box-shadow:0 0 0 2px #26324A,0 0 0 10px rgba(255,201,60,0)}}
+.race.racing .dot{transition:none;will-change:transform}
+/* Destello al tocar la pared: anillo que solo anima transform + opacity */
+.dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #FFC93C;opacity:0;pointer-events:none}
+.dot.in::after{animation:toque .5s var(--ease)}
+@keyframes toque{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.9)}}
 .gp{font:700 13px/1.2 var(--f-text);text-align:right;color:#fff}
 .gp small{display:block;font-weight:400;font-size:12px;color:var(--board-muted)}
 
@@ -221,7 +226,7 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 /* El área tocable (44 px) queda centrada sobre el nombre visible */
 .nm{grid-area:who;justify-self:start;align-self:center;display:inline-flex;align-items:center;flex-wrap:wrap;min-height:46px;margin:-5px 0;padding:0;border:0;background:none;cursor:pointer;text-align:left;
   font:600 16px/1.35 var(--f-text);color:inherit;text-decoration:underline;text-decoration-color:rgba(200,207,230,.45);text-underline-offset:4px}
-.nm:hover{text-decoration-color:var(--amber)}
+@media (hover:hover){.nm:hover{text-decoration-color:var(--amber)}}
 .item.top .meta{color:var(--board-muted)}
 .top10 .tag{background:var(--tag-bg);color:#22409A}
 .top10 .tag.x{background:var(--amber);color:#1E2430}
@@ -253,7 +258,7 @@ dialog.ficha[open]{animation:sube .32s var(--ease)}
 .fl{list-style:none;margin:0;padding:0}
 .fl li+li{border-top:1px solid var(--line)}
 .fi{display:grid;grid-template-columns:2.6ch 1fr auto;align-items:center;gap:10px;width:100%;min-height:48px;padding:6px 2px;border:0;background:none;text-align:left;cursor:pointer;color:inherit}
-.fi:hover{background:var(--surface-2)}
+@media (hover:hover){.fi:hover{background:var(--surface-2)}}
 .fi .pz{font:800 15px/1 var(--f-text);color:var(--muted)}
 .fi.r1 .pz{color:var(--record)}
 .fi .pr{font-weight:600}
@@ -261,15 +266,16 @@ dialog.ficha[open]{animation:sube .32s var(--ease)}
 .fi small{display:block;font-size:13px;color:var(--muted);font-weight:400}
 
 /* ===================== Estados y pie ===================== */
-.sk{height:76px;border-top:1px solid var(--line);background:linear-gradient(90deg,var(--surface) 0,var(--surface-2) 40%,var(--surface) 80%) 0 0/200% 100%;animation:brilla 1.4s linear infinite}
-@keyframes brilla{to{background-position:-200% 0}}
+.sk{position:relative;overflow:hidden;height:76px;border-top:1px solid var(--line);background:var(--surface)}
+.sk::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0,var(--surface-2) 50%,transparent 100%);transform:translate3d(-100%,0,0);will-change:transform;animation:brilla 1.4s linear infinite}
+@keyframes brilla{to{transform:translate3d(100%,0,0)}}
 .err{padding:16px;border-radius:var(--r);background:var(--warn-bg);color:var(--warn-fg)}
 .err button{margin-top:8px;min-height:44px;padding:8px 14px;border:1px solid currentColor;border-radius:4px;background:transparent;cursor:pointer;font-weight:700}
 footer{padding:28px 0 calc(40px + env(safe-area-inset-bottom));border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 footer p{margin:0 0 8px;max-width:72ch}
 footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;min-height:44px}
 .toast{position:fixed;z-index:60;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;
-  padding:12px 16px;border-radius:6px;background:var(--ink);color:var(--bg);font:600 15px/1.2 var(--f-text);pointer-events:none;transition:.25s var(--ease)}
+  padding:12px 16px;border-radius:6px;background:var(--ink);color:var(--bg);font:600 15px/1.2 var(--f-text);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
 @media (prefers-reduced-motion: reduce){
@@ -287,29 +293,21 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
 <body>
 <div class="strip" data-carril="horizontal" aria-hidden="true" data-state="rest">
   <i class="wall a"></i><i class="wall b"></i><i class="rope"></i>
-  <div class="sw-x"><div class="sw-d">
-    <svg class="sw" viewBox="0 0 40 18" focusable="false">
-      <path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/>
-      <line class="leg l1" x1="11" y1="8" x2="3" y2="6.5"/><line class="leg l2" x1="11" y1="10" x2="3" y2="11.5"/>
-      <g class="a1"><line class="arm" x1="26" y1="6" x2="37" y2="3"/><circle class="hand" cx="37" cy="3" r="1.7"/></g>
-      <g class="a2"><line class="arm" x1="26" y1="12" x2="37" y2="15"/><circle class="hand hold" cx="37" cy="15" r="1.7"/></g>
-      <path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/>
-      <circle class="cap" cx="33" cy="9" r="3.6"/>
-      <rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/>
-    </svg>
-  </div></div>
+  <div class="sw-x"><div class="sw-d"><div class="sw-f">
+    <div class="sw-win"><svg class="sw sw-sheet" width="240" height="18" viewBox="0 0 240 18" focusable="false">
+        <svg x="0" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="37" y2="3"/><circle class="hand" cx="37" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="18.57" y2="16.43"/><circle class="hand" cx="18.57" cy="16.43" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="40" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="28.88" y2="3"/><circle class="hand" cx="28.88" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="24.34" y2="15.63"/><circle class="hand" cx="24.34" cy="15.63" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="80" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="20.76" y2="3"/><circle class="hand" cx="20.76" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="32.13" y2="13.29"/><circle class="hand" cx="32.13" cy="13.29" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="120" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="17.48" y2="4.53"/><circle class="hand" cx="17.48" cy="4.53" r="1.7"/><line class="arm" x1="26" y1="12" x2="37" y2="15"/><circle class="hand" cx="37" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="160" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="22.61" y2="3.89"/><circle class="hand" cx="22.61" cy="3.89" r="1.7"/><line class="arm" x1="26" y1="12" x2="28.88" y2="15"/><circle class="hand" cx="28.88" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="200" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="30.41" y2="1.55"/><circle class="hand" cx="30.41" cy="1.55" r="1.7"/><line class="arm" x1="26" y1="12" x2="20.76" y2="15"/><circle class="hand" cx="20.76" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+    </svg></div>
+    <svg class="sw sw-rest" viewBox="0 0 40 18" focusable="false"><g transform="translate(0 3) rotate(-6 20 9)"><line class="leg" x1="11" y1="8" x2="3" y2="6.5"/><line class="leg" x1="11" y1="10" x2="3" y2="11.5"/><line class="arm" x1="26" y1="6" x2="31.57" y2="2.19"/><circle class="hand" cx="31.57" cy="2.19" r="1.7"/><line class="arm" x1="26" y1="12" x2="27.07" y2="19.37"/><circle class="hand hold" cx="27.07" cy="19.37" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></g></svg>
+  </div></div></div>
 </div>
 
 <header class="hero">
-  <svg class="caus" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-    <defs><filter id="cf" x="0" y="0" width="100%" height="100%">
-      <!-- Ruido → curvas de nivel finas: la red de luz que se ve en el fondo de una piscina -->
-      <feTurbulence type="fractalNoise" baseFrequency=".02 .03" numOctaves="2" seed="11" result="n"/>
-      <feColorMatrix in="n" type="matrix" values="0 0 0 0 .86  0 0 0 0 .89  0 0 0 0 1  1 0 0 0 0" result="a"/>
-      <feComponentTransfer in="a"><feFuncA type="table" tableValues="0 0 0 0 .15 .9 .15 0 0 0 0 0 .1 .6 .1 0 0"/></feComponentTransfer>
-    </filter></defs>
-    <g class="cg"><rect x="-60" y="-40" width="1320" height="580" filter="url(#cf)"/></g>
-  </svg>
+  <div class="caus" aria-hidden="true"><i class="cg"></i></div>
   <div class="wrap in">
     <p class="kick">Club Náutico · Natación</p>
     <h1>Récords del club</h1>
@@ -355,8 +353,9 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
 <script>
 (() => {
   'use strict';
-  const FILES = { rec: 'data/records_piscina.json', top: 'data/top10_piscina.json', rel: 'data/relevos_records.json',
-    owRec: 'data/records_aguas_abiertas.json', owTop: 'data/top_aguas_abiertas.json' };
+  // Orden de descarga: primero lo que pinta la vista inicial; el Top 10 (el JSON más grande) al final
+  const FILES = { rec: 'data/records_piscina.json', rel: 'data/relevos_records.json', owRec: 'data/records_aguas_abiertas.json',
+    owTop: 'data/top_aguas_abiertas.json', top: 'data/top10_piscina.json' };
   const D = {}, ERR = {};
   const st = { curso: 'LC', genero: 'M', abierta: null };
   const $ = (s, r = document) => r.querySelector(s);
@@ -451,7 +450,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     const W = PASOS.find((p) => p >= Math.max(...atras) * 1.15) || m;
     const lanes = ok.map((r, i) => {
       const f = Math.max(0, 1 - atras[i] / W), g = +r.segundos - t1;
-      return `<div class="ln" style="--x:${f.toFixed(4)}" data-f="${f.toFixed(4)}">
+      return `<div class="ln" data-f="${f.toFixed(4)}">
         <span class="lb">${esc(corto(r.nadador))}</span>
         <span class="tr"><i class="dot${r.puesto === 1 ? ' p1' : ''}" data-t="${+r.segundos}">${esc(r.puesto)}</i></span>
         <span class="gp">${r.puesto === 1 ? esc(r.tiempo) + '<small>toca la pared</small>' : '+' + dif(g) + ' s<small>a ' + dist(atras[i]) + '</small>'}</span>
@@ -504,67 +503,138 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   }
   const vistaActual = () => st.curso === 'OW' ? [['owRec', 'owTop'], vistaAguas] : [['rec', 'rel'], vistaRecords];
 
+  // ---------- tareas diferidas: lo no esencial espera al primer dibujo con datos ----------
+  const idle = (fn, ms = 800) => ('requestIdleCallback' in window) ? requestIdleCallback(fn, { timeout: ms }) : setTimeout(fn, 80);
+  const hero = $('.hero');
+  let soltado = false, ultScroll = -1e9;
+  // La deriva de los reflejos del hero (solo transform) arranca cuando el hilo principal ya descansó
+  const soltar = () => { if (soltado) return; soltado = true; idle(() => requestAnimationFrame(() => hero.classList.add('on')), 1500); };
+  const texto = (el) => el.firstChild || el.appendChild(document.createTextNode(''));
+
   // ---------- cifras del club ----------
   let cifrasListas = false;
   function cifras() {
     if (cifrasListas || !Object.keys(FILES).every((k) => D[k] || ERR[k]) || !D.rec || !D.top || !D.owRec) return;
     cifrasListas = true;
     const anim = (el, n) => {
-      if (reduce.matches) { el.textContent = n; return; }
+      const tn = texto(el);
+      if (reduce.matches) { tn.data = n; return; }
       const t0 = performance.now();
-      const paso = (now) => { const p = Math.min(1, (now - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(paso); };
+      const paso = (now) => { const p = Math.min(1, (now - t0) / 900); tn.data = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(paso); };
       requestAnimationFrame(paso);
     };
-    const anios = D.top.map((t) => +String(t.fecha).slice(0, 4)).filter(Boolean);
-    anim($('#s1'), D.rec.length + (D.rel ? D.rel.length : 0) + D.owRec.length);
-    anim($('#s2'), new Set(D.top.map((t) => t.nadador).concat(D.owTop ? D.owTop.map((t) => t.nadador) : [])).size);
-    anim($('#s3'), anios.length ? Math.max(...anios) - Math.min(...anios) + 1 : 0);
+    idle(() => {
+      const anios = D.top.map((t) => +String(t.fecha).slice(0, 4)).filter(Boolean);
+      anim($('#s1'), D.rec.length + (D.rel ? D.rel.length : 0) + D.owRec.length);
+      anim($('#s2'), new Set(D.top.map((t) => t.nadador).concat(D.owTop ? D.owTop.map((t) => t.nadador) : [])).size);
+      anim($('#s3'), anios.length ? Math.max(...anios) - Math.min(...anios) + 1 : 0);
+    }, 1200);
   }
 
   // ---------- reloj de competencia: cada récord "corre" hasta su marca al aparecer ----------
+  // Máximo 6 contadores a la vez, y ninguno mientras el usuario se desplaza (ahí muestra el tiempo final directo).
   const io = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => {
     for (const e of ents) if (e.isIntersecting) { io.unobserve(e.target); correr(e.target); }
   }, { rootMargin: '0px 0px -10% 0px' }) : null;
+  let activos = 0;
   function correr(el) {
     const fin = +el.dataset.s; if (!fin || reduce.matches || el.dataset.done) return;
     el.dataset.done = '1';
+    if (activos >= 6 || performance.now() - ultScroll < 160) return;
+    activos++;
     const ov = document.createElement('span'); ov.className = 'tc'; ov.setAttribute('aria-hidden', 'true');
+    const tn = texto(ov); tn.data = fmt(0);
     el.classList.add('counting'); el.append(ov);
     const dur = 700, t0 = performance.now();
     const paso = (now) => {
       const p = Math.min(1, (now - t0) / dur);
-      ov.textContent = fmt(fin * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(paso); else { ov.remove(); el.classList.remove('counting'); }
+      tn.data = fmt(fin * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(paso); else { ov.remove(); el.classList.remove('counting'); activos--; }
     };
     requestAnimationFrame(paso);
   }
   const vigilarTiempos = () => { if (io) main.querySelectorAll('.rowlink .time[data-s]:not([data-done])').forEach((el) => io.observe(el)); };
 
+  // ---------- carrera: posiciones con transform (sin layout por cuadro) ----------
+  const D_PUNTO = 22, CERO = 'translate3d(0,0,0)';
+  const mover = (d, px) => { d.style.transform = 'translate3d(' + px.toFixed(1) + 'px,0,0)'; };
+  const anchoPista = (race) => { const tr = race.querySelector('.tr'); return tr ? Math.max(0, tr.offsetWidth - D_PUNTO) : 0; };
+  // Mide el ancho útil de la pista una sola vez por carrera y coloca la "foto de llegada"
+  function posRace(race) {
+    const w = anchoPista(race);
+    race.querySelectorAll('.ln').forEach((ln) => { const d = ln.querySelector('.dot'); if (d) mover(d, (+ln.dataset.f || 0) * w); });
+  }
+  const posicionar = () => main.querySelectorAll('.race:not(.racing)').forEach(posRace);
+
   // ---------- carrera animada ----------
   function nadar(btn) {
-    const race = btn.closest('.top10, .board') && btn.closest('.top10, .board').querySelector('.race');
+    const box = btn.closest('.top10, .board'), race = box && box.querySelector('.race');
     if (!race || reduce.matches) return;
-    const dots = [...race.querySelectorAll('.dot')], clock = $('.rclock', race), lab = $('.rlab', race);
+    const dots = [...race.querySelectorAll('.dot')], clock = $('.rclock', race), lab = $('.rlab', race), cn = texto(clock);
     const t1 = +race.dataset.t1, T = 3.2;                        // el primero llega en 3,2 s
     const tiempos = dots.map((d) => +d.dataset.t), tmax = Math.max(...tiempos);
+    const durs = tiempos.map((t) => T * t / t1), entro = dots.map(() => false);
     const fin = Math.min(T * tmax / t1, 7);
+    const w = anchoPista(race);                                   // única lectura de layout, antes del bucle
     btn.disabled = true; race.classList.add('racing'); lab.textContent = 'En carrera · piscina completa (' + dist(+race.dataset.m) + ')';
-    dots.forEach((d) => { d.style.setProperty('--x', 0); d.classList.remove('in'); });
+    dots.forEach((d) => { d.style.transform = CERO; d.classList.remove('in'); });
     const t0 = performance.now();
-    const paso = (now) => {
-      const e = (now - t0) / 1000;
-      clock.textContent = fmt(Math.min(e, fin) * t1 / T);
-      dots.forEach((d, i) => {
-        const x = Math.min(1, e / (T * tiempos[i] / t1));
-        d.style.setProperty('--x', x.toFixed(4));
-        if (x >= 1 && !d.classList.contains('in')) d.classList.add('in');
+    if (typeof dots[0].animate === 'function') {
+      // Web Animations: cada punto corre en el compositor; el bucle solo escribe el reloj
+      let anims = [], timer = 0, n = 0;
+      const abortar = () => { anims.forEach((a) => a.cancel()); anims = []; clearTimeout(timer); };
+      anims = dots.map((d, i) => {
+        const a = d.animate([{ transform: CERO }, { transform: 'translate3d(' + w.toFixed(1) + 'px,0,0)' }],
+          { duration: durs[i] * 1000, easing: 'linear', fill: 'forwards' });
+        a.onfinish = () => d.classList.add('in');
+        return a;
       });
+      const volver = () => {   // vuelve a la foto de llegada: cada punto desliza a su posición
+        if (!race.isConnected) { abortar(); return; }
+        cn.data = fmt(t1); lab.textContent = race.dataset.foto;
+        const w2 = anchoPista(race);
+        const dest = dots.map((d) => (+d.closest('.ln').dataset.f || 0) * w2);
+        const desde = durs.map((du) => Math.min(1, fin / du) * w);
+        anims.forEach((a) => a.cancel());
+        anims = dots.map((d, i) => d.animate(
+          [{ transform: 'translate3d(' + desde[i].toFixed(1) + 'px,0,0)' }, { transform: 'translate3d(' + dest[i].toFixed(1) + 'px,0,0)' }],
+          { duration: 700, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' }));
+        timer = setTimeout(() => {
+          if (!race.isConnected) { abortar(); return; }
+          dots.forEach((d, i) => mover(d, dest[i]));              // posición final exacta (igual que posRace)
+          abortar();
+          race.classList.remove('racing');
+          btn.disabled = false;
+        }, 720);
+      };
+      const reloj = (now) => {
+        if (!race.isConnected) { abortar(); return; }              // la vista cambió
+        const e = (now - t0) / 1000;
+        if ((n++ & 1) === 0 || e >= fin) cn.data = fmt(Math.min(e, fin) * t1 / T);
+        if (e < fin + .05) { requestAnimationFrame(reloj); return; }
+        lab.textContent = 'Llegada';
+        timer = setTimeout(volver, 1400);
+      };
+      requestAnimationFrame(reloj);
+      return;
+    }
+    const paso = (now) => {
+      if (!race.isConnected) return;                              // la vista cambió: ya no hay nada que animar
+      const e = (now - t0) / 1000;
+      cn.data = fmt(Math.min(e, fin) * t1 / T);
+      for (let i = 0; i < dots.length; i++) {
+        if (entro[i]) continue;
+        const x = Math.min(1, e / durs[i]);
+        mover(dots[i], x * w);
+        if (x >= 1) { entro[i] = true; dots[i].classList.add('in'); }
+      }
       if (e < fin + .05) return requestAnimationFrame(paso);
       lab.textContent = 'Llegada';
-      setTimeout(() => {   // vuelve a la foto de llegada
+      setTimeout(() => {   // vuelve a la foto de llegada (transición de transform)
+        if (!race.isConnected) return;
         race.classList.remove('racing');
-        race.querySelectorAll('.ln').forEach((ln) => $('.dot', ln).style.setProperty('--x', ln.dataset.f));
-        clock.textContent = fmt(t1); lab.textContent = race.dataset.foto;
+        posRace(race);
+        cn.data = fmt(t1); lab.textContent = race.dataset.foto;
         btn.disabled = false;
       }, 1400);
     };
@@ -584,7 +654,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
       main.innerHTML = `<div class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba recargar la página.</div>`;
     }
     const h2 = $('h2', main); statusEl.textContent = h2 ? h2.textContent : '';
-    escribirHash(); vigilarTiempos(); medir();
+    escribirHash(); vigilarTiempos(); posicionar(); pedirMedir();
   }
   // Transición suave entre vistas: la vista nueva entra con un leve deslizamiento (solo opacity/transform)
   const conTransicion = (fn) => {
@@ -604,7 +674,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     else { st.abierta = p; a.insertAdjacentHTML('afterend', top10Html(p)); marcar(a, true); }
     window.scrollBy(0, a.getBoundingClientRect().top - antes);
     statusEl.textContent = st.abierta ? 'Top 10 de ' + prueba(p) + ' abierto' : 'Top 10 cerrado';
-    escribirHash(); medir();
+    escribirHash(); posicionar(); pedirMedir();
   }
   let porDesplazar = true;
   function irAAbierta() {
@@ -672,40 +742,47 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   window.addEventListener('hashchange', () => { leerHash(); porDesplazar = true; draw(); irAAbierta(); });
 
   // ---------- carril superior: nada al desplazarte, se agarra de la corchera al parar ----------
+  // Los cuadros de nado corren en el compositor (hoja de sprites + steps()); aquí solo se mueve el nadador con translate3d.
   const strip = $('.strip'), swx = $('.sw-x', strip);
-  let alto = 1, ancho = 1, ultimoY = scrollY, timer = 0, pedido = false;
-  function medir() { alto = Math.max(1, document.documentElement.scrollHeight - innerHeight); ancho = Math.max(0, strip.clientWidth - swx.offsetWidth - 8); pintar(); }
+  let alto = 1, ancho = 1, ultimoY = scrollY, timer = 0, pedido = false, midiendo = false;
+  function medir() { midiendo = false; alto = Math.max(1, document.documentElement.scrollHeight - innerHeight); ancho = Math.max(0, strip.clientWidth - 40 - 8); pintar(); }
+  const pedirMedir = () => { if (!midiendo) { midiendo = true; requestAnimationFrame(medir); } };
   function pintar() {
     pedido = false;
     const p = Math.min(1, Math.max(0, scrollY / alto));
-    swx.style.transform = `translateX(${(4 + p * ancho).toFixed(1)}px)`;
+    swx.style.transform = 'translate3d(' + (4 + p * ancho).toFixed(1) + 'px,0,0)';
   }
   addEventListener('scroll', () => {
     const y = scrollY;
+    ultScroll = performance.now();
     if (y !== ultimoY) { strip.dataset.dir = y < ultimoY ? 'back' : 'fwd'; ultimoY = y; }
     if (strip.dataset.state !== 'swim') strip.dataset.state = 'swim';
     clearTimeout(timer); timer = setTimeout(() => { strip.dataset.state = 'rest'; }, 400);
     if (!pedido) { pedido = true; requestAnimationFrame(pintar); }
   }, { passive: true });
-  addEventListener('resize', medir, { passive: true });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+  let reajuste = false;
+  addEventListener('resize', () => { pedirMedir(); if (!reajuste) { reajuste = true; requestAnimationFrame(() => { reajuste = false; posicionar(); }); } }, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(pedirMedir);
 
   // ---------- carga ----------
   leerHash(); draw();
+  // Los reflejos del hero solo derivan mientras el hero se ve en pantalla
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => hero.classList.toggle('fuera', !es[es.length - 1].isIntersecting)).observe(hero);
+  setTimeout(soltar, 4000);   // respaldo: si los datos tardan o fallan, los reflejos igual empiezan a derivar
   for (const [k, url] of Object.entries(FILES)) {
     fetch(url, { cache: 'no-cache' })
       .then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
       .then((j) => { if (!Array.isArray(j)) throw new Error(url + ' con formato inválido'); D[k] = j; })
       .catch((e) => { ERR[k] = e.message || url; })
       .finally(() => {
-        cifras();
         const necesita = vistaActual()[0];
-        if (necesita.includes(k) && necesita.every((n) => D[n] || ERR[n])) { draw(); irAAbierta(); }
+        if (necesita.includes(k) && necesita.every((n) => D[n] || ERR[n])) { draw(); irAAbierta(); soltar(); }
         else if (k === 'top' && st.abierta && st.curso !== 'OW') {
           const viejo = main.querySelector('.top10'), f = filaDe(st.abierta);
-          if (viejo && f) { viejo.remove(); f.insertAdjacentHTML('afterend', top10Html(st.abierta)); }
+          if (viejo && f) { viejo.remove(); f.insertAdjacentHTML('afterend', top10Html(st.abierta)); posicionar(); pedirMedir(); }
           irAAbierta();
         }
+        cifras();   // las cifras del hero (y su animación) esperan al dibujo con datos y a que el hilo principal descanse
       });
   }
 })();
