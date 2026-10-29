@@ -75,6 +75,10 @@ Nunca le digas a Ricardo que algo está publicado sin esta comprobación. En los
 
 Carpeta de Dropbox de Ricardo: `C:\Users\secre\Dropbox\CLUB NAUTICO 2026 (1)\REPORTES NADADORES\Resultados FENA historico\`
 (PDF de FENA, Excel de Cali 2023, y `_records_club\` con CSV, scripts y la versión final). Los JSON se generan en el proyecto "Club - Reportes y tests".
+Actualización del 28/10/2026 (Cali 2025, Selectivo Pichincha 2025, aguas abiertas FENA 2020–2023 con festivales de 500 m a 2,5 km):
+scripts en `_records_club\ACTUALIZACION 2026-10-27\scripts\` — `fusionar_top10.py` (suma marcas nuevas a `data/top10_piscina.json`) y `aa_fena.py`
+(aguas abiertas desde `_records_club\aguas_abiertas_club.csv`). Usar siempre los JSON de esta carpeta `data/` como base: tienen Cali 2023 y "Natalí".
+Procedimiento completo: `REPORTES NADADORES\_CLAUDE (archivos de Claude para Claude)\documentos del proyecto\10_PROCEDIMIENTO_RESULTADOS_Y_RECORDS.md`.
 Alias conocido: "Ramos Robalino, Erick" en los PDF = Adrian Ramos. Pendiente sin resolver: Steven Navas nadó ANAMG 2026 como invitado ("INVI"), no se agregó.
 Reclamos de Natalí sin documento oficial (no agregar sin prueba): Pentatlón Rancho 2023 y "Chequeo Regatas 2020".
 
