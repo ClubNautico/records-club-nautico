@@ -25,6 +25,12 @@ Ha pedido que confíes en tu criterio y no le hagas preguntas innecesarias.
 - `data/` — `records_piscina.json`, `top10_piscina.json`, `relevos_records.json`, `records_aguas_abiertas.json`, `top_aguas_abiertas.json`.
   En aguas abiertas, `puesto` es la posición dentro del club, no en la carrera.
 - `assets/` — `og.png` (vista previa de WhatsApp, 1200×630), `reflejos.jpg` (reflejos del encabezado).
+- `historico.html` — sección aparte "Histórico 2002–2009" (decisión de Ricardo, 28/10/2026): mismas piezas que `index.html`
+  (se genera desde ella con `_records_club\ACTUALIZACION 2026-10-28\scripts\hacer_historico_html.py`; si cambias el diseño de
+  `index.html`, vuelve a generarla), solo piscina 50/25 m, sin relevos ni aguas abiertas. Lee `data/historico_records.json` y
+  `data/historico_top10.json` (de `hacer_historico.py`, resultados FENA 2002–2009 recuperados de web.archive.org).
+  No se mezcla con los récords vigentes. Enlazada desde el pie de `index.html` ("Ver el histórico 2002–2009").
+  `herramientas/dispositivos.html?pagina=historico.html` sirve para probarla.
 - `anterior.html` — diseño anterior (respaldo). `opus.html` — redirige a la raíz conservando el hash (no borrar: hay enlaces viejos).
 - `DESIGN.md` — colores y tipografías de la marca (natacionluciorojas.com): azul rey #22409A, pervinca, perla, pizarra; Josefin Slab + Open Sans. Nombre visible: "Club Náutico".
 - `ACTUALIZAR.md` — guía para Ricardo (cambiar los JSON y publicar). Mantenla al día si cambias el proceso.
@@ -79,6 +85,10 @@ Actualización del 28/10/2026 (Cali 2025, Selectivo Pichincha 2025, aguas abiert
 scripts en `_records_club\ACTUALIZACION 2026-10-27\scripts\` — `fusionar_top10.py` (suma marcas nuevas a `data/top10_piscina.json`) y `aa_fena.py`
 (aguas abiertas desde `_records_club\aguas_abiertas_club.csv`). Usar siempre los JSON de esta carpeta `data/` como base: tienen Cali 2023 y "Natalí".
 Procedimiento completo: `REPORTES NADADORES\_CLAUDE (archivos de Claude para Claude)\documentos del proyecto\10_PROCEDIMIENTO_RESULTADOS_Y_RECORDS.md`.
+Actualización del 28/10/2026 (noche): 81 PDF FENA que faltaban (máster 2021–2024, Carlos Luis Gilbert 2020 y 2024, Diana Quintana 2022,
+Diego Quiroga 2024…) y Copa Pacífico 2017 (Aguas Ramos) y 2026 (Espejo, Recalde; NO Vallejo ni Palacios, decisión de Ricardo), con
+`_records_club\ACTUALIZACION 2026-10-28\scripts\fusionar_top10.py` sobre los JSON de `data/`. Alias: "Fustillos, Nathalie" = Natalí.
+Ojo: en Dropbox, los archivos "2024 - Piscina - VIII CAMPEONATO NACIONAL CARLOS LUIS GILBERT VASCONEZ" son en realidad el VIII Abel Gilbert 2024.
 Alias conocido: "Ramos Robalino, Erick" en los PDF = Adrian Ramos. Pendiente sin resolver: Steven Navas nadó ANAMG 2026 como invitado ("INVI"), no se agregó.
 Reclamos de Natalí sin documento oficial (no agregar sin prueba): Pentatlón Rancho 2023 y "Chequeo Regatas 2020".
 

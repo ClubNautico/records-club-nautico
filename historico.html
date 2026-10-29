@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Histórico 2002–2009 · Récords Club Náutico</title>
+<meta name="description" content="Mejores marcas del Club Náutico de natación en los resultados FENA de 2002 a 2009.">
+<!-- La página incluye menores de edad: se comparte por enlace, no se indexa en buscadores. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#22409A" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14275E" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clubnautico.github.io/records-club-nautico/historico.html">
+<meta property="og:locale" content="es_EC">
+<meta property="og:title" content="Histórico 2002–2009 · Récords Club Náutico">
+<meta property="og:description" content="Las mejores marcas del club entre 2002 y 2009, por prueba: piscina 50 m y 25 m.">
+<meta property="og:image" content="https://clubnautico.github.io/records-club-nautico/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2322409A'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='16' cy='44' r='5'/%3E%3Ccircle cx='32' cy='44' r='5'/%3E%3Ccircle cx='48' cy='44' r='5'/%3E%3C/g%3E%3Ccircle cx='40' cy='20' r='7' fill='%23FFC93C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Las fuentes no bloquean el primer dibujo: se cargan como precarga y se activan al llegar (display=swap) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Open+Sans:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Open+Sans:wght@400;600;700;800&display=swap"></noscript>
+<style>
+/* Letra de respaldo con las medidas de Open Sans: al llegar la fuente real el texto casi no se mueve */
+@font-face{font-family:"Open Sans Ajuste";src:local("Arial"),local("Helvetica"),local("Liberation Sans");size-adjust:105%;ascent-override:101.8%;descent-override:27.9%;line-gap-override:0%}
+/* ===================== Tokens ===================== */
+:root{
+  color-scheme: light dark;
+  --hero:#22409A; --hero-2:#1A3380; --brand:#22409A; --peri:#5970B3; --claro:#C8CFE6;
+  --bg:#F4F6FB; --surface:#FFFFFF; --surface-2:#E9EDF7; --ink:#1E2430; --ink-2:#313E4F; --muted:#4A5668;
+  --line:#D5DBEA; --agua:#DCE4F6; --agua-2:#C2CEEC; --amber:#FFC93C; --record:#8A5A00;
+  --warn-bg:#FFF3D6; --warn-fg:#5E4200; --tag-bg:#DDE3F4; --tag-fg:#22409A;
+  --board:#313E4F; --board-2:#3A4860; --board-ink:#FFFFFF; --board-muted:#C9D0D8; --board-line:#4A5870;
+  --focus:#22409A;
+  --f-display:"Josefin Slab","Roboto Slab",Rockwell,Georgia,serif;
+  --f-text:"Open Sans","Open Sans Ajuste",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --strip:26px; --safe-t:env(safe-area-inset-top,0px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --hero:#1C3480; --hero-2:#14275E; --brand:#A9B9F3; --bg:#0E1424; --surface:#161E33; --surface-2:#1D2741;
+    --ink:#E8ECF5; --ink-2:#C8CFE6; --muted:#A7B3CC; --line:#2A3654; --agua:#18244A; --agua-2:#26346B;
+    --record:#FFC93C; --warn-bg:#3A2C10; --warn-fg:#F3D79C; --tag-bg:#26346B; --tag-fg:#DDE3F8;
+    --board:#313E4F; --focus:#C8CFE6;
+  }
+}
+*{box-sizing:border-box}
+html{background:var(--hero);-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--strip) + var(--safe-t) + 16px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-text);padding-top:calc(var(--strip) + var(--safe-t));
+  font-variant-numeric:tabular-nums lining-nums}
+.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right))}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ===================== Carril superior (indicador de desplazamiento) ===================== */
+.strip{position:fixed;z-index:50;top:0;left:0;right:0;height:calc(var(--strip) + var(--safe-t));padding-top:var(--safe-t);
+  background:var(--agua);pointer-events:none;border-bottom:1px solid var(--agua-2);contain:strict}
+.strip *{pointer-events:none}
+.strip .rope{position:absolute;left:0;right:0;bottom:1px;height:6px;
+  background:radial-gradient(circle at 4px 3px,var(--brand) 2.6px,transparent 3px) 0 0/16px 6px,
+             radial-gradient(circle at 12px 3px,var(--peri) 2.6px,transparent 3px) 0 0/16px 6px}
+.strip .rope::before,.strip .rope::after{content:"";position:absolute;top:0;width:48px;height:6px;
+  background:radial-gradient(circle at 4px 3px,var(--amber) 2.8px,transparent 3.2px) 0 0/8px 6px}
+.strip .rope::before{left:0}.strip .rope::after{right:0}
+.strip .wall{position:absolute;top:var(--safe-t);bottom:0;width:4px;background:var(--brand)}
+.strip .wall.a{left:0}.strip .wall.b{right:0}
+/* Nadador: hoja de sprites (6 cuadros) que se desplaza con transform + steps() -> corre en el compositor aunque el hilo principal este ocupado */
+.sw-x{position:absolute;left:0;top:calc(var(--safe-t) + 1px);width:40px;height:18px;will-change:transform;transform:translate3d(4px,0,0)}
+.sw-d{width:100%;height:100%;transition:transform .25s var(--ease)}
+.strip[data-dir="back"] .sw-d{transform:scaleX(-1)}
+.sw-f{position:relative;width:100%;height:100%;will-change:transform}
+.sw-win{position:absolute;left:0;top:0;width:40px;height:18px;overflow:hidden;contain:strict;opacity:0}
+.sw-sheet{display:block;width:240px;height:18px;will-change:transform;transform:translate3d(0,0,0)}
+.sw-rest{position:absolute;left:0;top:0;width:40px;height:18px;overflow:visible;display:block}
+.strip[data-state="swim"] .sw-win{opacity:1}
+.strip[data-state="swim"] .sw-rest{opacity:0}
+.strip[data-state="swim"] .sw-sheet{animation:nado .8s steps(6) infinite}
+@keyframes nado{from{transform:translate3d(0,0,0)}to{transform:translate3d(-240px,0,0)}}
+.sw .bd{fill:var(--brand)}.sw .cap{fill:var(--amber);stroke:var(--brand);stroke-width:1}
+.sw .gg{fill:var(--ink)}
+.sw .arm{stroke:var(--brand);stroke-width:2.4;stroke-linecap:round;fill:none}
+.sw .hand{fill:var(--brand)}
+.sw .leg{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
+.sw .wake{stroke:var(--peri);stroke-width:1.2;fill:none;opacity:.9}
+/* Reposo: baja hasta la corchera y se agarra con un brazo; leve flotacion solo con transform */
+.sw-rest .hold{fill:var(--agua);stroke:var(--brand);stroke-width:1}
+.strip[data-state="rest"] .sw-f{animation:flota 2.8s ease-in-out 3}
+@keyframes flota{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,1.5px,0)}}
+
+/* ===================== Hero ===================== */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:#fff;isolation:isolate}
+/* Reflejos de luz en el agua: imagen pre-renderizada (assets/reflejos.jpg); la deriva es solo transform (compositor) */
+.hero .caus{position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:.32;mix-blend-mode:screen;contain:strict;pointer-events:none}
+.hero .cg{position:absolute;inset:-40px -50px;background:url(assets/reflejos.jpg) center/cover no-repeat;will-change:transform;transform:translate3d(0,0,0)}
+.hero.on .cg{animation:deriva 26s linear infinite alternate}
+.hero.on.fuera .cg{animation-play-state:paused}
+@keyframes deriva{from{transform:translate3d(0,0,0) rotate(0deg)}to{transform:translate3d(-24px,14px,0) rotate(2deg)}}
+.hero .in{position:relative;padding-block:28px 0}
+.kick{margin:0;font:700 15px/1.2 var(--f-text);color:var(--claro)}
+.hero h1{margin:6px 0 10px;font:700 clamp(2.4rem,1.6rem + 4.2vw,4.6rem)/1 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
+.lede{margin:0;max-width:48ch;color:var(--claro);font-size:15px}
+.stats{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+  border-top:1px solid rgba(200,207,230,.35)}
+.stats li{padding:12px 4px 18px 0}
+.stats .num{display:block;min-height:1.05em;font:800 clamp(1.5rem,1.1rem + 1.8vw,2.4rem)/1.05 var(--f-text);color:#fff;font-variant-numeric:tabular-nums;contain:layout}
+.stats span{display:block;font-size:13px;line-height:1.3;color:var(--claro)}
+.edge{display:block;height:22px;background:
+  radial-gradient(circle at 6px 6px,#fff 4px,transparent 4.5px) 0 2px/24px 12px repeat-x,
+  radial-gradient(circle at 18px 6px,var(--claro) 4px,transparent 4.5px) 0 2px/24px 12px repeat-x,
+  linear-gradient(var(--hero),var(--hero)) 0 0/100% 8px no-repeat,
+  linear-gradient(var(--bg),var(--bg)) 0 14px/100% 8px no-repeat}
+
+/* ===================== Controles ===================== */
+.controls{position:relative;z-index:20;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line)}
+.ctl{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:flex;flex:3 1 220px;padding:3px;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.seg[data-key="genero"]{flex:2 1 150px}
+.seg button{flex:1 1 0;min-height:46px;padding:4px 6px;border:0;border-radius:4px;background:transparent;cursor:pointer;
+  font:700 15px/1.15 var(--f-text);color:var(--ink-2);transition:background .2s var(--ease),color .2s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+@media (prefers-color-scheme: dark){.seg button[aria-pressed="true"]{color:#0E1424}}
+.seg button:active{transform:scale(.97)}
+.seg .lg{display:none}
+@media (min-width:640px){.seg .lg{display:inline}.seg .sh{display:none}}
+@media (min-height:640px){.controls{position:sticky;top:calc(var(--strip) + var(--safe-t))}}
+
+/* ===================== Contenido ===================== */
+main{padding-block:8px 32px;min-height:60vh}
+main.entra>*:nth-child(-n+3){animation:entra .38s var(--ease) backwards}
+main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animation-delay:.08s}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vt{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
+.vt h2{margin:0;font:700 clamp(1.5rem,1.2rem + 1.4vw,2.3rem)/1.1 var(--f-display)}
+.vt p{margin:0;color:var(--muted);font-size:14px}
+.grp{margin-top:36px}
+.gh{display:flex;align-items:center;gap:12px;margin:0 0 10px}
+.gh h3{margin:0;font:700 clamp(1.35rem,1.2rem + .7vw,1.75rem)/1.1 var(--f-display)}
+.gh .n{font-size:13px;color:var(--muted)}
+.gh::after{content:"";flex:1;height:6px;background:radial-gradient(circle at 3px 3px,var(--peri) 2.5px,transparent 3px) 0 0/12px 6px repeat-x;opacity:.7}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:clip}
+@media (max-width:599px){.card{border-radius:0;border-inline:0;margin-inline:-16px}}
+
+/* Fila de récord */
+.item{display:grid;padding:14px 16px;border-top:1px solid var(--line);color:inherit;text-decoration:none}
+.card>.item:first-child,.card>.rowlink:first-child{border-top:0}
+.rowlink{grid-template-columns:1fr auto;grid-template-areas:"ev time" "who who" "meta go";column-gap:12px;row-gap:2px;cursor:pointer;
+  scroll-margin-top:calc(var(--strip) + var(--safe-t) + 140px);-webkit-tap-highlight-color:transparent;transition:background .15s}
+@media (hover:hover){.rowlink:hover{background:var(--surface-2)}}
+.rowlink:active{background:var(--surface-2)}
+.rowlink[aria-expanded="true"]{background:var(--surface-2)}
+.ev{grid-area:ev;font:700 17px/1.3 var(--f-text);align-self:center}
+.time{grid-area:time;position:relative;justify-self:end;font:800 clamp(1.4rem,1.15rem + 1.1vw,1.9rem)/1.1 var(--f-text);color:var(--brand);white-space:nowrap;contain:layout paint}
+.time.counting{color:transparent}
+.time .tc{position:absolute;right:0;top:0;color:var(--brand)}
+.who{grid-area:who;font-size:16px}
+.meta{grid-area:meta;font-size:14px;color:var(--muted);overflow-wrap:break-word;min-width:0}
+.meta .d{padding-inline:5px}
+.go{grid-area:go;align-self:end;font:700 14px/1.2 var(--f-text);color:var(--brand);white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.go::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);transition:transform .25s var(--ease)}
+.rowlink[aria-expanded="true"] .go::after{transform:translateY(2px) rotate(-135deg)}
+.tag{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:4px;background:var(--tag-bg);color:var(--tag-fg);font:700 14px/1.5 var(--f-text);vertical-align:1px}
+.tag.x{background:var(--warn-bg);color:var(--warn-fg)}
+@media (min-width:900px){
+  .rowlink{grid-template-columns:minmax(140px,.9fr) 130px minmax(150px,1fr) minmax(0,2.2fr) auto;grid-template-areas:"ev time who meta go";column-gap:24px;align-items:center}
+  .go{align-self:center}
+}
+
+/* Relevos */
+.relay{grid-template-columns:1fr auto;grid-template-areas:"ev time" "who who" "meta meta";column-gap:12px;row-gap:4px}
+.relay .who{font-size:15px}
+.team{margin:2px 0 0;padding:0;list-style:none;counter-reset:pos}
+.team li{counter-increment:pos;display:flex;gap:8px;padding:1px 0}
+.team li::before{content:counter(pos);min-width:16px;color:var(--muted);font-weight:700;font-size:14px;line-height:1.6}
+@media (min-width:768px){.team{columns:2;column-gap:24px}}
+@media (min-width:900px){.relay{grid-template-columns:minmax(140px,.9fr) 130px minmax(0,1.6fr) minmax(0,1.6fr);grid-template-areas:"ev time who meta";column-gap:24px;align-items:start}.relay .time{align-self:start}}
+
+/* ===================== Top 10: tablero + foto de llegada ===================== */
+.top10{background:var(--board);color:var(--board-ink);padding:16px 16px 12px;animation:abre .35s var(--ease)}
+@keyframes abre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.t10h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:12px}
+.t10h h4{margin:0;font:700 clamp(1.25rem,1.1rem + .7vw,1.6rem)/1.15 var(--f-display)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{min-height:44px;padding:8px 14px;border-radius:4px;border:1px solid var(--board-line);background:var(--board-2);color:#fff;
+  font:700 14px/1.2 var(--f-text);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+@media (hover:hover){.btn:hover{border-color:var(--claro)}}
+.btn.pri{background:var(--amber);border-color:var(--amber);color:#1E2430}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default}
+.btn svg{width:14px;height:14px;fill:currentColor}
+
+.race{margin:0 -4px 14px;padding:10px 4px 6px;border-radius:4px;background:#26324A;contain:layout paint}
+.rhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 6px 8px;flex-wrap:wrap}
+.rclock{font:800 22px/1 var(--f-text);color:var(--amber);display:inline-block;min-width:10ch;font-variant-numeric:tabular-nums;contain:layout paint}
+.rlab{font-size:13px;color:var(--board-muted)}
+.ln{display:grid;grid-template-columns:minmax(64px,92px) 1fr minmax(70px,92px);align-items:center;gap:8px;padding:3px 6px;position:relative}
+.ln+.ln::before{content:"";position:absolute;left:calc(min(92px,24%) + 14px);right:calc(min(92px,24%) + 14px);top:-1px;height:3px;
+  background:radial-gradient(circle at 1.5px 1.5px,rgba(200,207,230,.55) 1.4px,transparent 1.6px) 0 0/8px 3px repeat-x}
+.lb{font:600 13px/1.2 var(--f-text);color:var(--board-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr{position:relative;height:24px;border-right:4px solid var(--amber)}
+.tr::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:rgba(200,207,230,.18)}
+.dot{position:absolute;top:1px;left:0;width:22px;height:22px;border-radius:50%;
+  background:var(--claro);color:#1E2430;font:800 12px/22px var(--f-text);text-align:center;font-style:normal;
+  transform:translate3d(0,0,0);transition:transform .7s var(--ease);box-shadow:0 0 0 2px #26324A}
+.dot.p1{background:var(--amber)}
+.race.racing .dot{transition:none;will-change:transform}
+/* Destello al tocar la pared: anillo que solo anima transform + opacity */
+.dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #FFC93C;opacity:0;pointer-events:none}
+.dot.in::after{animation:toque .5s var(--ease)}
+@keyframes toque{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.9)}}
+.gp{font:700 13px/1.2 var(--f-text);text-align:right;color:#fff}
+.gp small{display:block;font-weight:400;font-size:12px;color:var(--board-muted)}
+
+.note{margin:0 0 10px;padding:10px 12px;border-radius:4px;background:var(--warn-bg);color:var(--warn-fg);font-size:14px}
+.top10 .item{border-top:1px solid var(--board-line);padding:10px 4px}
+.item.top{grid-template-columns:2.4ch auto 1fr;grid-template-areas:"pos time time" ". who who" ". meta meta";column-gap:10px;row-gap:0;align-items:baseline}
+.pos{grid-area:pos;font:800 18px/1.3 var(--f-text);color:var(--board-muted)}
+.item.top .time{grid-area:time;justify-self:start;color:#fff;font-size:clamp(1.2rem,1.05rem + .7vw,1.5rem)}
+.item.top.p1 .pos,.item.top.p1 .time{color:var(--amber)}
+/* El área tocable (44 px) queda centrada sobre el nombre visible */
+.nm{grid-area:who;justify-self:start;align-self:center;display:inline-flex;align-items:center;flex-wrap:wrap;min-height:46px;margin:-5px 0;padding:0;border:0;background:none;cursor:pointer;text-align:left;
+  font:600 16px/1.35 var(--f-text);color:inherit;text-decoration:underline;text-decoration-color:rgba(200,207,230,.45);text-underline-offset:4px}
+@media (hover:hover){.nm:hover{text-decoration-color:var(--amber)}}
+.item.top .meta{color:var(--board-muted)}
+.top10 .tag{background:var(--tag-bg);color:#22409A}
+.top10 .tag.x{background:var(--amber);color:#1E2430}
+@media (min-width:900px){
+  .item.top{grid-template-columns:3ch 120px minmax(180px,1fr) minmax(0,2fr);grid-template-areas:"pos time who meta";align-items:center}
+  .nm{margin:0}
+}
+.t10close{display:block;width:100%;min-height:48px;margin-top:12px;border:1px solid var(--board-line);border-radius:4px;background:transparent;
+  color:#fff;font:700 15px/1 var(--f-text);cursor:pointer}
+.t10close:active{transform:scale(.98)}
+
+/* Aguas abiertas: tablero propio por distancia */
+.board{background:var(--board);color:var(--board-ink);border:0;padding:12px 16px}
+.board .race{margin-top:2px}
+
+/* ===================== Ficha del nadador ===================== */
+dialog.ficha{width:min(560px,100%);max-height:min(86vh,760px);margin:auto auto 0;padding:0;border:0;border-radius:12px 12px 0 0;
+  background:var(--surface);color:var(--ink);box-shadow:0 -10px 40px rgba(14,20,36,.35)}
+@media (min-width:640px){dialog.ficha{margin:auto;border-radius:10px}}
+dialog.ficha::backdrop{background:rgba(14,20,36,.55)}
+dialog.ficha[open]{animation:sube .32s var(--ease)}
+@keyframes sube{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.fh{position:sticky;top:0;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 12px;background:var(--hero);color:#fff}
+.fh h3{margin:0;font:700 1.6rem/1.1 var(--f-display)}
+.fh p{margin:4px 0 0;font-size:14px;color:var(--claro)}
+.x{flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.4);border-radius:4px;background:transparent;color:#fff;font:700 20px/1 var(--f-text);cursor:pointer}
+.fb{padding:6px 18px 22px;overflow:auto}
+.fb h4{margin:18px 0 6px;font:700 1.15rem/1.2 var(--f-display)}
+.fl{list-style:none;margin:0;padding:0}
+.fl li+li{border-top:1px solid var(--line)}
+.fi{display:grid;grid-template-columns:2.6ch 1fr auto;align-items:center;gap:10px;width:100%;min-height:48px;padding:6px 2px;border:0;background:none;text-align:left;cursor:pointer;color:inherit}
+@media (hover:hover){.fi:hover{background:var(--surface-2)}}
+.fi .pz{font:800 15px/1 var(--f-text);color:var(--muted)}
+.fi.r1 .pz{color:var(--record)}
+.fi .pr{font-weight:600}
+.fi .tt{font:800 16px/1 var(--f-text);color:var(--brand)}
+.fi small{display:block;font-size:13px;color:var(--muted);font-weight:400}
+
+/* ===================== Estados y pie ===================== */
+.sk{position:relative;overflow:hidden;height:76px;border-top:1px solid var(--line);background:var(--surface)}
+.sk::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0,var(--surface-2) 50%,transparent 100%);transform:translate3d(-100%,0,0);will-change:transform;animation:brilla 1.4s linear infinite}
+@keyframes brilla{to{transform:translate3d(100%,0,0)}}
+.err{padding:16px;border-radius:var(--r);background:var(--warn-bg);color:var(--warn-fg)}
+.err button{margin-top:8px;min-height:44px;padding:8px 14px;border:1px solid currentColor;border-radius:4px;background:transparent;cursor:pointer;font-weight:700}
+footer{padding:28px 0 calc(40px + env(safe-area-inset-bottom));border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer p{margin:0 0 8px;max-width:72ch}
+footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;min-height:44px}
+.toast{position:fixed;z-index:60;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;
+  padding:12px 16px;border-radius:6px;background:var(--ink);color:var(--bg);font:600 15px/1.2 var(--f-text);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .race-go{display:none!important}
+}
+@media (forced-colors: active){.seg button[aria-pressed="true"]{outline:2px solid CanvasText}.dot{forced-color-adjust:none}}
+@media print{
+  .strip,.controls,.go,.acts,.race,.t10close,.hero .caus,.toast{display:none!important}
+  body{padding-top:0;background:#fff;color:#000}.hero{background:none;color:#000}.lede,.kick,.stats span{color:#333}
+  .top10,.board{background:#fff;color:#000}.item.top .time,.item.top .meta,.pos{color:#000}.item{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="strip" data-carril="horizontal" aria-hidden="true" data-state="rest">
+  <i class="wall a"></i><i class="wall b"></i><i class="rope"></i>
+  <div class="sw-x"><div class="sw-d"><div class="sw-f">
+    <div class="sw-win"><svg class="sw sw-sheet" width="240" height="18" viewBox="0 0 240 18" focusable="false">
+        <svg x="0" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="37" y2="3"/><circle class="hand" cx="37" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="18.57" y2="16.43"/><circle class="hand" cx="18.57" cy="16.43" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="40" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="28.88" y2="3"/><circle class="hand" cx="28.88" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="24.34" y2="15.63"/><circle class="hand" cx="24.34" cy="15.63" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="80" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="20.76" y2="3"/><circle class="hand" cx="20.76" cy="3" r="1.7"/><line class="arm" x1="26" y1="12" x2="32.13" y2="13.29"/><circle class="hand" cx="32.13" cy="13.29" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="120" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="17.48" y2="4.53"/><circle class="hand" cx="17.48" cy="4.53" r="1.7"/><line class="arm" x1="26" y1="12" x2="37" y2="15"/><circle class="hand" cx="37" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="160" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="2.86" y2="8.2"/><line class="leg" x1="11" y1="10" x2="2.86" y2="9.8"/><line class="arm" x1="26" y1="6" x2="22.61" y2="3.89"/><circle class="hand" cx="22.61" cy="3.89" r="1.7"/><line class="arm" x1="26" y1="12" x2="28.88" y2="15"/><circle class="hand" cx="28.88" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+        <svg x="200" y="0" width="40" height="18" viewBox="0 0 40 18"><path class="wake" d="M3 4q-2 5 0 10M0.5 6q-1.6 3 0 6"/><line class="leg" x1="11" y1="8" x2="3.49" y2="4.87"/><line class="leg" x1="11" y1="10" x2="3.49" y2="13.13"/><line class="arm" x1="26" y1="6" x2="30.41" y2="1.55"/><circle class="hand" cx="30.41" cy="1.55" r="1.7"/><line class="arm" x1="26" y1="12" x2="20.76" y2="15"/><circle class="hand" cx="20.76" cy="15" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></svg>
+    </svg></div>
+    <svg class="sw sw-rest" viewBox="0 0 40 18" focusable="false"><g transform="translate(0 3) rotate(-6 20 9)"><line class="leg" x1="11" y1="8" x2="3" y2="6.5"/><line class="leg" x1="11" y1="10" x2="3" y2="11.5"/><line class="arm" x1="26" y1="6" x2="31.57" y2="2.19"/><circle class="hand" cx="31.57" cy="2.19" r="1.7"/><line class="arm" x1="26" y1="12" x2="27.07" y2="19.37"/><circle class="hand hold" cx="27.07" cy="19.37" r="1.7"/><path class="bd" d="M27.5 4.2Q30 4.2 30 7V11Q30 13.8 27.5 13.8L13 11.6Q10 11 10 9Q10 7 13 6.4Z"/><circle class="cap" cx="33" cy="9" r="3.6"/><rect class="gg" x="34.6" y="6.6" width="1.6" height="2" rx=".8"/><rect class="gg" x="34.6" y="9.4" width="1.6" height="2" rx=".8"/></g></svg>
+  </div></div></div>
+</div>
+
+<header class="hero">
+  <div class="caus" aria-hidden="true"><i class="cg"></i></div>
+  <div class="wrap in">
+    <p class="kick">Club Náutico · Natación</p>
+    <h1>Histórico 2002–2009</h1>
+    <p class="lede">Las mejores marcas del club en los resultados FENA de 2002 a 2009, recuperados del archivo web. Van aparte: no cambian los récords vigentes.</p>
+    <ul class="stats" aria-label="El club en cifras">
+      <li><span class="num" id="s1">—</span><span>mejores marcas por prueba</span></li>
+      <li><span class="num" id="s2">—</span><span>nadadores en los Top 10</span></li>
+      <li><span class="num" id="s3">—</span><span>torneos con resultados</span></li>
+    </ul>
+  </div>
+  <i class="edge" aria-hidden="true"></i>
+</header>
+
+<nav class="controls" aria-label="Elegir piscina y rama">
+  <div class="wrap ctl">
+    <div class="seg" role="group" aria-label="Piscina" data-key="curso">
+      <button type="button" data-v="LC" aria-label="Piscina 50 m"><span class="sh">50 m</span><span class="lg">Piscina 50 m</span></button>
+      <button type="button" data-v="SC" aria-label="Piscina 25 m"><span class="sh">25 m</span><span class="lg">Piscina 25 m</span></button>
+    </div>
+    <div class="seg" role="group" aria-label="Rama" data-key="genero">
+      <button type="button" data-v="M">Varones</button>
+      <button type="button" data-v="F">Damas</button>
+    </div>
+  </div>
+</nav>
+
+<p id="status" class="sr" role="status"></p>
+<main class="wrap" id="main" tabindex="-1">
+  <div class="card" aria-hidden="true"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  <noscript><p class="err">Esta página necesita JavaScript. Actívalo o ábrela en otro navegador.</p></noscript>
+</main>
+
+<footer class="wrap">
+  <p id="notas">Marcas individuales del club en los resultados oficiales que la FENA publicó entre 2002 y 2009, recuperados del archivo web (web.archive.org). No hay resultados del club en línea de 2010 a 2016. Algunas fechas son el primer día del torneo. La "foto de llegada" compara tiempos, como si hubieran nadado juntos.</p>
+  <p><a href="./">Ver los récords vigentes del club</a></p>
+  <p>Fuente: resultados oficiales FENA 2002–2009 (archivo web). Actualizado al 28/10/2026.</p>
+  <p>Página del Club Náutico. No es una página oficial de la FENA.</p>
+</footer>
+
+<dialog class="ficha" id="ficha" aria-labelledby="fn"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  // Orden de descarga: primero lo que pinta la vista inicial; el Top 10 (el JSON más grande) al final
+  const FILES = { rec: 'data/historico_records.json', top: 'data/historico_top10.json' };
+  const D = { rel: [], owRec: [], owTop: [] }, ERR = {};
+  const st = { curso: 'LC', genero: 'M', abierta: null };
+  const $ = (s, r = document) => r.querySelector(s);
+  const main = $('#main'), statusEl = $('#status'), ficha = $('#ficha'), toast = $('#toast');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // ---------- formato ----------
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const nombre = (s) => { s = String(s || ''); const i = s.indexOf(','); return i < 0 ? s.trim() : s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim(); };
+  const corto = (s) => { s = String(s || ''); const i = s.indexOf(','); if (i < 0) return s; const ap = s.slice(0, i).trim().split(/\s+/)[0]; return s.slice(i + 1).trim().split(/\s+/)[0] + ' ' + ap.charAt(0) + '.'; };
+  const titulo = (s) => String(s || '').toLowerCase().replace(/(^|[\s,(\-\/])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  const lugar = (s) => { const t = String(s || '').trim(); return t ? titulo(t) : 'Ecuador'; };
+  const ymd = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '').trim()); return m ? { y: m[1], m: m[2], d: m[3] } : null; };
+  const fecha = (ini, fin) => {
+    if (fin === undefined && /\sa\s/.test(ini || '')) [ini, fin] = String(ini).split(/\s+a\s+/);
+    const a = ymd(ini), b = ymd(fin);
+    if (!a) return ini || '';
+    if (!b || (a.y === b.y && a.m === b.m && a.d === b.d)) return `${a.d}/${a.m}/${a.y}`;
+    if (a.y === b.y && a.m === b.m) return `${a.d} al ${b.d}/${b.m}/${b.y}`;
+    if (a.y === b.y) return `${a.d}/${a.m} al ${b.d}/${b.m}/${b.y}`;
+    return `${a.d}/${a.m}/${a.y} al ${b.d}/${b.m}/${b.y}`;
+  };
+  const prueba = (p) => { const s = String(p || '').trim(); const [d, e] = s.split(/\s+/); if (!e || !/^\d|^4x/i.test(d)) return s; return d + ' m ' + (e === 'Combinado' ? (d.includes('x') ? 'Combinado' : 'Combinado individual') : e); };
+  const estilo = (r) => String(r.prueba || '').trim().split(/\s+/)[1] || r.estilo || '';
+  const metros = (p) => { const d = String(p || '').split(/\s+/)[0]; const m = /^4x(\d+)$/i.exec(d); return m ? 4 * +m[1] : +d || 0; };
+  const piscina = (c) => c === 'LC' ? 'Piscina 50 m' : c === 'SC' ? 'Piscina 25 m' : 'Aguas abiertas';
+  const rama = (g) => g === 'M' ? 'Varones' : 'Damas';
+  const fmt = (s) => { // segundos → "1:02.45"
+    s = Math.max(0, s); const cs = Math.round(s * 100); const h = Math.floor(cs / 360000), m = Math.floor(cs / 6000) % 60, sec = Math.floor(cs / 100) % 60, c = cs % 100;
+    const p2 = (n) => String(n).padStart(2, '0');
+    return h ? `${h}:${p2(m)}:${p2(sec)}.${p2(c)}` : m ? `${m}:${p2(sec)}.${p2(c)}` : `${sec}.${p2(c)}`;
+  };
+  const dif = (g) => g >= 60 ? fmt(g) : g.toFixed(2);
+  const dist = (m) => m < 1 ? Math.round(m * 100) + ' cm' : (m < 10 ? m.toFixed(1).replace('.', ',') : String(Math.round(m))) + ' m';
+  const dot = '<span class="d" aria-hidden="true">·</span>';
+  const ESTILOS_REL = ['(E)', '(P)', '(M)', '(L)'];
+  const metaHtml = (f, l, t) => `${esc(f)}${dot}${esc(lugar(l))}${dot}${esc(t)}`;
+
+  // ---------- estado en la URL ----------
+  const leerHash = () => {
+    const h = new URLSearchParams(location.hash.slice(1));
+    if (['LC', 'SC'].includes(h.get('c'))) st.curso = h.get('c');
+    if (['M', 'F'].includes(h.get('g'))) st.genero = h.get('g');
+    st.abierta = h.get('p') || null;
+  };
+  const enlace = (p) => { const h = new URLSearchParams({ c: st.curso, g: st.genero }); if (p && st.curso !== 'OW') h.set('p', p); return '#' + h; };
+  const escribirHash = () => history.replaceState(null, '', enlace(st.abierta));
+
+  // ---------- piezas ----------
+  const grupo = (titulo, items, extra = '') => items.length
+    ? `<section class="grp"><div class="gh"><h3>${titulo}</h3><span class="n">${items.length} ${items.length === 1 ? 'prueba' : 'pruebas'}</span></div><div class="card${extra}">${items.join('')}</div></section>` : '';
+
+  function recordItem(r) {
+    const abierta = st.abierta === r.prueba;
+    return `<a class="item rowlink" href="${esc(enlace(r.prueba))}" role="button" data-prueba="${esc(r.prueba)}" aria-expanded="${abierta}">
+      <span class="ev">${esc(prueba(r.prueba))}${r.marca === 'x' ? '<span class="tag x">Exhibición</span>' : ''}</span>
+      <span class="time" data-s="${+r.segundos || 0}">${esc(r.tiempo)}</span>
+      <span class="who">${esc(nombre(r.nadador))}</span>
+      <span class="meta">${metaHtml(fecha(r.fecha), r.lugar, r.torneo)}</span>
+      <span class="go">${abierta ? 'Ocultar' : 'Ver Top 10'}</span>
+    </a>${abierta ? top10Html(r.prueba) : ''}`;
+  }
+  function relevoItem(r) {
+    const comb = estilo(r) === 'Combinado';
+    const ints = (r.integrantes || []).length
+      ? '<ol class="team">' + r.integrantes.map((n, i) => `<li>${esc(nombre(n))}${comb ? ' ' + ESTILOS_REL[i] : ''}</li>`).join('') + '</ol>'
+      : 'Integrantes no publicados en los resultados oficiales';
+    return `<div class="item relay">
+      <span class="ev">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? '<span class="tag">Mixto</span>' : ''}</span>
+      <span class="time">${esc(r.tiempo)}</span>
+      <span class="who">${ints}</span>
+      <span class="meta">${metaHtml(fecha(r.fecha_ini, r.fecha_fin), r.lugar, r.torneo)}</span>
+    </div>`;
+  }
+  function topItem(t, extra = '') {
+    const exh = t.marca === 'x';
+    return `<div class="item top${t.puesto === 1 ? ' p1' : ''}">
+      <span class="pos">${esc(t.puesto)}.</span>
+      <span class="time">${esc(t.tiempo)}</span>
+      <button class="nm" type="button" data-n="${esc(t.nadador)}" aria-haspopup="dialog">${esc(nombre(t.nadador))}${exh ? '<span class="tag x">Exhibición</span>' : ''}${extra}</button>
+      <span class="meta">${metaHtml(fecha(t.fecha), t.lugar, t.torneo)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
+    </div>`;
+  }
+  // Foto de llegada: dónde iba cada uno cuando el primero tocó la pared (misma velocidad media que su marca)
+  function raceHtml(rows, m) {
+    const ok = rows.filter((r) => +r.segundos > 0);
+    if (ok.length < 2 || !m) return '';
+    const t1 = +ok[0].segundos;
+    // La foto muestra solo los últimos W metros (escala "redonda"), para que las diferencias se vean
+    const atras = ok.map((r) => m * (1 - t1 / +r.segundos));
+    const PASOS = [1, 2, 3, 5, 10, 15, 20, 25, 50, 75, 100, 150, 200, 250, 500, 750, 1000, 1500, 2000, 5000];
+    const W = PASOS.find((p) => p >= Math.max(...atras) * 1.15) || m;
+    const lanes = ok.map((r, i) => {
+      const f = Math.max(0, 1 - atras[i] / W), g = +r.segundos - t1;
+      return `<div class="ln" data-f="${f.toFixed(4)}">
+        <span class="lb">${esc(corto(r.nadador))}</span>
+        <span class="tr"><i class="dot${r.puesto === 1 ? ' p1' : ''}" data-t="${+r.segundos}">${esc(r.puesto)}</i></span>
+        <span class="gp">${r.puesto === 1 ? esc(r.tiempo) + '<small>toca la pared</small>' : '+' + dif(g) + ' s<small>a ' + dist(atras[i]) + '</small>'}</span>
+      </div>`;
+    }).join('');
+    const foto = `Foto de llegada · últimos ${dist(W)}`;
+    return `<div class="race" aria-hidden="true" data-t1="${t1}" data-foto="${esc(foto)}" data-m="${m}">
+      <div class="rhead"><span class="rclock">${esc(ok[0].tiempo)}</span><span class="rlab">${esc(foto)}</span></div>${lanes}</div>`;
+  }
+  const notaExh = (rows) => rows.some((t) => t.marca === 'x')
+    ? '<p class="note"><strong>Exhibición:</strong> marca nadada fuera de puntaje. Cuenta igual para el ranking y para los récords del club.</p>' : '';
+  const ICO_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>';
+  const ICO_SHARE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12 10.5a2.5 2.5 0 0 0-1.9.9L6.4 9.3a2.4 2.4 0 0 0 0-2.6l3.7-2.1A2.5 2.5 0 1 0 9.5 3c0 .2 0 .4.1.6L5.9 5.7a2.5 2.5 0 1 0 0 4.6l3.7 2.1-.1.6a2.5 2.5 0 1 0 2.5-2.5z"/></svg>';
+
+  function top10Html(p) {
+    if (!D.top) return `<div class="top10" data-prueba="${esc(p)}"><p>Cargando Top 10…</p></div>`;
+    const rows = D.top.filter((t) => t.curso === st.curso && t.genero === st.genero && t.prueba === p).sort((a, b) => a.puesto - b.puesto);
+    return `<div class="top10" data-prueba="${esc(p)}" role="region" aria-label="Top 10 de ${esc(prueba(p))}">
+      <div class="t10h"><h4>Top 10 · ${esc(prueba(p))}</h4>
+        <div class="acts">${rows.length > 1 ? `<button class="btn pri race-go" type="button">${ICO_PLAY}Nadar la carrera</button>` : ''}<button class="btn share" type="button">${ICO_SHARE}Compartir</button></div></div>
+      ${raceHtml(rows, metros(p))}
+      ${notaExh(rows)}
+      ${rows.map((t) => topItem(t)).join('') || '<p>Sin marcas.</p>'}
+      <button class="t10close" type="button">Cerrar Top 10</button>
+    </div>`;
+  }
+
+  // ---------- vistas ----------
+  function vistaRecords() {
+    const recs = D.rec.filter((r) => r.curso === st.curso && r.genero === st.genero).sort((a, b) => a.orden - b.orden);
+    const rel = D.rel.filter((r) => r.curso === st.curso && (r.genero === st.genero || r.genero === 'Mixto'))
+      .sort((a, b) => (a.genero === 'Mixto') - (b.genero === 'Mixto') || a.posta - b.posta);
+    const ESTILOS = ['Libre', 'Mariposa', 'Espalda', 'Pecho', 'Combinado'];
+    const by = (e) => recs.filter((r) => estilo(r) === e).map(recordItem);
+    const relBy = (e) => rel.filter((r) => estilo(r) === e).map(relevoItem);
+    const otras = recs.filter((r) => !ESTILOS.includes(estilo(r))).map(recordItem).concat(rel.filter((r) => !['Libre', 'Combinado'].includes(estilo(r))).map(relevoItem));
+    return `<div class="vt"><h2>${piscina(st.curso)} · ${rama(st.genero)}</h2><p>Mejores marcas 2002–2009. Toca una prueba para ver su Top 10.</p></div>
+      ${grupo('Libre', by('Libre'))}${grupo('Relevos libres', relBy('Libre'))}${grupo('Mariposa', by('Mariposa'))}
+      ${grupo('Espalda', by('Espalda'))}${grupo('Pecho', by('Pecho'))}${grupo('Combinado individual', by('Combinado'))}
+      ${grupo('Relevos combinados', relBy('Combinado'))}${grupo('Otras pruebas', otras)}`;
+  }
+  function vistaAguas() {
+    const recs = D.owRec.filter((r) => r.rama === st.genero).sort((a, b) => a.dist_km - b.dist_km);
+    const bloques = recs.map((r) => {
+      const top = D.owTop.filter((t) => t.rama === st.genero && t.distancia === r.distancia).sort((a, b) => a.puesto - b.puesto);
+      return `<section class="grp" id="ow-${esc(String(r.dist_km).replace('.', '-'))}"><div class="gh"><h3>${esc(r.distancia)}</h3><span class="n">${top.length} ${top.length === 1 ? 'marca' : 'marcas'}</span></div>
+        <div class="card board">${raceHtml(top, Math.round(+r.dist_km * 1000))}${top.map((t) => topItem(t, t.puesto === 1 ? '<span class="tag">Récord</span>' : '')).join('')}</div></section>`;
+    });
+    return `<div class="vt"><h2>Aguas abiertas · ${rama(st.genero)}</h2><p>El número es la posición dentro del club, no el lugar en la carrera.</p></div>${bloques.join('') || '<p>Sin marcas registradas.</p>'}`;
+  }
+  const vistaActual = () => [['rec'], vistaRecords];
+
+  // ---------- tareas diferidas: lo no esencial espera al primer dibujo con datos ----------
+  const idle = (fn, ms = 800) => ('requestIdleCallback' in window) ? requestIdleCallback(fn, { timeout: ms }) : setTimeout(fn, 80);
+  const hero = $('.hero');
+  let soltado = false, ultScroll = -1e9;
+  // La deriva de los reflejos del hero (solo transform) arranca cuando el hilo principal ya descansó
+  const soltar = () => { if (soltado) return; soltado = true; idle(() => requestAnimationFrame(() => hero.classList.add('on')), 1500); };
+  const texto = (el) => el.firstChild || el.appendChild(document.createTextNode(''));
+
+  // ---------- cifras del club ----------
+  let cifrasListas = false;
+  function cifras() {
+    if (cifrasListas || !Object.keys(FILES).every((k) => D[k] || ERR[k]) || !D.rec || !D.top) return;
+    cifrasListas = true;
+    const anim = (el, n) => {
+      const tn = texto(el);
+      if (reduce.matches) { tn.data = n; return; }
+      const t0 = performance.now();
+      const paso = (now) => { const p = Math.min(1, (now - t0) / 900); tn.data = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(paso); };
+      requestAnimationFrame(paso);
+    };
+    idle(() => {
+      anim($('#s1'), D.rec.length);
+      anim($('#s2'), new Set(D.top.map((t) => t.nadador).concat(D.owTop ? D.owTop.map((t) => t.nadador) : [])).size);
+      anim($('#s3'), new Set(D.top.map((t) => t.torneo)).size);
+    }, 1200);
+  }
+
+  // ---------- reloj de competencia: cada récord "corre" hasta su marca al aparecer ----------
+  // Máximo 6 contadores a la vez, y ninguno mientras el usuario se desplaza (ahí muestra el tiempo final directo).
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => {
+    for (const e of ents) if (e.isIntersecting) { io.unobserve(e.target); correr(e.target); }
+  }, { rootMargin: '0px 0px -10% 0px' }) : null;
+  let activos = 0;
+  function correr(el) {
+    const fin = +el.dataset.s; if (!fin || reduce.matches || el.dataset.done) return;
+    el.dataset.done = '1';
+    if (activos >= 6 || performance.now() - ultScroll < 160) return;
+    activos++;
+    const ov = document.createElement('span'); ov.className = 'tc'; ov.setAttribute('aria-hidden', 'true');
+    const tn = texto(ov); tn.data = fmt(0);
+    el.classList.add('counting'); el.append(ov);
+    const dur = 700, t0 = performance.now();
+    const paso = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      tn.data = fmt(fin * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(paso); else { ov.remove(); el.classList.remove('counting'); activos--; }
+    };
+    requestAnimationFrame(paso);
+  }
+  const vigilarTiempos = () => { if (io) main.querySelectorAll('.rowlink .time[data-s]:not([data-done])').forEach((el) => io.observe(el)); };
+
+  // ---------- carrera: posiciones con transform (sin layout por cuadro) ----------
+  const D_PUNTO = 22, CERO = 'translate3d(0,0,0)';
+  const mover = (d, px) => { d.style.transform = 'translate3d(' + px.toFixed(1) + 'px,0,0)'; };
+  const anchoPista = (race) => { const tr = race.querySelector('.tr'); return tr ? Math.max(0, tr.offsetWidth - D_PUNTO) : 0; };
+  // Mide el ancho útil de la pista una sola vez por carrera y coloca la "foto de llegada"
+  function posRace(race) {
+    const w = anchoPista(race);
+    race.querySelectorAll('.ln').forEach((ln) => { const d = ln.querySelector('.dot'); if (d) mover(d, (+ln.dataset.f || 0) * w); });
+  }
+  const posicionar = () => main.querySelectorAll('.race:not(.racing)').forEach(posRace);
+
+  // ---------- carrera animada ----------
+  function nadar(btn) {
+    const box = btn.closest('.top10, .board'), race = box && box.querySelector('.race');
+    if (!race || reduce.matches) return;
+    const dots = [...race.querySelectorAll('.dot')], clock = $('.rclock', race), lab = $('.rlab', race), cn = texto(clock);
+    const t1 = +race.dataset.t1, T = 3.2;                        // el primero llega en 3,2 s
+    const tiempos = dots.map((d) => +d.dataset.t), tmax = Math.max(...tiempos);
+    const durs = tiempos.map((t) => T * t / t1), entro = dots.map(() => false);
+    const fin = Math.min(T * tmax / t1, 7);
+    const w = anchoPista(race);                                   // única lectura de layout, antes del bucle
+    btn.disabled = true; race.classList.add('racing'); lab.textContent = 'En carrera · piscina completa (' + dist(+race.dataset.m) + ')';
+    dots.forEach((d) => { d.style.transform = CERO; d.classList.remove('in'); });
+    const t0 = performance.now();
+    if (typeof dots[0].animate === 'function') {
+      // Web Animations: cada punto corre en el compositor; el bucle solo escribe el reloj
+      let anims = [], timer = 0, n = 0;
+      const abortar = () => { anims.forEach((a) => a.cancel()); anims = []; clearTimeout(timer); };
+      anims = dots.map((d, i) => {
+        const a = d.animate([{ transform: CERO }, { transform: 'translate3d(' + w.toFixed(1) + 'px,0,0)' }],
+          { duration: durs[i] * 1000, easing: 'linear', fill: 'forwards' });
+        a.onfinish = () => d.classList.add('in');
+        return a;
+      });
+      const volver = () => {   // vuelve a la foto de llegada: cada punto desliza a su posición
+        if (!race.isConnected) { abortar(); return; }
+        cn.data = fmt(t1); lab.textContent = race.dataset.foto;
+        const w2 = anchoPista(race);
+        const dest = dots.map((d) => (+d.closest('.ln').dataset.f || 0) * w2);
+        const desde = durs.map((du) => Math.min(1, fin / du) * w);
+        anims.forEach((a) => a.cancel());
+        anims = dots.map((d, i) => d.animate(
+          [{ transform: 'translate3d(' + desde[i].toFixed(1) + 'px,0,0)' }, { transform: 'translate3d(' + dest[i].toFixed(1) + 'px,0,0)' }],
+          { duration: 700, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' }));
+        timer = setTimeout(() => {
+          if (!race.isConnected) { abortar(); return; }
+          dots.forEach((d, i) => mover(d, dest[i]));              // posición final exacta (igual que posRace)
+          abortar();
+          race.classList.remove('racing');
+          btn.disabled = false;
+        }, 720);
+      };
+      const reloj = (now) => {
+        if (!race.isConnected) { abortar(); return; }              // la vista cambió
+        const e = (now - t0) / 1000;
+        if ((n++ & 1) === 0 || e >= fin) cn.data = fmt(Math.min(e, fin) * t1 / T);
+        if (e < fin + .05) { requestAnimationFrame(reloj); return; }
+        lab.textContent = 'Llegada';
+        timer = setTimeout(volver, 1400);
+      };
+      requestAnimationFrame(reloj);
+      return;
+    }
+    const paso = (now) => {
+      if (!race.isConnected) return;                              // la vista cambió: ya no hay nada que animar
+      const e = (now - t0) / 1000;
+      cn.data = fmt(Math.min(e, fin) * t1 / T);
+      for (let i = 0; i < dots.length; i++) {
+        if (entro[i]) continue;
+        const x = Math.min(1, e / durs[i]);
+        mover(dots[i], x * w);
+        if (x >= 1) { entro[i] = true; dots[i].classList.add('in'); }
+      }
+      if (e < fin + .05) return requestAnimationFrame(paso);
+      lab.textContent = 'Llegada';
+      setTimeout(() => {   // vuelve a la foto de llegada (transición de transform)
+        if (!race.isConnected) return;
+        race.classList.remove('racing');
+        posRace(race);
+        cn.data = fmt(t1); lab.textContent = race.dataset.foto;
+        btn.disabled = false;
+      }, 1400);
+    };
+    requestAnimationFrame(paso);
+  }
+
+  // ---------- dibujo ----------
+  function draw() {
+    document.querySelectorAll('.seg').forEach((g) => g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st[g.dataset.key]))));
+    const [need, html] = vistaActual();
+    const falla = need.find((k) => ERR[k]);
+    try {
+      if (falla) main.innerHTML = `<div class="err">No se pudieron cargar los datos (${esc(ERR[falla])}). Revisa tu conexión.<br><button type="button" id="retry">Reintentar</button></div>`;
+      else if (need.every((k) => D[k])) main.innerHTML = html();
+      else main.innerHTML = '<div class="card" aria-hidden="true"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>';
+    } catch (e) {
+      main.innerHTML = `<div class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba recargar la página.</div>`;
+    }
+    const h2 = $('h2', main); statusEl.textContent = h2 ? h2.textContent : '';
+    escribirHash(); vigilarTiempos(); posicionar(); pedirMedir();
+  }
+  // Transición suave entre vistas: la vista nueva entra con un leve deslizamiento (solo opacity/transform)
+  const conTransicion = (fn) => {
+    fn();
+    if (reduce.matches) return;
+    main.classList.remove('entra'); void main.offsetWidth; main.classList.add('entra');
+  };
+
+  const filaDe = (p) => [...main.querySelectorAll('a.rowlink')].find((a) => a.dataset.prueba === p);
+  const marcar = (a, abierta) => { a.setAttribute('aria-expanded', String(abierta)); const g = $('.go', a); if (g) g.textContent = abierta ? 'Ocultar' : 'Ver Top 10'; };
+  function alternar(a, abrir) {
+    const p = a.dataset.prueba, antes = a.getBoundingClientRect().top;
+    const prev = st.abierta ? filaDe(st.abierta) : null;
+    main.querySelectorAll('.top10').forEach((d) => d.remove());
+    if (prev) marcar(prev, false);
+    if (st.abierta === p && abrir !== true) st.abierta = null;
+    else { st.abierta = p; a.insertAdjacentHTML('afterend', top10Html(p)); marcar(a, true); }
+    window.scrollBy(0, a.getBoundingClientRect().top - antes);
+    statusEl.textContent = st.abierta ? 'Top 10 de ' + prueba(p) + ' abierto' : 'Top 10 cerrado';
+    escribirHash(); posicionar(); pedirMedir();
+  }
+  let porDesplazar = true;
+  function irAAbierta() {
+    if (!porDesplazar || !st.abierta || !D.top) return;
+    const f = filaDe(st.abierta); if (f) { f.scrollIntoView({ block: 'start' }); porDesplazar = false; }
+  }
+
+  // ---------- ficha del nadador ----------
+  function abrirFicha(n) {
+    const mios = (D.top || []).filter((t) => t.nadador === n);
+    const ow = (D.owTop || []).filter((t) => t.nadador === n);
+    const rel = (D.rel || []).filter((r) => (r.integrantes || []).includes(n));
+    const nRec = mios.filter((t) => t.puesto === 1).length + ow.filter((t) => t.puesto === 1).length + rel.length;
+    const gen = (mios[0] || {}).genero || ((ow[0] || {}).rama) || st.genero;
+    const item = (t, c, p, etiqueta) => `<li><button class="fi${t.puesto === 1 ? ' r1' : ''}" type="button" data-c="${c}" data-g="${esc(gen)}" data-p="${esc(p)}">
+        <span class="pz">${t.puesto === 1 ? '★' : esc(t.puesto) + '.'}</span><span class="pr">${esc(etiqueta)}<small>${esc(fecha(t.fecha))} · ${esc(lugar(t.lugar))}</small></span><span class="tt">${esc(t.tiempo)}</span></button></li>`;
+    const sec = (titulo, lista) => lista.length ? `<h4>${titulo}</h4><ul class="fl">${lista.join('')}</ul>` : '';
+    const por = (c) => mios.filter((t) => t.curso === c).sort((a, b) => a.puesto - b.puesto || a.orden - b.orden).map((t) => item(t, c, t.prueba, prueba(t.prueba)));
+    const owL = ow.sort((a, b) => a.dist_km - b.dist_km).map((t) => item(t, 'OW', '', t.distancia));
+    const relL = rel.map((r) => `<li><div class="fi" style="cursor:default"><span class="pz">★</span><span class="pr">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? ' mixto' : ''}<small>${esc(piscina(r.curso))} · ${esc(fecha(r.fecha_ini, r.fecha_fin))}</small></span><span class="tt">${esc(r.tiempo)}</span></div></li>`);
+    ficha.innerHTML = `<div class="fh"><div><h3 id="fn">${esc(nombre(n))}</h3><p>${nRec} ${nRec === 1 ? 'mejor marca 2002–2009' : 'mejores marcas 2002–2009'} · ${mios.length + ow.length} ${mios.length + ow.length === 1 ? 'marca' : 'marcas'} en los Top 10</p></div>
+      <button class="x" type="button" aria-label="Cerrar ficha" data-cerrar>×</button></div>
+      <div class="fb">${sec('Piscina 50 m', por('LC'))}${sec('Piscina 25 m', por('SC'))}${sec('Aguas abiertas', owL)}${sec('Relevos récord', relL)}</div>`;
+    if (typeof ficha.showModal === 'function') ficha.showModal(); else ficha.setAttribute('open', '');
+  }
+  const cerrarFicha = () => { if (ficha.open) { if (typeof ficha.close === 'function') ficha.close(); else ficha.removeAttribute('open'); } };
+  ficha.addEventListener('click', (e) => {
+    if (e.target === ficha || e.target.closest('[data-cerrar]')) return cerrarFicha();
+    const b = e.target.closest('button.fi'); if (!b) return;
+    cerrarFicha();
+    conTransicion(() => {
+      st.curso = b.dataset.c; st.genero = b.dataset.g; st.abierta = b.dataset.p || null; porDesplazar = true; draw();
+    });
+    setTimeout(irAAbierta, 60);
+  });
+
+  // ---------- compartir ----------
+  let tt;
+  const avisar = (txt) => { toast.textContent = txt; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('on'), 2200); };
+  async function compartir(p) {
+    const url = location.origin + location.pathname + enlace(p);
+    const titulo = 'Top 10 ' + prueba(p) + ' · ' + piscina(st.curso) + ' · ' + rama(st.genero);
+    try {
+      if (navigator.share) { await navigator.share({ title: titulo, text: titulo + ' — Histórico 2002–2009, Club Náutico', url }); return; }
+      await navigator.clipboard.writeText(url); avisar('Enlace copiado');
+    } catch (e) { if (e && e.name !== 'AbortError') avisar('No se pudo compartir'); }
+  }
+
+  // ---------- eventos ----------
+  document.querySelectorAll('.seg').forEach((g) => g.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b || st[g.dataset.key] === b.dataset.v) return;
+    conTransicion(() => { st[g.dataset.key] = b.dataset.v; st.abierta = null; draw(); });
+  }));
+  main.addEventListener('click', (e) => {
+    if (e.target.closest('#retry')) { location.reload(); return; }
+    const nm = e.target.closest('.nm'); if (nm) { abrirFicha(nm.dataset.n); return; }
+    const go = e.target.closest('.race-go'); if (go) { nadar(go); return; }
+    const sh = e.target.closest('.share'); if (sh) { compartir(sh.closest('.top10').dataset.prueba); return; }
+    const c = e.target.closest('.t10close');
+    if (c) { const f = filaDe(c.closest('.top10').dataset.prueba); if (f) { alternar(f); f.focus({ preventScroll: true }); } return; }
+    const a = e.target.closest('a.rowlink'); if (!a) return;
+    e.preventDefault(); alternar(a);
+  });
+  main.addEventListener('keydown', (e) => { const a = e.target.closest && e.target.closest('a.rowlink'); if (a && e.key === ' ') { e.preventDefault(); alternar(a); } });
+  window.addEventListener('hashchange', () => { leerHash(); porDesplazar = true; draw(); irAAbierta(); });
+
+  // ---------- carril superior: nada al desplazarte, se agarra de la corchera al parar ----------
+  // Los cuadros de nado corren en el compositor (hoja de sprites + steps()); aquí solo se mueve el nadador con translate3d.
+  const strip = $('.strip'), swx = $('.sw-x', strip);
+  let alto = 1, ancho = 1, ultimoY = scrollY, timer = 0, pedido = false, midiendo = false;
+  function medir() { midiendo = false; alto = Math.max(1, document.documentElement.scrollHeight - innerHeight); ancho = Math.max(0, strip.clientWidth - 40 - 8); pintar(); }
+  const pedirMedir = () => { if (!midiendo) { midiendo = true; requestAnimationFrame(medir); } };
+  function pintar() {
+    pedido = false;
+    const p = Math.min(1, Math.max(0, scrollY / alto));
+    swx.style.transform = 'translate3d(' + (4 + p * ancho).toFixed(1) + 'px,0,0)';
+  }
+  addEventListener('scroll', () => {
+    const y = scrollY;
+    ultScroll = performance.now();
+    if (y !== ultimoY) { strip.dataset.dir = y < ultimoY ? 'back' : 'fwd'; ultimoY = y; }
+    if (strip.dataset.state !== 'swim') strip.dataset.state = 'swim';
+    clearTimeout(timer); timer = setTimeout(() => { strip.dataset.state = 'rest'; }, 400);
+    if (!pedido) { pedido = true; requestAnimationFrame(pintar); }
+  }, { passive: true });
+  let reajuste = false;
+  addEventListener('resize', () => { pedirMedir(); if (!reajuste) { reajuste = true; requestAnimationFrame(() => { reajuste = false; posicionar(); }); } }, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(pedirMedir);
+
+  // ---------- carga ----------
+  leerHash(); draw();
+  // Los reflejos del hero solo derivan mientras el hero se ve en pantalla
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => hero.classList.toggle('fuera', !es[es.length - 1].isIntersecting)).observe(hero);
+  setTimeout(soltar, 4000);   // respaldo: si los datos tardan o fallan, los reflejos igual empiezan a derivar
+  for (const [k, url] of Object.entries(FILES)) {
+    fetch(url, { cache: 'no-cache' })
+      .then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
+      .then((j) => { if (!Array.isArray(j)) throw new Error(url + ' con formato inválido'); D[k] = j; })
+      .catch((e) => { ERR[k] = e.message || url; })
+      .finally(() => {
+        const necesita = vistaActual()[0];
+        if (necesita.includes(k) && necesita.every((n) => D[n] || ERR[n])) { draw(); irAAbierta(); soltar(); }
+        else if (k === 'top' && st.abierta && st.curso !== 'OW') {
+          const viejo = main.querySelector('.top10'), f = filaDe(st.abierta);
+          if (viejo && f) { viejo.remove(); f.insertAdjacentHTML('afterend', top10Html(st.abierta)); posicionar(); pedirMedir(); }
+          irAAbierta();
+        }
+        cifras();   // las cifras del hero (y su animación) esperan al dibujo con datos y a que el hilo principal descanse
+      });
+  }
+})();
+</script>
+</body>
+</html>

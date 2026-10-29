@@ -15,6 +15,7 @@ La página lee todo de la carpeta `data/`. Para actualizar **no hace falta tocar
    - `relevos_records.json`
    - `records_aguas_abiertas.json`
    - `top_aguas_abiertas.json`
+   - `historico_records.json` y `historico_top10.json` (página aparte `historico.html`, 2002–2009; cambian solo si aparecen resultados viejos)
 3. En `index.html`, cambia la fecha del pie: busca `Actualizado al` y escribe la fecha nueva.
 4. Verifica los datos. Debe terminar con **"OK: datos verificados, sin errores."**
    Si sale **ERRORES**, no publiques: corrige o pide a Claude que lo revise.
