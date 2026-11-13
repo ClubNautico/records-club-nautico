@@ -44,7 +44,7 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
   const nombre = (s) => { const i = s.indexOf(','); return i < 0 ? s.trim() : s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim(); };
 
   try {
-    const [rec, top, rel, owRec, owTop] = await Promise.all(['records_piscina', 'top10_piscina', 'relevos_records', 'records_aguas_abiertas', 'top_aguas_abiertas'].map((n) => get('data/' + n + '.json')));
+    const [rec, top, rel, owRec, owTop, tvRec, tvTop] = await Promise.all(['records_piscina', 'top10_piscina', 'relevos_records', 'records_aguas_abiertas', 'top_aguas_abiertas', 'travesias_records', 'travesias_top'].map((n) => get('data/' + n + '.json')));
     const f = document.getElementById('f');
     const errores = [];
     // ?pagina=otra.html permite probar una copia (solo archivos .html de la raíz del sitio)
@@ -205,6 +205,50 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
       ok(!overflow(), `${id}: scroll horizontal a 360 px`);
     }
 
+    // 3b) Travesías y otras competencias (no FENA): sub-selector .seg[data-key=aa] FENA | TV dentro de Aguas abiertas
+    const segAA = () => d.querySelector('.seg[data-key=aa]');
+    const visible = (el) => !!el && !el.hidden && el.getBoundingClientRect().height > 0;
+    if (segAA()) {
+      ok(visible(segAA()), 'Aguas abiertas: no se ve el selector FENA | Travesías');
+      await seg('curso', 'LC');
+      ok(!visible(segAA()), 'Piscina 50 m: el selector FENA | Travesías no debe verse');
+      await seg('curso', 'OW');
+      ok(d.querySelector('.seg[data-key=aa] button[data-v=FENA]').getAttribute('aria-pressed') === 'true', 'Aguas abiertas: por defecto debe quedar "FENA"');
+      await seg('aa', 'TV');
+      for (const g of ['M', 'F']) {
+        await seg('genero', g);
+        const id = `Travesías ${RAMA[g]}`;
+        const esp = tvTop.filter((t) => t.rama === g);
+        const fs = [...main().querySelectorAll('.item.top')];
+        ok(fs.length === esp.length, `${id}: se ven ${fs.length} filas, los datos ${esp.length}`);
+        ok(/No son récords oficiales FENA/.test(txt(main())), `${id}: falta la línea "No son récords oficiales FENA"`);
+        ok(!/Récord/.test([...main().querySelectorAll('.tag')].map((x) => x.textContent).join(' ')), `${id}: aparece la etiqueta "Récord" (no son récords oficiales)`);
+        ok(!main().querySelector('a.item.rowlink'), `${id}: hay filas clicables de piscina`);
+        for (const t of esp) {
+          const x = fs.find((y) => txt(y).includes(t.tiempo) && txt(y).includes(nombre(t.nadador)));
+          if (!ok(x, `${id} ${t.distancia} puesto ${t.puesto}: no aparece ${t.tiempo} ${nombre(t.nadador)}`)) continue;
+          const tx = txt(x);
+          ok((t.puesto === 1) === /Mejor marca/.test(tx), `${id} ${t.distancia} puesto ${t.puesto}: etiqueta "Mejor marca" ${t.puesto === 1 ? 'ausente' : 'indebida'}`);
+          ok(tx.includes(t.torneo), `${id} ${t.distancia} puesto ${t.puesto}: no muestra el evento`);
+          if (t.fecha) ok(/^\d{4}-/.test(t.fecha) ? tx.includes(t.fecha.split('-').reverse().join('/')) : tx.includes(t.fecha), `${id} ${t.distancia} puesto ${t.puesto}: no muestra la fecha`);
+          ok(!/años|\d{4}-\d{2}-\d{2}/.test(tx), `${id} ${t.distancia} puesto ${t.puesto}: muestra "años" o fecha sin formatear`);
+        }
+        for (const r of tvRec.filter((r) => r.rama === g)) ok(fs.some((x) => txt(x).includes(r.tiempo) && /Mejor marca/.test(txt(x))), `${id} ${r.distancia}: mejor marca ${r.tiempo} no marcada`);
+        ok(!/undefined|null|NaN/.test(txt(main())), `${id}: undefined/null/NaN`);
+        ok(!overflow(), `${id}: scroll horizontal a 360 px`);
+      }
+      ok(/[#&]a=TV/.test(W.location.hash), 'Travesías: el enlace (hash) no lleva a=TV');
+      // enlaces: viejo #c=OW → FENA; #c=OW&a=TV y #c=TV → travesías
+      const pAA = (v) => d.querySelector(`.seg[data-key=aa] button[data-v=${v}]`).getAttribute('aria-pressed') === 'true';
+      W.location.hash = 'c=OW&g=M'; await sleep(300);
+      ok(pAA('FENA') && main().querySelectorAll('.item.top').length === owTop.filter((t) => t.rama === 'M').length, 'Enlace viejo #c=OW&g=M: no muestra Aguas abiertas FENA');
+      W.location.hash = 'c=OW&g=F&a=TV'; await sleep(300);
+      ok(pAA('TV') && main().querySelectorAll('.item.top').length === tvTop.filter((t) => t.rama === 'F').length, 'Enlace #c=OW&g=F&a=TV: no muestra Travesías damas');
+      W.location.hash = 'c=TV&g=M'; await sleep(300);
+      ok(pAA('TV') && d.querySelector('.seg[data-key=curso] button[data-v=OW]').getAttribute('aria-pressed') === 'true', 'Enlace #c=TV&g=M: no abre Travesías dentro de Aguas abiertas');
+      await seg('aa', 'FENA');
+    } else nota('Información: la página no tiene el selector FENA | Travesías (normal en historico.html).');
+
     // 4) Enlace directo e hash inválido
     W.location.hash = 'c=SC&g=F&p=100+Pecho'; await sleep(300);
     const pr = (k, v) => d.querySelector(`.seg[data-key=${k}] button[data-v=${v}]`)?.getAttribute('aria-pressed') === 'true';
@@ -223,7 +267,7 @@ iframe{width:360px;height:640px;border:1px solid var(--line);border-radius:8px;b
 
     ok(!/años/.test(txt(d.body)), 'Aparece "años" en la página');
     ok(errores.length === 0, 'Errores de JavaScript en la página: ' + errores.join(' | '));
-    nota(`Datos: ${rec.length} récords, ${top.length} filas de Top 10 (recorridas: ${filasVistas}), ${rel.length} relevos, ${owRec.length} récords de aguas abiertas.`);
+    nota(`Datos: ${rec.length} récords, ${top.length} filas de Top 10 (recorridas: ${filasVistas}), ${rel.length} relevos, ${owRec.length} récords de aguas abiertas, ${tvRec.length} mejores marcas de travesías (${tvTop.length} filas).`);
     if (fallos.length > MAXLOG) nota(`(se muestran solo los primeros ${MAXLOG} de ${fallos.length} fallos)`);
   } catch (e) {
     ok(false, 'La verificación no pudo completarse: ' + (e && e.message || e));

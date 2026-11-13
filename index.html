@@ -18,7 +18,16 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2322409A'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='16' cy='44' r='5'/%3E%3Ccircle cx='32' cy='44' r='5'/%3E%3Ccircle cx='48' cy='44' r='5'/%3E%3C/g%3E%3Ccircle cx='40' cy='20' r='7' fill='%23FFC93C'/%3E%3C/svg%3E">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<!-- Instalable ("Añadir a pantalla de inicio"): rutas relativas, el enlace del QR no cambia. Sin service worker. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Récords">
+<meta name="application-name" content="Récords">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Las fuentes no bloquean el primer dibujo: se cargan como precarga y se activan al llegar (display=swap) -->
@@ -146,6 +155,9 @@ button{font:inherit;color:inherit}
 .seg button:active{transform:scale(.97)}
 .seg .lg{display:none}
 @media (min-width:640px){.seg .lg{display:inline}.seg .sh{display:none}}
+/* Aguas abiertas: FENA | Travesías (solo se ve con Aguas abiertas elegido) */
+.seg[data-key="aa"]{flex:1 1 100%}
+.seg[hidden]{display:none}
 @media (min-height:640px){.controls{position:sticky;top:calc(var(--strip) + var(--safe-t))}}
 
 /* ===================== Contenido ===================== */
@@ -174,8 +186,9 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .rowlink[aria-expanded="true"]{background:var(--surface-2)}
 .ev{grid-area:ev;font:700 17px/1.3 var(--f-text);align-self:center}
 .time{grid-area:time;position:relative;justify-self:end;font:800 clamp(1.4rem,1.15rem + 1.1vw,1.9rem)/1.1 var(--f-text);color:var(--brand);white-space:nowrap;contain:layout paint}
-.time.counting{color:transparent}
-.time .tc{position:absolute;right:0;top:0;color:var(--brand)}
+/* Entrada del tiempo: el texto real está siempre en el DOM; solo se anima opacity/transform (nunca un valor intermedio) */
+.time.llega{animation:llega .45s var(--ease) both}
+@keyframes llega{from{opacity:0;transform:translate3d(12px,0,0)}to{opacity:1;transform:none}}
 .who{grid-area:who;font-size:16px}
 .meta{grid-area:meta;font-size:14px;color:var(--muted);overflow-wrap:break-word;min-width:0}
 .meta .d{padding-inline:5px}
@@ -215,15 +228,15 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .race{margin:0 -4px 14px;padding:10px 4px 6px;border-radius:4px;background:#26324A;contain:layout paint}
 .rhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 6px 8px;flex-wrap:wrap}
 .rclock{font:800 22px/1 var(--f-text);color:var(--amber);display:inline-block;min-width:10ch;font-variant-numeric:tabular-nums;contain:layout paint}
-.rlab{font-size:13px;color:var(--board-muted)}
+.rlab{font-size:14px;color:var(--board-muted)}
 .ln{display:grid;grid-template-columns:minmax(64px,92px) 1fr minmax(70px,92px);align-items:center;gap:8px;padding:3px 6px;position:relative}
 .ln+.ln::before{content:"";position:absolute;left:calc(min(92px,24%) + 14px);right:calc(min(92px,24%) + 14px);top:-1px;height:3px;
   background:radial-gradient(circle at 1.5px 1.5px,rgba(200,207,230,.55) 1.4px,transparent 1.6px) 0 0/8px 3px repeat-x}
-.lb{font:600 13px/1.2 var(--f-text);color:var(--board-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb{font:600 14px/1.2 var(--f-text);color:var(--board-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tr{position:relative;height:24px;border-right:4px solid var(--amber)}
 .tr::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:rgba(200,207,230,.18)}
 .dot{position:absolute;top:1px;left:0;width:22px;height:22px;border-radius:50%;
-  background:var(--claro);color:#1E2430;font:800 12px/22px var(--f-text);text-align:center;font-style:normal;
+  background:var(--claro);color:#1E2430;font:800 14px/22px var(--f-text);text-align:center;font-style:normal;
   transform:translate3d(0,0,0);transition:transform .7s var(--ease);box-shadow:0 0 0 2px #26324A}
 .dot.p1{background:var(--amber)}
 .race.racing .dot{transition:none;will-change:transform}
@@ -231,8 +244,8 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 .dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #FFC93C;opacity:0;pointer-events:none}
 .dot.in::after{animation:toque .5s var(--ease)}
 @keyframes toque{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.9)}}
-.gp{font:700 13px/1.2 var(--f-text);text-align:right;color:#fff}
-.gp small{display:block;font-weight:400;font-size:12px;color:var(--board-muted)}
+.gp{font:700 14px/1.2 var(--f-text);text-align:right;color:#fff}
+.gp small{display:block;font-weight:400;font-size:14px;color:var(--board-muted)}
 
 .note{margin:0 0 10px;padding:10px 12px;border-radius:4px;background:var(--warn-bg);color:var(--warn-fg);font-size:14px}
 .top10 .item{border-top:1px solid var(--board-line);padding:10px 4px}
@@ -258,6 +271,9 @@ main.entra>*:nth-child(2){animation-delay:.04s}main.entra>*:nth-child(3){animati
 /* Aguas abiertas: tablero propio por distancia */
 .board{background:var(--board);color:var(--board-ink);border:0;padding:12px 16px}
 .board .race{margin-top:2px}
+/* Travesías: aviso de que no son récords oficiales FENA */
+.aviso-tv{margin:12px 0 0;padding:12px 14px;border-radius:var(--r);background:var(--tag-bg);color:var(--tag-fg);font-size:15px;line-height:1.45}
+.aviso-tv strong{font-weight:700}
 
 /* ===================== Ficha del nadador ===================== */
 dialog.ficha{width:min(560px,100%);max-height:min(86vh,760px);margin:auto auto 0;padding:0;border:0;border-radius:12px 12px 0 0;
@@ -299,6 +315,8 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .race-go{display:none!important}
 }
+/* Celular en horizontal (poco alto): sin el carril superior, para ganar espacio */
+@media (max-height:500px) and (orientation:landscape){:root{--strip:0px}.strip{display:none}}
 @media (forced-colors: active){.seg button[aria-pressed="true"]{outline:2px solid CanvasText}.dot{forced-color-adjust:none}}
 @media print{
   .strip,.controls,.go,.acts,.race,.t10close,.hero .caus,.toast{display:none!important}
@@ -344,6 +362,10 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
       <button type="button" data-v="M">Varones</button>
       <button type="button" data-v="F">Damas</button>
     </div>
+    <div class="seg" role="group" aria-label="Tipo de competencia en aguas abiertas" data-key="aa" hidden>
+      <button type="button" data-v="FENA" aria-label="Competencias FENA"><span class="sh">FENA</span><span class="lg">Competencias FENA</span></button>
+      <button type="button" data-v="TV" aria-label="Travesías y otras competencias"><span class="sh">Travesías</span><span class="lg">Travesías y otras competencias</span></button>
+    </div>
   </div>
 </nav>
 
@@ -355,7 +377,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
 
 <footer class="wrap">
   <p id="notas">Las marcas de exhibición (fuera de puntaje) cuentan como récord del club. Los relevos mixtos aparecen en varones y en damas. La "foto de llegada" compara tiempos: muestra dónde iba cada nadador cuando el primero tocó la pared, como si hubieran nadado juntos.</p>
-  <p>Fuente: resultados oficiales FENA 2017–2026 y torneos internacionales verificados. Actualizado al 12/11/2026.</p>
+  <p>Fuente: resultados oficiales FENA 2017–2026 y torneos internacionales verificados. Travesías y otras competencias: resultados de cada evento recopilados por el club (no son récords oficiales FENA). Actualizado al 12/11/2026.</p>
   <p><a href="historico.html">Ver el histórico 2002–2009</a></p>
   <p>Página del Club Náutico. No es una página oficial de la FENA.</p>
 </footer>
@@ -369,17 +391,24 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   // Orden de descarga: primero lo que pinta la vista inicial; el Top 10 (el JSON más grande) al final
   const FILES = { rec: 'data/records_piscina.json', rel: 'data/relevos_records.json', owRec: 'data/records_aguas_abiertas.json',
     owTop: 'data/top_aguas_abiertas.json', top: 'data/top10_piscina.json' };
+  // Travesías y otras competencias (no FENA): aparte de las aguas abiertas FENA, se piden al final
+  FILES.tvRec = 'data/travesias_records.json'; FILES.tvTop = 'data/travesias_top.json';
   const D = {}, ERR = {};
-  const st = { curso: 'LC', genero: 'M', abierta: null };
+  const st = { curso: 'LC', genero: 'M', abierta: null, aa: 'FENA' };
   const $ = (s, r = document) => r.querySelector(s);
   const main = $('#main'), statusEl = $('#status'), ficha = $('#ficha'), toast = $('#toast');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 
   // ---------- formato ----------
-  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const nombre = (s) => { s = String(s || ''); const i = s.indexOf(','); return i < 0 ? s.trim() : s.slice(i + 1).trim() + ' ' + s.slice(0, i).trim(); };
-  const corto = (s) => { s = String(s || ''); const i = s.indexOf(','); if (i < 0) return s; const ap = s.slice(0, i).trim().split(/\s+/)[0]; return s.slice(i + 1).trim().split(/\s+/)[0] + ' ' + ap.charAt(0) + '.'; };
-  const titulo = (s) => String(s || '').toLowerCase().replace(/(^|[\s,(\-\/])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  const corto = (s) => { s = String(s || ''); const i = s.indexOf(',');
+    if (i < 0) { // "Nombre Apellido (hijo)" (travesías) → "Nombre A. (hijo)"
+      const pa = (/\s*\([^)]*\)$/.exec(s) || [''])[0], w = s.slice(0, s.length - pa.length).trim().split(/\s+/);
+      return w.length < 2 ? s : w[0] + ' ' + w[1].charAt(0) + '.' + pa;
+    }
+    const ap = s.slice(0, i).trim().split(/\s+/)[0]; return s.slice(i + 1).trim().split(/\s+/)[0] + ' ' + ap.charAt(0) + '.'; };
+  const titulo = (s) => String(s || '').toLowerCase().replace(/(^|[\s,(\-\/])([a-zà-öø-ÿ])/g, (m, a, b) => a + b.toUpperCase());
   const lugar = (s) => { const t = String(s || '').trim(); return t ? titulo(t) : 'Ecuador'; };
   const ymd = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '').trim()); return m ? { y: m[1], m: m[2], d: m[3] } : null; };
   const fecha = (ini, fin) => {
@@ -412,9 +441,10 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     const h = new URLSearchParams(location.hash.slice(1));
     if (['LC', 'SC', 'OW'].includes(h.get('c'))) st.curso = h.get('c');
     if (['M', 'F'].includes(h.get('g'))) st.genero = h.get('g');
+    if (h.get('c') === 'TV') { st.curso = 'OW'; st.aa = 'TV'; } else st.aa = h.get('a') === 'TV' ? 'TV' : 'FENA';   // travesías: #c=OW&a=TV (también #c=TV)
     st.abierta = h.get('p') || null;
   };
-  const enlace = (p) => { const h = new URLSearchParams({ c: st.curso, g: st.genero }); if (p && st.curso !== 'OW') h.set('p', p); return '#' + h; };
+  const enlace = (p) => { const h = new URLSearchParams({ c: st.curso, g: st.genero }); if (st.curso === 'OW' && st.aa === 'TV') h.set('a', 'TV'); if (p && st.curso !== 'OW') h.set('p', p); return '#' + h; };
   const escribirHash = () => history.replaceState(null, '', enlace(st.abierta));
 
   // ---------- piezas ----------
@@ -443,13 +473,13 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
       <span class="meta">${metaHtml(fecha(r.fecha_ini, r.fecha_fin), r.lugar, r.torneo)}</span>
     </div>`;
   }
-  function topItem(t, extra = '') {
+  function topItem(t, extra = '', meta) {
     const exh = t.marca === 'x';
     return `<div class="item top${t.puesto === 1 ? ' p1' : ''}">
       <span class="pos">${esc(t.puesto)}.</span>
       <span class="time">${esc(t.tiempo)}</span>
       <button class="nm" type="button" data-n="${esc(t.nadador)}" aria-haspopup="dialog">${esc(nombre(t.nadador))}${exh ? '<span class="tag x">Exhibición</span>' : ''}${extra}</button>
-      <span class="meta">${metaHtml(fecha(t.fecha), t.lugar, t.torneo)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
+      <span class="meta">${meta || metaHtml(fecha(t.fecha), t.lugar, t.torneo)}${exh && t.oficial ? `<br>Mejor marca oficial: <strong>${esc(t.oficial)}</strong>` : ''}</span>
     </div>`;
   }
   // Foto de llegada: dónde iba cada uno cuando el primero tocó la pared (misma velocidad media que su marca)
@@ -512,9 +542,21 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
       return `<section class="grp" id="ow-${esc(String(r.dist_km).replace('.', '-'))}"><div class="gh"><h3>${esc(r.distancia)}</h3><span class="n">${top.length} ${top.length === 1 ? 'marca' : 'marcas'}</span></div>
         <div class="card board">${raceHtml(top, Math.round(+r.dist_km * 1000))}${top.map((t) => topItem(t, t.puesto === 1 ? '<span class="tag">Récord</span>' : '')).join('')}</div></section>`;
     });
-    return `<div class="vt"><h2>Aguas abiertas · ${rama(st.genero)}</h2><p>El número es la posición dentro del club, no el lugar en la carrera.</p></div>${bloques.join('') || '<p>Sin marcas registradas.</p>'}`;
+    return `<div class="vt"><h2>Aguas abiertas FENA · ${rama(st.genero)}</h2><p>El número es la posición dentro del club, no el lugar en la carrera.</p></div>${bloques.join('') || '<p>Sin marcas registradas.</p>'}`;
   }
-  const vistaActual = () => st.curso === 'OW' ? [['owRec', 'owTop'], vistaAguas] : [['rec', 'rel'], vistaRecords];
+  // Travesías y otras competencias (no FENA): fecha · evento (el evento ya dice el lugar); sin "Ecuador" por defecto
+  const metaTv = (t) => (t.fecha ? esc(fecha(t.fecha)) + dot : '') + esc(t.torneo);
+  function vistaTravesias() {
+    const recs = D.tvRec.filter((r) => r.rama === st.genero).sort((a, b) => a.dist_km - b.dist_km);
+    const bloques = recs.map((r) => {
+      const top = D.tvTop.filter((t) => t.rama === st.genero && t.distancia === r.distancia).sort((a, b) => a.puesto - b.puesto);
+      return `<section class="grp" id="tv-${esc(String(r.dist_km).replace('.', '-'))}"><div class="gh"><h3>${esc(r.distancia)}</h3><span class="n">${top.length} ${top.length === 1 ? 'marca' : 'marcas'}</span></div>
+        <div class="card board">${raceHtml(top, Math.round(+r.dist_km * 1000))}${top.map((t) => topItem(t, t.puesto === 1 ? '<span class="tag">Mejor marca</span>' : '', metaTv(t))).join('')}</div></section>`;
+    });
+    return `<div class="vt"><h2>Travesías y otras competencias · ${rama(st.genero)}</h2><p>El número es la posición dentro del club, no el lugar en la carrera.</p></div>
+      <p class="aviso-tv"><strong>No son récords oficiales FENA.</strong> Son las mejores marcas del club en travesías y competencias de aguas abiertas fuera del calendario FENA; cada marca indica el evento y la fecha.</p>${bloques.join('') || '<p>Sin marcas registradas.</p>'}`;
+  }
+  const vistaActual = () => st.curso === 'OW' ? (st.aa === 'TV' ? [['tvRec', 'tvTop'], vistaTravesias] : [['owRec', 'owTop'], vistaAguas]) : [['rec', 'rel'], vistaRecords];
 
   // ---------- tareas diferidas: lo no esencial espera al primer dibujo con datos ----------
   const idle = (fn, ms = 800) => ('requestIdleCallback' in window) ? requestIdleCallback(fn, { timeout: ms }) : setTimeout(fn, 80);
@@ -544,8 +586,9 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     }, 1200);
   }
 
-  // ---------- reloj de competencia: cada récord "corre" hasta su marca al aparecer ----------
-  // Máximo 6 contadores a la vez, y ninguno mientras el usuario se desplaza (ahí muestra el tiempo final directo).
+  // ---------- entrada de las marcas: el tiempo real aparece con un leve deslizamiento ----------
+  // Sin conteo desde 0 (nunca se ve una marca intermedia): solo opacity/transform sobre el texto real.
+  // Máximo 6 a la vez, y ninguna mientras el usuario se desplaza; con movimiento reducido, nada.
   const io = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => {
     for (const e of ents) if (e.isIntersecting) { io.unobserve(e.target); correr(e.target); }
   }, { rootMargin: '0px 0px -10% 0px' }) : null;
@@ -555,16 +598,8 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     el.dataset.done = '1';
     if (activos >= 6 || performance.now() - ultScroll < 160) return;
     activos++;
-    const ov = document.createElement('span'); ov.className = 'tc'; ov.setAttribute('aria-hidden', 'true');
-    const tn = texto(ov); tn.data = fmt(0);
-    el.classList.add('counting'); el.append(ov);
-    const dur = 700, t0 = performance.now();
-    const paso = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
-      tn.data = fmt(fin * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(paso); else { ov.remove(); el.classList.remove('counting'); activos--; }
-    };
-    requestAnimationFrame(paso);
+    el.classList.add('llega');
+    setTimeout(() => { el.classList.remove('llega'); activos--; }, 500);
   }
   const vigilarTiempos = () => { if (io) main.querySelectorAll('.rowlink .time[data-s]:not([data-done])').forEach((el) => io.observe(el)); };
 
@@ -658,14 +693,18 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   function draw() {
     document.querySelector('.strip').dataset.g = st.genero;
     document.querySelectorAll('.seg').forEach((g) => g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st[g.dataset.key]))));
+    const segAA = document.querySelector('.seg[data-key="aa"]'); if (segAA) segAA.hidden = st.curso !== 'OW';
     const [need, html] = vistaActual();
     const falla = need.find((k) => ERR[k]);
+    // A los padres, un mensaje humano; el detalle técnico (archivo, código) solo en la consola
+    const ERR_HTML = (txt) => `<div class="err" role="alert">${txt}<br><button type="button" id="retry">Reintentar</button></div>`;
     try {
-      if (falla) main.innerHTML = `<div class="err">No se pudieron cargar los datos (${esc(ERR[falla])}). Revisa tu conexión.<br><button type="button" id="retry">Reintentar</button></div>`;
+      if (falla) { console.error('No se pudieron cargar los datos:', need.filter((k) => ERR[k]).map((k) => ERR[k]).join(' | ')); main.innerHTML = ERR_HTML('No se pudieron cargar los récords. Revisa tu conexión e inténtalo de nuevo.'); }
       else if (need.every((k) => D[k])) main.innerHTML = html();
       else main.innerHTML = '<div class="card" aria-hidden="true"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>';
     } catch (e) {
-      main.innerHTML = `<div class="err">Hubo un problema al mostrar esta vista (${esc(e && e.message)}). Prueba recargar la página.</div>`;
+      console.error('Error al mostrar la vista:', e);
+      main.innerHTML = ERR_HTML('Hubo un problema al mostrar esta parte de la página. Inténtalo de nuevo.');
     }
     const h2 = $('h2', main); statusEl.textContent = h2 ? h2.textContent : '';
     escribirHash(); vigilarTiempos(); posicionar(); pedirMedir();
@@ -698,20 +737,25 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
 
   // ---------- ficha del nadador ----------
   function abrirFicha(n) {
-    const mios = (D.top || []).filter((t) => t.nadador === n);
-    const ow = (D.owTop || []).filter((t) => t.nadador === n);
-    const rel = (D.rel || []).filter((r) => (r.integrantes || []).includes(n));
+    // Mismo nadador = mismo nombre visible ("Espejo, Sofia" de FENA y "Sofia Espejo" de travesías)
+    const mismo = (x) => x === n || nombre(x) === nombre(n);
+    const mios = (D.top || []).filter((t) => mismo(t.nadador));
+    const ow = (D.owTop || []).filter((t) => mismo(t.nadador));
+    const tv = (D.tvTop || []).filter((t) => mismo(t.nadador));
+    const rel = (D.rel || []).filter((r) => (r.integrantes || []).some(mismo));
     const nRec = mios.filter((t) => t.puesto === 1).length + ow.filter((t) => t.puesto === 1).length + rel.length;
-    const gen = (mios[0] || {}).genero || ((ow[0] || {}).rama) || st.genero;
-    const item = (t, c, p, etiqueta) => `<li><button class="fi${t.puesto === 1 ? ' r1' : ''}" type="button" data-c="${c}" data-g="${esc(gen)}" data-p="${esc(p)}">
-        <span class="pz">${t.puesto === 1 ? '★' : esc(t.puesto) + '.'}</span><span class="pr">${esc(etiqueta)}<small>${esc(fecha(t.fecha))} · ${esc(lugar(t.lugar))}</small></span><span class="tt">${esc(t.tiempo)}</span></button></li>`;
+    const nMarcas = mios.length + ow.length + tv.length;
+    const gen = (mios[0] || {}).genero || ((ow[0] || {}).rama) || ((tv[0] || {}).rama) || st.genero;
+    const item = (t, c, p, etiqueta, a, sub) => `<li><button class="fi${t.puesto === 1 ? ' r1' : ''}" type="button" data-c="${c}" data-g="${esc(gen)}" data-p="${esc(p)}"${a ? ` data-a="${a}"` : ''}>
+        <span class="pz">${t.puesto === 1 ? '★' : esc(t.puesto) + '.'}</span><span class="pr">${esc(etiqueta)}<small>${sub || esc(fecha(t.fecha)) + ' · ' + esc(lugar(t.lugar))}</small></span><span class="tt">${esc(t.tiempo)}</span></button></li>`;
     const sec = (titulo, lista) => lista.length ? `<h4>${titulo}</h4><ul class="fl">${lista.join('')}</ul>` : '';
     const por = (c) => mios.filter((t) => t.curso === c).sort((a, b) => a.puesto - b.puesto || a.orden - b.orden).map((t) => item(t, c, t.prueba, prueba(t.prueba)));
     const owL = ow.sort((a, b) => a.dist_km - b.dist_km).map((t) => item(t, 'OW', '', t.distancia));
+    const tvL = tv.sort((a, b) => a.dist_km - b.dist_km).map((t) => item(t, 'OW', '', t.distancia, 'TV', metaTv(t)));
     const relL = rel.map((r) => `<li><div class="fi" style="cursor:default"><span class="pz">★</span><span class="pr">${esc(prueba(r.prueba))}${r.genero === 'Mixto' ? ' mixto' : ''}<small>${esc(piscina(r.curso))} · ${esc(fecha(r.fecha_ini, r.fecha_fin))}</small></span><span class="tt">${esc(r.tiempo)}</span></div></li>`);
-    ficha.innerHTML = `<div class="fh"><div><h3 id="fn">${esc(nombre(n))}</h3><p>${nRec} ${nRec === 1 ? 'récord del club' : 'récords del club'} · ${mios.length + ow.length} ${mios.length + ow.length === 1 ? 'marca' : 'marcas'} en los Top 10</p></div>
+    ficha.innerHTML = `<div class="fh"><div><h3 id="fn">${esc(nombre(n))}</h3><p>${nRec} ${nRec === 1 ? 'récord del club' : 'récords del club'} · ${nMarcas} ${nMarcas === 1 ? 'marca' : 'marcas'} en los Top 10</p></div>
       <button class="x" type="button" aria-label="Cerrar ficha" data-cerrar>×</button></div>
-      <div class="fb">${sec('Piscina 50 m', por('LC'))}${sec('Piscina 25 m', por('SC'))}${sec('Aguas abiertas', owL)}${sec('Relevos récord', relL)}</div>`;
+      <div class="fb">${sec('Piscina 50 m', por('LC'))}${sec('Piscina 25 m', por('SC'))}${sec('Aguas abiertas FENA', owL)}${sec('Travesías y otras competencias (no FENA)', tvL)}${sec('Relevos récord', relL)}</div>`;
     if (typeof ficha.showModal === 'function') ficha.showModal(); else ficha.setAttribute('open', '');
   }
   const cerrarFicha = () => { if (ficha.open) { if (typeof ficha.close === 'function') ficha.close(); else ficha.removeAttribute('open'); } };
@@ -720,7 +764,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
     const b = e.target.closest('button.fi'); if (!b) return;
     cerrarFicha();
     conTransicion(() => {
-      st.curso = b.dataset.c; st.genero = b.dataset.g; st.abierta = b.dataset.p || null; porDesplazar = true; draw();
+      st.curso = b.dataset.c; st.genero = b.dataset.g; st.aa = b.dataset.a || 'FENA'; st.abierta = b.dataset.p || null; porDesplazar = true; draw();
     });
     setTimeout(irAAbierta, 60);
   });

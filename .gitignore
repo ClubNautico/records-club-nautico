@@ -1,3 +1,5 @@
 .claude/
 base.html
 herramientas/resultados_movil_*.json
+# Notas internas con datos personales y rutas de la PC (no se publican)
+CLAUDE.local.md

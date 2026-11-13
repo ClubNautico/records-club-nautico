@@ -39,6 +39,16 @@ $top = Leer 'top10_piscina.json'
 $rel = Leer 'relevos_records.json'
 $owRec = Leer 'records_aguas_abiertas.json'
 $owTop = Leer 'top_aguas_abiertas.json'
+$tvRec = Leer 'travesias_records.json'
+$tvTop = Leer 'travesias_top.json'
+
+# ---- Privacidad: hay menores; ningún JSON publicado puede traer la edad (ni datos que la revelen) ----
+foreach ($f in Get-ChildItem (Join-Path $raiz 'data') -Filter *.json) {
+  $txt = [IO.File]::ReadAllText($f.FullName, [Text.Encoding]::UTF8)
+  $n = ([regex]::Matches($txt, '"edad"\s*:')).Count
+  if ($n) { Err "data\$($f.Name): trae la clave ""edad"" $n vez/veces (no se publican edades: quítala en el script que genera el archivo)" }
+  foreach ($k in 'fecha_nacimiento', 'nacimiento', 'cedula') { if ($txt -match """$k""\s*:") { Err "data\$($f.Name): trae la clave ""$k"" (dato personal que no se publica)" } }
+}
 
 # Pruebas esperadas por piscina (100 combinado individual solo en 25 m)
 $base = '50 Libre','100 Libre','200 Libre','400 Libre','800 Libre','1500 Libre','50 Mariposa','100 Mariposa','200 Mariposa','50 Espalda','100 Espalda','200 Espalda','50 Pecho','100 Pecho','200 Pecho','200 Combinado','400 Combinado'
@@ -140,6 +150,36 @@ foreach ($g in ($owTop | Group-Object distancia, rama)) {
   if (-not ($owRec | Where-Object { "$($_.distancia), $($_.rama)" -eq $g.Name })) { Err "Top aguas abiertas $($g.Name) sin récord" }
 }
 
+# ---- Travesías y otras competencias (no FENA; de herramientas\traer_travesias.py) ----
+# Tiempos a veces sin centésimas ("9:39"); fecha "AAAA-MM-DD", "mes AAAA" o vacía; sin categoría (revela la edad) ni IDs internos
+$reTiempoTv = '^(\d{1,2}:)?\d{1,2}:\d{2}(\.\d{2})?$'
+$reMesAnio = '^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) \d{4}$'
+if ($tvRec.Count -eq 0 -or $tvTop.Count -eq 0) { Err "Travesías: archivo vacío (la pestaña quedaría en blanco)" }
+$i = 0
+foreach ($r in @($tvRec) + @($tvTop)) {
+  $i++; $id = "Travesías fila $i $($r.distancia) $($r.rama) $($r.tiempo)"
+  foreach ($c in 'distancia','dist_km','rama','tiempo','segundos','nadador','torneo') { if ($null -eq $r.$c -or "$($r.$c)" -eq '') { Err "$id sin '$c'" } }
+  if ($r.rama -notin 'M','F') { Err "$id rama inválida" }
+  if ("$($r.tiempo)" -notmatch $reTiempoTv) { Err "$id tiempo con formato raro" }
+  elseif ([Math]::Abs((Seg $r.tiempo) - [double]$r.segundos) -gt 0.6) { Err "$id 'segundos' no coincide con 'tiempo'" }
+  if ("$($r.fecha)" -match '^\d{4}-') { $pf = ProblemaFecha $r.fecha; if ($pf) { Err "$id fecha '$($r.fecha)': $pf" } }
+  elseif ("$($r.fecha)" -ne '' -and "$($r.fecha)" -notmatch $reMesAnio) { Err "$id fecha con formato raro '$($r.fecha)'" }
+  foreach ($k in 'categoria', 'clave', 'id') { if ($r.PSObject.Properties.Name -contains $k) { Err "$id trae '$k' (no se publica: usa traer_travesias.py)" } }
+  if ("$($r.nadador) $($r.torneo)" -match '\b[NX]-\d{2,}\b') { Err "$id contiene un ID interno" }
+}
+foreach ($g in ($tvTop | Group-Object distancia, rama)) {
+  $f = @($g.Group | Sort-Object { [int]$_.puesto })
+  if ($f.Count -gt 10) { Err "Top travesías $($g.Name): $($f.Count) filas" }
+  for ($k = 0; $k -lt $f.Count; $k++) { if ([int]$f[$k].puesto -ne $k + 1) { Err "Top travesías $($g.Name): puestos no consecutivos"; break }; if ($k -gt 0 -and [double]$f[$k].segundos -lt [double]$f[$k-1].segundos) { Err "Top travesías $($g.Name): orden de tiempos" } }
+  foreach ($d in ($f | Group-Object nadador | Where-Object Count -gt 1)) { Err "Top travesías $($g.Name): nadador repetido $($d.Name)" }
+  if (-not ($tvRec | Where-Object { "$($_.distancia), $($_.rama)" -eq $g.Name })) { Err "Top travesías $($g.Name) sin récord" }
+}
+foreach ($r in $tvRec) {
+  $t1 = $tvTop | Where-Object { $_.distancia -eq $r.distancia -and $_.rama -eq $r.rama -and [int]$_.puesto -eq 1 }
+  if (-not $t1) { Err "Travesías $($r.distancia) $($r.rama) sin puesto 1 en el top" } elseif ($t1.tiempo -ne $r.tiempo -or $t1.nadador -ne $r.nadador) { Err "Travesías $($r.distancia) $($r.rama): mejor marca y puesto 1 del top no coinciden" }
+  if (-not $r.fecha) { Aviso "Travesías $($r.distancia) $($r.rama): mejor marca sin fecha (se muestra solo el evento)" }
+}
+
 # ---- Pie de página y vista previa ----
 $html = [IO.File]::ReadAllText((Join-Path $raiz 'index.html'), [Text.Encoding]::UTF8)
 if ($html -notmatch 'Actualizado al (\d{2}/\d{2}/\d{4})') { Err "index.html: falta 'Actualizado al dd/mm/aaaa' en el pie" }
@@ -151,7 +191,7 @@ else {
 if ($html -match 'property="og:image" content="(?!https://)') { Aviso "og:image no es una URL completa (https://...): WhatsApp puede no mostrar la imagen" }
 
 Write-Host ""
-Write-Host "Récords: $($rec.Count) · Top 10: $($top.Count) filas · Relevos: $($rel.Count) · Aguas abiertas: $($owRec.Count) récords / $($owTop.Count) filas"
+Write-Host "Récords: $($rec.Count) · Top 10: $($top.Count) filas · Relevos: $($rel.Count) · Aguas abiertas: $($owRec.Count) récords / $($owTop.Count) filas · Travesías: $($tvRec.Count) mejores marcas / $($tvTop.Count) filas"
 if ($avisos.Count) { Write-Host "`nAvisos ($($avisos.Count)):" -ForegroundColor Yellow; $avisos | ForEach-Object { Write-Host "  - $_" } }
 if ($errores.Count) { Write-Host "`nERRORES ($($errores.Count)):" -ForegroundColor Red; $errores | ForEach-Object { Write-Host "  - $_" }; exit 1 }
 Write-Host "`nOK: datos verificados, sin errores." -ForegroundColor Green

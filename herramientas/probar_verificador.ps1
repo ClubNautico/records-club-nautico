@@ -27,7 +27,14 @@ $casos = [ordered]@{
   'Aguas abiertas vacío'                 = { Guardar 'records_aguas_abiertas.json' @(); Guardar 'top_aguas_abiertas.json' @() }
   'Prueba con estilo desconocido'        = { $r = Leer 'records_piscina.json'; $r[0].prueba = '50 Delfin'; Guardar 'records_piscina.json' $r }
   'JSON roto'                            = { [IO.File]::WriteAllText("$tmp\data\top10_piscina.json", '[{"curso":', (New-Object Text.UTF8Encoding $false)) }
-  'Pie con fecha vieja'                  = { $h = [IO.File]::ReadAllText("$tmp\index.html", [Text.Encoding]::UTF8) -replace 'Actualizado al \d{2}/\d{2}/\d{4}', 'Actualizado al 01/01/2020'; [IO.File]::WriteAllText("$tmp\index.html", $h, (New-Object Text.UTF8Encoding $false)) }
+  'Clave "edad" en récords'              = { $r = Leer 'records_piscina.json'; $r[0] | Add-Member -NotePropertyName edad -NotePropertyValue '12'; Guardar 'records_piscina.json' $r }
+  'Clave "edad" en el histórico'         = { $r = Leer 'historico_top10.json'; $r[5] | Add-Member -NotePropertyName edad -NotePropertyValue 11; Guardar 'historico_top10.json' $r }
+  'Clave "edad" en travesías'            = { $r = Leer 'travesias_top.json'; $r[0] | Add-Member -NotePropertyName edad -NotePropertyValue '14'; Guardar 'travesias_top.json' $r }
+  'Travesía con categoría (revela edad)' = { $r = Leer 'travesias_records.json'; $r[0] | Add-Member -NotePropertyName categoria -NotePropertyValue 'M12 SPRINT'; Guardar 'travesias_records.json' $r }
+  'Travesía con ID interno'              = { $r = Leer 'travesias_top.json'; $r[0].nadador = 'N-040'; Guardar 'travesias_top.json' $r }
+  'Travesías: récord distinto del top'   = { $r = Leer 'travesias_records.json'; $r[0].tiempo = '1:00'; $r[0].segundos = 60; Guardar 'travesias_records.json' $r }
+  'Travesías vacío'                      = { Guardar 'travesias_records.json' @(); Guardar 'travesias_top.json' @() }
+  'Pie con fecha vieja'                 = { $h = [IO.File]::ReadAllText("$tmp\index.html", [Text.Encoding]::UTF8) -replace 'Actualizado al \d{2}/\d{2}/\d{4}', 'Actualizado al 01/01/2020'; [IO.File]::WriteAllText("$tmp\index.html", $h, (New-Object Text.UTF8Encoding $false)) }
 }
 $fallos = 0
 foreach ($nombre in $casos.Keys) {

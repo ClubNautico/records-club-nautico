@@ -199,6 +199,10 @@ No son interactivos. Misma rejilla de la fila de récord sin chevron: `.ev` + ta
 ### 4.9 Aguas abiertas
 Mismo h2/sub. Por distancia: `h3.group` + `.card.board` (el tablero oscuro completo, siempre abierto; mismas filas `.item.top`). El puesto 1 lleva tag "Récord" (en tablero: fondo `--claro`, texto #16215A, 9,66) y tiempo en ámbar. El `.sub` explica que el número es la posición dentro del club (texto actual). Sin filas clicables.
 
+**Travesías y otras competencias (12/11/2026).** Con "Abiertas" elegido aparece debajo un tercer segmentado `.seg[data-key=aa]` a todo el ancho: "FENA" | "Travesías" (≥640 px: "Competencias FENA" | "Travesías y otras competencias"); mismos botones de 46 px, mismo estilo `aria-pressed`. Fuera de "Abiertas" está oculto (`hidden`). Se descartó un cuarto botón en `.seg[data-key=curso]`: a 320 px no caben cuatro rótulos legibles. La vista de travesías es igual a la de aguas abiertas (h3 por distancia + `.card.board` con foto de llegada y filas `.item.top`), con h2 "Travesías y otras competencias · Rama", la misma línea `.sub` y un aviso `.aviso-tv` (fondo `--tag-bg`, texto `--tag-fg`, 15 px) que empieza con **"No son récords oficiales FENA."**. El puesto 1 lleva tag "Mejor marca" (no "Récord"). Meta de cada fila: fecha · evento (sin "Ecuador" por defecto: el evento ya dice el lugar). Enlace: `#c=OW&g=M|F&a=TV` (también `#c=TV`).
+
+**Tablero (12/11/2026).** Letra mínima 14 px en el tablero: `.lb`, `.rlab`, `.gp`, `.gp small` y el número de `.dot`. Las marcas de las filas de récord ya no cuentan desde 0: entran con opacity + translateX(12px→0), 450 ms, sobre el texto real.
+
 ### 4.10 Pie
 `--muted` 14 px, `padding: 32px 0 72px` (el 72 deja respirar al carril y a la barra de gestos), dos párrafos actuales ("Fuente: … Actualizado al 18/10/2026." y "Página del Club Náutico. No es una página oficial de la FENA."). Sobre el pie, una corchera divisoria de 8 px a todo el ancho. Sin nombre repetido en grande ni sitemap. `padding-bottom: calc(32px + env(safe-area-inset-bottom))`.
 
