@@ -323,6 +323,11 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
   body{padding-top:0;background:#fff;color:#000}.hero{background:none;color:#000}.lede,.kick,.stats span{color:#333}
   .top10,.board{background:#fff;color:#000}.item.top .time,.item.top .meta,.pos{color:#000}.item{break-inside:avoid}
 }
+#volver-club{display:inline-flex;align-items:center;min-height:44px;margin:0 0 6px -4px;padding:0 14px;border:1px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;font:600 .95rem/1 var(--f-text);cursor:pointer;text-decoration:none}
+#volver-club[hidden]{display:none}
+#volver-club:hover{background:rgba(255,255,255,.22)}
+#volver-club:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media print{#volver-club{display:none}}
 </style>
 </head>
 <body>
@@ -339,6 +344,7 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
 <header class="hero">
   <div class="caus" aria-hidden="true"><i class="cg"></i></div>
   <div class="wrap in">
+    <button type="button" id="volver-club" hidden>‹ Volver</button>
     <p class="kick">Club Náutico · Natación</p>
     <h1>Récords del club</h1>
     <p class="lede">Las mejores marcas de la historia del club, todas las categorías y máster juntas.</p>
@@ -844,6 +850,17 @@ footer a{color:var(--brand);font-weight:700;display:inline-block;padding:12px 0;
       });
   }
 })();
+</script>
+<script>
+(function(){try{
+  var ok=['https://club-nautico-nube.clubnautico.workers.dev','http://127.0.0.1:8787','http://localhost:8787'];
+  var r=document.referrer||'',o='';try{o=new URL(r).origin}catch(e){}
+  if(ok.indexOf(o)>=0){try{sessionStorage.setItem('origen-club',o)}catch(e){}}
+  else{try{o=sessionStorage.getItem('origen-club')||''}catch(e){o=''}}
+  var b=document.getElementById('volver-club');if(!b||ok.indexOf(o)<0)return;
+  b.hidden=false;
+  b.addEventListener('click',function(){location.href=o+'/'});
+}catch(e){}})();
 </script>
 </body>
 </html>
